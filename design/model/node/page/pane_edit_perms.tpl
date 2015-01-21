@@ -1,0 +1,1 @@
+<?= Module::runHook('permissions', $this, $node) ?>

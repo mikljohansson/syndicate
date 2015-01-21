@@ -1,0 +1,1 @@
+<input type="text" name="mplex[mplex;<?= $workflow->id() ?>;<?= $node->id() ?>/setLocation/][uri]" value="<?= $this->quote($node->getLocation()) ?>" size="60" />

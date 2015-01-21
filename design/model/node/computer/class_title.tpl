@@ -1,0 +1,1 @@
+<?= tpl_text('Computer inventory item') ?>

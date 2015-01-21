@@ -1,0 +1,61 @@
+.SearchResult {
+	margin-bottom: 1em;
+}
+
+.SearchResult h3 {
+	border: 0;
+	margin-bottom: 0;
+}
+
+.SearchResult hr {
+	margin-top: 1em;
+}
+
+.SearchResult .Abstract ul.Actions li {
+	display: inline;
+	margin-left: 0.7em;
+}
+
+.SearchResult .Abstract ul.Actions li:before {
+	content: url(../../image/tree/leaf.gif);
+	margin-right: 0.5em;
+}
+
+.SearchResult .Footer {
+	color: #008000;
+}
+
+.CachedPage {
+	margin: 1em;
+}
+
+.CachedPage .Notice a {
+	font-weight: bold;
+}
+
+.CachedPage .Notice em {
+	font-style: normal;
+	font-weight: bold;
+}
+
+.CachedPage .Content {
+	margin: 2em 4em 4em 4em;
+}
+
+.CachedPage .Content em {
+	font-style: normal;
+	font-weight: bold;
+	background-color: yellow;
+}
+
+.CachedPage .Pagination {
+	padding: 0.2em;
+	font-size: 1.2em;
+	border-top: 1px solid #ccc;
+	text-align: right;
+	color: #888;
+}
+
+.CachedPage .Pagination:last-child {
+	display: none;
+}

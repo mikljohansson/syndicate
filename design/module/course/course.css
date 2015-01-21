@@ -1,0 +1,116 @@
+/* Article */
+table.Files img {
+	margin-right: 4px;
+}
+
+.Navigation h3 {
+	margin-top: 2em;
+}
+
+/* Tooltips */
+.Tooltip {
+	position: absolute;
+	display: none;
+	background-color: #ffffdd;
+	border: 1px solid #000;
+	font-size: 8pt;
+	padding: 3px;
+}
+
+/* Tree and folder style */
+ul.Menu li.Question {
+	list-style-type: circle;
+	list-style-image: url(../../image/icon/question.gif);
+	font-size: 8pt;
+	margin-left: 0.7em;
+}
+
+div.Collapsed, div.Leaf, div.Question {
+	width: 15px; height: 15px;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+div.Collapsed {
+	background-image: url(../../image/tree/collapsed.gif);
+}
+
+div.Leaf {
+	background-image: url(../../image/tree/leaf.gif);
+}
+
+div.Question {
+	background-image: url(../../image/icon/question.gif);
+}
+
+img.ProgressIndicator {
+	float: right;
+	width: 0.45em;
+	height: 0.95em;
+	border: 1px solid #000;
+}
+
+.Answer {
+	margin-top: 3px;
+	border: 1px dashed #bbb;
+	background-color: #f6f6f6;
+	padding: 3px;
+}
+
+.Correct .Answer {
+	display: none;
+}
+
+/* Inline questions */
+.Inline {
+	line-height: 2em;
+}
+
+/* Open-Ended-Text */
+.Correct .OpenEndedText input, .Correct textarea, .Correct div.Inline {
+	border: 2px solid #00bb00;
+}
+
+.Incorrect .OpenEndedText input, .Incorrect textarea, .Incorrect div.Inline {
+	border: 2px solid #ff3333;
+}
+
+.Correct div.Inline, .Incorrect div.Inline {
+	padding: 5px;
+}
+
+/* Multiple-Coice */
+.Correct select {
+	background-color: #00dd00;
+}
+
+.Incorrect select {
+	background-color: #ff3333; 
+	font-weight:bold;
+}
+
+.Item label {
+	border-bottom: 1px dashed #666;
+}
+
+.Item label:hover {
+	border-bottom: 1px solid #333;
+}
+
+.Item label.Correct, .Item span.Correct {
+	font-weight: bold;
+	color: #00bb00;
+}
+
+.Item label.Incorrect {
+	font-weight: bold;
+	color: #ff3333;
+}
+
+thead th {
+	background: 0;
+}
+
+table.Children td {
+	padding-right: 1em;
+}

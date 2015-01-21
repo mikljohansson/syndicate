@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=iso-8859-1" />
+	<title>SyndRTE Demo 1 - Using a &lt;div&gt; tag</title>
+	<script id="srte_loader" type="text/javascript" src="../loader.js"></script>
+</head>
+<body>
+	<h3>SyndRTE Demo 1</h3>
+	<div style="margin-left:20px;">
+		This demo show using SyndRTE together with a &lt;div&gt;<br />
+		<a href="demo2.html">Next demo &gt;&gt;</a>
+	</div>
+	<br />
+
+	<form method="post">
+		<div class="srte_area" id="some_form_variable" upload="../upload.php">
+			<em><b>Note:</b> When using Mozilla/FireFox be sure to press the F7 button on your keyboard to enable the cursor.</em>
+
+			<p>Some <em>styled</em> text.</p>
+
+			<table style="width:300px;">
+				<tr>
+					<td>Cell 1</td>
+					<td>Cell 2</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						Open the properties toolbar and select the table to display and edit
+						table properties. Right-click the table to insert rows and columns.
+					</td>
+				</tr>
+			</table>
+			<br />
+			&nbsp;&nbsp;<img src="valid-xhtml10.png" /><br />
+			Open the properties toolbar and select the image to display and edit image properties. <br />
+			Inserting new images require a supporting backend that will receive the image upload <br />
+			and return the uri to the file stored on the server. A reference backend written in PHP <br />
+			is supplied (upload.php).
+
+			<ul>
+				<li>A simple list, press Enter to add a new item</li>
+				<li>You can toggle between numbered and unordered list using the buttons.</li>
+			</ul>
+
+			<p>
+				Pressing the HTML button <img src="../image/source.gif" /> allows you to edit the underlying code. The DOM <br />
+				inspector <img src="../image/dom.gif" /> toolbar displays the code structure and allows you to select and <br />
+				delete specific elements by right clicking.
+			</p>
+		</div>
+	</form>
+</body>
+</html>

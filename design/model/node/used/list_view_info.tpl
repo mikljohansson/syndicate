@@ -1,0 +1,1 @@
+<? $this->render($node->getItem(),'list_view.tpl') ?>

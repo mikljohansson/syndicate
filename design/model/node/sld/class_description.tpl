@@ -1,0 +1,1 @@
+<?= tpl_text('Leases have a SLD that specifies the level of service the client has') ?>

@@ -1,0 +1,2 @@
+<h2><?= tpl_text('Similar or unsure spelling') ?></h2>
+<p><?= tpl_text("By appending the tilde <em>(~)</em> sign onto words; similar sounding words and mispellings can be found. The search <em>'feature~'</em> would for example also find documents containing the incorrectly spelled 'feture'.") ?></p>

@@ -1,0 +1,42 @@
+.Interfaces th, .Interfaces td {
+	font-size: 0.9em;
+}
+
+.Interfaces .Status {
+	width: 1em;
+	padding: 0.2em 0.2em 0 0.2em;
+}
+
+.Interfaces .Status div, .Legend .Status img {
+	border: 1px solid;
+}
+
+.Interfaces .Status img, .Legend .Status img {
+	width: 0.6em;
+	height: 1.1em;
+}
+
+.Interfaces .Active .Status * {
+	background-color: #30cc30;
+}
+
+.Interfaces .Recent .Status * {
+	background-color: yellow;
+}
+
+.Interfaces .Expired .Status * {
+	background-color: red;
+}
+
+.Interfaces .Unknown .Status * {
+	display: none;
+}
+
+.Legend {
+	font-size: 0.8em;
+}
+
+.Legend img {
+	margin-left: 1em;
+}
+

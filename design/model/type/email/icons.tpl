@@ -1,0 +1,2 @@
+<a href="<?= tpl_link($node->id(),'source') ?>"><img src="<?= tpl_design_uri('image/icon/16x16/txt.gif') 
+	?>" alt="<?= tpl_text('Source') ?>" title="<?= tpl_text('View message source and headers') ?>" /></a>

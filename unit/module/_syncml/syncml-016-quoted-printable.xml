@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<!DOCTYPE SyncML PUBLIC "-//SYNCML//DTD SyncML 1.1//EN" "http://www.syncml.org/docs/syncml_represent_v11_20020213.dtd">
+<SyncML xmlns="syncml:SYNCML1.1">
+ <SyncHdr>
+  <VerDTD>
+   1.1
+  </VerDTD>
+  <VerProto>
+   SyncML/1.1
+  </VerProto>
+  <SessionID>
+   148
+  </SessionID>
+  <MsgID>
+   2
+  </MsgID>
+  <Target>
+   <LocURI>
+    http://devel.synd.info/syncml/
+   </LocURI>
+  </Target>
+  <Source>
+   <LocURI>
+    0882AF01C240AD018800
+   </LocURI>
+   <LocName>
+    mikl
+   </LocName>
+  </Source>
+  <Meta>
+   <MaxMsgSize xmlns="syncml:metinf">
+    10000
+   </MaxMsgSize>
+   <MaxObjSize xmlns="syncml:metinf">
+    4000000
+   </MaxObjSize>
+  </Meta>
+ </SyncHdr>
+ <SyncBody>
+  <Status>
+   <CmdID>
+    1
+   </CmdID>
+   <MsgRef>
+    1
+   </MsgRef>
+   <CmdRef>
+    0
+   </CmdRef>
+   <Cmd>
+    SyncHdr
+   </Cmd>
+   <TargetRef>
+    0882AF01C240AD018800
+   </TargetRef>
+   <SourceRef>
+    http://devel.synd.info/syncml/
+   </SourceRef>
+   <Data>
+    200
+   </Data>
+  </Status>
+  <Status>
+   <CmdID>
+    2
+   </CmdID>
+   <MsgRef>
+    1
+   </MsgRef>
+   <CmdRef>
+    2
+   </CmdRef>
+   <Cmd>
+    Results
+   </Cmd>
+   <SourceRef>
+    ./devinf11
+   </SourceRef>
+   <Data>
+    200
+   </Data>
+  </Status>
+  <Status>
+   <CmdID>
+    3
+   </CmdID>
+   <MsgRef>
+    1
+   </MsgRef>
+   <CmdRef>
+    4
+   </CmdRef>
+   <Cmd>
+    Alert
+   </Cmd>
+   <TargetRef>
+    ./tasks
+   </TargetRef>
+   <SourceRef>
+    tasks
+   </SourceRef>
+   <Data>
+    200
+   </Data>
+   <Item>
+    <Data>
+     <Anchor xmlns="syncml:metinf">
+      <Next>
+       20050630T124718Z
+      </Next>
+     </Anchor>
+    </Data>
+   </Item>
+  </Status>
+  <Sync>
+   <CmdID>
+    4
+   </CmdID>
+   <Target>
+    <LocURI>
+     tasks
+    </LocURI>
+   </Target>
+   <Source>
+    <LocURI>
+     ./tasks
+    </LocURI>
+   </Source>
+   <Replace>
+    <CmdID>
+     5
+    </CmdID>
+    <Meta>
+     <Type xmlns="syncml:metinf">
+      text/x-vcalendar
+     </Type>
+    </Meta>
+    <Item>
+     <Source>
+      <LocURI>
+       50349189
+      </LocURI>
+     </Source>
+     <Data>
+<![CDATA[BEGIN:VCALENDAR
+VERSION:1.0
+BEGIN:VTODO
+SUMMARY;CHARSET=UTF-8:BM25
+DESCRIPTION;ENCODING=QUOTED-PRINTABLE:None=0D=0A=
+123=0D=0A=
+
+CATEGORIES:Synd
+CLASS:PUBLIC
+DTSTART:20050714T000000
+DUE:20050714T000000
+PRIORITY:2
+STATUS:NEEDS ACTION
+AALARM;CHARSET=UTF-8:20050714T060000Z;;;BM25
+DALARM;CHARSET=UTF-8:20050714T060000Z;;;BM25
+END:VTODO
+END:VCALENDAR
+]]>
+     </Data>
+    </Item>
+   </Replace>
+  </Sync>
+  <Final>
+  </Final>
+ </SyncBody>
+</SyncML>

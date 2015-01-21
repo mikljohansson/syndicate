@@ -1,0 +1,1 @@
+<?= tpl_chop($node->toString(),25) ?>

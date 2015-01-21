@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Inventory>
+  <Agent Transport="SOAP" Location="https://www.example.com/synd/soap/inventory/" ImageIdentifier="Windows">
+  <!-- <Agent Transport="Mail" Server="mail.example.com" Address="agent@example.com" ImageIdentifier="Windows"> -->
+    <LoadedImage Key="SOFTWARE\\Rembo" Value="XPImage">Rembo</LoadedImage>
+    <Timer Interval="24" />
+  </Agent>
+  <RemoteService Port="7500" />
+</Inventory>

@@ -1,0 +1,15 @@
+<? $client =& $node->getClient(); ?>
+	<!--
+	<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+			 xmlns:dc="http://purl.org/dc/elements/1.1/" 
+			 xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+	<rdf:Description 
+		rdf:about="<?= tpl_request_host() ?><?= tpl_view($node->getHandler(),'view',array($node->nodeId)) ?>" 
+		trackback:ping="<?= tpl_request_host() ?><?= tpl_view($node->getHandler(),'invoke',array($node->nodeId,'trackback_ping')) ?>" 
+		dc:identifier="<?= tpl_request_host() ?><?= tpl_view($node->getHandler(),'view',array($node->nodeId)) ?>" 
+		dc:title="<?= $node->toString() ?>" 
+		dc:description="<?= preg_replace("/\s*[\r\n]\s*/s",'',strip_tags($node->getDescription())) ?>" 
+		db:creator="<?= $client->toString() ?>" 
+		dc:date="<?= date('Y-m-d\TH:i:s+00:00', $node->data['TS_CREATE']) ?>" />
+	</rdf:RDF>
+	-->

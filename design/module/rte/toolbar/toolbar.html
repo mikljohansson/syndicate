@@ -1,0 +1,154 @@
+<!-- SyndRTE button toolbar -->
+<div id="srte_toolbar_button" class="srte_toolbar" style="width:355px; left:{btnLeft}; top:{btnTop};">
+	<table>
+	<tr>
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td class="srte_button" id="srte_button_save"><img src="{base}image/save.gif" title="Save (Ctrl+S)" /></td>
+		<td><img src="{base}image/separator.gif" /></td>
+		<td class="srte_button" id="srte_button_bold"><img src="{base}image/bold.gif" title="Bold (Ctrl+B)" /></td>
+		<td class="srte_button" id="srte_button_italic"><img src="{base}image/italic.gif" title="Italic (Ctrl+I)" /></td>
+		<td class="srte_button" id="srte_button_underline"><img src="{base}image/underline.gif" title="Underline (Ctrl+U)" /></td>
+		<td><img src="{base}image/separator.gif" /></td>
+		<td class="srte_button" id="srte_button_outdent"><img src="{base}image/outdent.gif" title="Decrease Indent" /></td>
+		<td class="srte_button" id="srte_button_indent"><img src="{base}image/indent.gif" title="Increase Indent" /></td>
+		<td><img src="{base}image/separator.gif" /></td>
+		<td class="srte_button" id="srte_button_orderedlist"><img src="{base}image/orderedlist.gif" title="Numbered List" /></td>
+		<td class="srte_button" id="srte_button_unorderedlist"><img src="{base}image/unorderedlist.gif" title="Bulleted List" /></td>
+		<td><img src="{base}image/separator.gif" /></td>
+		<td class="srte_button" id="srte_button_alignleft"><img src="{base}image/alignleft.gif" title="Align Left" /></td>
+		<td class="srte_button" id="srte_button_aligncenter"><img src="{base}image/aligncenter.gif" title="Center" /></td>
+		<td class="srte_button" id="srte_button_alignright"><img src="{base}image/alignright.gif" title="Align Right" /></td>
+		<td><img src="{base}image/separator.gif" /></td>
+		<td class="srte_button" id="srte_button_table"><img src="{base}image/table.gif" title="Insert Table" /></td>
+		<td class="srte_button" id="srte_button_image"><img src="{base}image/image.gif" title="Insert Image" /></td>
+		<td class="srte_button" id="srte_button_source"><img src="{base}image/source.gif" title="Show HTML" /></td>
+		<td class="srte_button" id="srte_button_properties"><img src="{base}image/properties.gif" title="Properties Inspector Toolbar" /></td>
+		<td class="srte_button" id="srte_button_dom"><img src="{base}image/dom.gif" title="HTML Inspector Toolbar" /></td>
+	</tr>
+	</table>
+</div>
+
+<!-- SyndRTE properties inspector toolbar -->
+<div id="srte_toolbar_properties" class="srte_toolbar" style="width:370px; left:{propLeft}; top:{propTop}; visibility:{propVisibility};">
+	<table id="srte_properties_text" cellpadding="0" cellspacing="0">
+	<tr class="srte_toolbar_top">
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td style="text-align:right;">Format</td>
+		<td>
+			<select id="srte_component_format">
+				<option value="">None</option>
+				<option value="P">Paragraph</option>
+				<option value="DIV">Div</option>
+				<option value="H1">Heading 1</option>
+				<option value="H2">Heading 2</option>
+				<option value="H3">Heading 3</option>
+				<option value="H4">Heading 4</option>
+				<option value="H5">Heading 5</option>
+				<option value="H6">Heading 6</option>
+				<option value="PRE">Preformatted</option>
+			</select>
+			Style
+			<select id="srte_component_class">
+				<option value="">None</option>
+				<option id="srte_style_small" value="small">Small</option>
+				<option id="srte_style_medium" value="medium">Medium</option>
+				<option id="srte_style_large" value="large">Large</option>
+				<option id="srte_style_float-left" value="float-left">Float Left</option>
+				<option id="srte_style_float-right" value="float-right">Float Right</option>
+				<option id="srte_style_indent" value="indent">Indent</option>
+				<option id="srte_style_code" value="code">Code</option>
+			</select>
+		</td>
+		<td style="text-align:right; vertical-align:top;">
+			<img id="srte_toolbar_properties_close" src="{base}image/close.gif" />
+		</td>
+	</tr>
+	<tr class="srte_toolbar_bottom">
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td style="text-align:right;"><u>L</u>ink</td>
+		<td colspan="2">
+			<input id="srte_component_link" type="text" accesskey="l" style="width:300px;" />
+		</td>
+	</tr>
+	</table>
+
+	<table id="srte_properties_table" style="display:none;" cellpadding="0" cellspacing="0">
+	<tr class="srte_toolbar_top">
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td style="text-align:right;"><u>W</u></td>
+		<td><input id="srte_properties_table_width" accesskey="w" type="text" style="width:40px;" /></td>
+		<td style="text-align:right;"><u>R</u>ows</td>
+		<td><input id="srte_properties_table_rows" accesskey="r" type="text" style="width:30px;" /></td>
+		<td style="text-align:right;">Cell<u>P</u>ad</td>
+		<td><input id="srte_properties_table_cellpadding" accesskey="p" type="text" style="width:30px;" /></td>
+		<td style="text-align:right;"><u>B</u>order</td>
+		<td><input id="srte_properties_table_border" accesskey="b" type="text" style="width:30px;" /></td>
+	</tr>
+	<tr class="srte_toolbar_bottom">
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td style="text-align:right;"><u>H</u></td>
+		<td><input id="srte_properties_table_height" accesskey="h" type="text" style="width:40px;" /></td>
+		<td style="text-align:right;"><u>C</u>ols</td>
+		<td><input id="srte_properties_table_cols" accesskey="c" type="text" style="width:30px;" /></td>
+		<td style="text-align:right;">Cell<u>S</u>pace</td>
+		<td><input id="srte_properties_table_cellspacing" accesskey="s" type="text" style="width:30px;" /></td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	</table>
+
+	<table id="srte_properties_image" style="display:none;" cellpadding="0" cellspacing="0">
+	<tr class="srte_toolbar_top">
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td style="text-align:right;"><u>W</u></td>
+		<td><input id="srte_properties_image_width" accesskey="w" type="text" style="width:40px;" /></td>
+		<td style="text-align:right;"><u>L</u>ink</td>
+		<td colspan="3"><input id="srte_properties_image_link" accesskey="l" type="text" style="width:236px;" /></td>
+	</tr>
+	<tr class="srte_toolbar_bottom">
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td style="text-align:right;"><u>H</u></td>
+		<td><input id="srte_properties_image_height" accesskey="h" type="text" style="width:40px;" /></td>
+		<td style="text-align:right;"><u>S</u>ource</td>
+		<td colspan="3"><input id="srte_properties_image_src" accesskey="s" type="text" style="width:236px;" /></td>
+	</tr>
+	<tr class="srte_toolbar_bottom">
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td>&nbsp;</td>
+		<td colspan="2" style="text-align:right;"><u>A</u>lt. Text</td>
+		<td><input id="srte_properties_image_alt" accesskey="a" type="text" style="width:160px;" /></td>
+		<td style="text-align:right;"><u>B</u>order</td>
+		<td><input id="srte_properties_image_border" accesskey="b" type="text" style="width:30px;" /></td>
+	</tr>
+	</table>
+</div>
+
+<!-- SyndRTE DOM inspector toolbar -->
+<div id="srte_toolbar_dom" class="srte_toolbar" style="width:700px; left:{domLeft}; top:{domTop}; visibility:{domVisibility};">
+	<table cellpadding="0" cellspacing="0">
+	<tr>
+		<td style="padding:3px 3px 0px 3px;"><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td id="srte_component_dombrowser" class="middle" width="99%">
+			&nbsp;
+		</td>
+		<td valign="top" style="padding:0;">
+			<img id="srte_toolbar_dom_close" src="{base}image/close.gif" />
+		</td>
+	</tr>
+	</table>
+</div>
+
+<!-- SyndRTE image toolbar -->
+<div id="srte_toolbar_image" class="srte_toolbar" style="width:400px; left:{imageLeft}; top:{imageTop}; visibility:hidden;">
+	<table cellpadding="0" cellspacing="0">
+	<tr class="srte_toolbar_top">
+		<td><img class="srte_moveable" src="{base}image/toolbar.gif" /></td>
+		<td style="padding-top:1px;">
+			<input type="hidden" id="srte_area_id" value="" />
+			<input type="hidden" id="srte_area_global_id" value="" />
+			<iframe scrolling="no" id="srte_component_image" src="{base}toolbar/image.html"
+				style="width:350px; height:22px; border:0;"></iframe>
+		</td>
+	</tr>
+	</table>
+</div>

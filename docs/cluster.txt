@@ -1,0 +1,3 @@
+The docs/lvs directory contains example scripts and configuration 
+files for a Linux Virtual Server cluster setup where both master and
+backup loadbalancer also function as worker nodes.

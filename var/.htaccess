@@ -1,0 +1,20 @@
+Options	-Indexes -Includes +FollowSymLinks
+
+<FilesMatch "\.(inc|tpl)$">
+	Order		Deny,Allow
+	Satisfy		All
+</FilesMatch>
+
+# If you have PHP4 or PHP5 installed make sure the directive
+# below is enabled. If you do not have PHP installed you
+# will need to comment out the directory below to avoid
+# errors:
+php_flag		engine	off
+
+# If you have PHP3 installed make sure the directive below is
+# enabled:
+#php3_engine	off
+
+# This line will redefine the mime type for the most common
+# types of scripts.
+AddType			text/plain		.shtml .php .php3 .phtml .phtm .pl .py .cgi

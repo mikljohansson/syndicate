@@ -1,0 +1,33 @@
+Running the search engine on large collections you might want to 
+adjust your /etc/my.cnf if you have the memory to spare.
+
+See also:
+ http://www.databasejournal.com/features/mysql/article.php/3367871
+ The example 'my-huge.cnf' config file
+
+# Use separate files for each InnoDB table
+innodb_file_per_table = 1
+
+# About 1/3 of total RAM on dedicated servers
+key_buffer_size = 512M
+
+sort_buffer_size = 4M
+myisam_sort_buffer_size = 64M
+query_cache_type = 1
+query_cache_size = 32M
+read_buffer_size = 4M
+
+# Use about 1Kb per 1Mb of total RAM, allocated per thread
+read_rnd_buffer_size = 2M
+
+# Use 512 for large dedicated servers.
+table_cache = 256
+
+# Allocated per thread, use 64M for large dedicated servers.
+tmp_table_size = 32M 
+
+# Try number of CPU's*2 for thread_concurrency
+thread_concurrency = 4
+
+# Put the temp dir on dedicated disks (RAID10 is always nice)
+tmpdir = /tmp/

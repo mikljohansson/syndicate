@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>Synd JavaScript unit tests</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+	<meta http-equiv="Expires" content="Sat, 1 Jan 2000 00:00:00 GMT" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<link rel="stylesheet" type="text/css" href="jsunit/css/jsUnitStyle.css">
+	<script type="text/javascript" src="jsunit/app/jsUnitCore.js"></script>
+	<script type="text/javascript" src="../../design/js/xmlrpc.js"></script>
+	<script type="text/javascript">
+	<!--
+
+	var sLocation = new String(window.location).substr(0, new String(window.location).lastIndexOf('/')+1);
+	var oTransport = new SyndXMLRPCTransport(sLocation+'xmlrpc.script.php');
+
+	function testConnection() {
+		var nActual = oTransport.invoke('echoParameter', [123]);
+		assertEquals(123, nActual);
+	}
+
+	function testTransparentProxy() {
+		var oProxy = new TransparentProxy(oTransport, ['echoParameter']);
+		var nActual = oProxy.echoParameter(123);
+		assertEquals(123, nActual);
+
+		// Test introspection using 'system.listMethods'
+		oProxy = new TransparentProxy(oTransport);
+		nActual = oProxy.echoparameter(123);
+		assertEquals(123, nActual);
+	}
+
+	function testEncodeString() {
+		var sExpected = '<string><![CDATA[text]]></string>';
+		var sActual = 'text'.toXMLRPC();
+		assertEquals(sExpected, sActual);
+
+		var oParsed = oTransport._parse(sActual);
+		var oActual = oTransport._value(oParsed.firstChild);
+		assertEquals('text', oActual);
+	}
+
+	function testEncodeBoolean() {
+		var sExpected = '<boolean>0</boolean>';
+		var sActual = false.toXMLRPC();
+		assertEquals(sExpected, sActual);
+
+		var sExpected = '<boolean>1</boolean>';
+		var sActual = true.toXMLRPC();
+		assertEquals(sExpected, sActual);
+
+		var oParsed = oTransport._parse(sActual);
+		var oActual = oTransport._value(oParsed.firstChild);
+		assertEquals(true, oActual);
+	}
+
+	function testEncodeNumber() {
+		var sExpected = '<int>123</int>';
+		var sActual = new Number(123).toXMLRPC();
+		assertEquals(sExpected, sActual);
+
+		var oParsed = oTransport._parse(sActual);
+		var oActual = oTransport._value(oParsed.firstChild);
+		assertEquals(123, oActual);
+
+		var sExpected = '<double>123.123</double>';
+		var sActual = new Number(123.123).toXMLRPC();
+		assertEquals(sExpected, sActual);
+
+		var oParsed = oTransport._parse(sActual);
+		var oActual = oTransport._value(oParsed.firstChild);
+		assertEquals(123.123, oActual);
+	}
+
+	function testEncodeDate() {
+		var sExpected = '<dateTime.iso8601>20050308T08:00:00</dateTime.iso8601>';
+		var oDate = new Date();
+
+		oDate.setUTCFullYear(2005);
+		oDate.setUTCMonth(2);
+		oDate.setUTCDate(8);
+		oDate.setUTCHours(8);
+		oDate.setUTCMinutes(0);
+		oDate.setUTCSeconds(0);
+
+		var sActual = oDate.toXMLRPC();
+		assertEquals(sExpected, sActual);
+
+		var oParsed = oTransport._parse(sActual);
+		var oActual = oTransport._value(oParsed.firstChild);
+		assertEquals(oDate.toString(), oActual.toString());
+	}
+
+	function testEncodeBASE64() {
+		var oParsed = oTransport._parse('<base64>YWJj</base64>');
+		var oActual = oTransport._value(oParsed.firstChild);
+		assertEquals('abc', oActual);
+
+	}
+
+	function testEncodeArray() {
+		var sExpected = '<array><data><value><int>123</int></value><value><int>456</int></value></data></array>';
+		var sActual = [123, 456].toXMLRPC();
+		assertEquals(sExpected, sActual);
+
+		var oParsed = oTransport._parse(sActual);
+		var oActual = oTransport._value(oParsed.firstChild);
+		assertEquals(2, oActual.length);
+		assertEquals(123, oActual[0]);
+		assertEquals(456, oActual[1]);
+	}
+
+	function testEncodeStruct() {
+		var sExpected = '<struct><member><name>key</name><value><int>123</int></value></member></struct>';
+		var oStruct = new Object();
+		oStruct['key'] = 123;
+
+		var sActual = oStruct.toXMLRPC();
+		assertEquals(sExpected, sActual);
+
+		var oParsed = oTransport._parse(sActual);
+		var oActual = oTransport._value(oParsed.firstChild);
+		assertEquals(123, oActual['key']);
+	}
+
+	//-->
+	</script>
+</head>
+<body>
+	<h1>XML-RPC unit tests</h1>
+	<p>Unit tests for the JavaScript XML-RPC implementation</p>
+</body>

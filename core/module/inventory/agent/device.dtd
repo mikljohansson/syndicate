@@ -1,0 +1,141 @@
+<!ELEMENT device (listener?, motherboard?, chassis?, cpu*, ram*, keyboard?, pointingdevice*, disk*, rom*, nic*, videocard*, soundcard*, monitor*, os*)>
+<!ATTLIST device
+	xmlns		CDATA	#FIXED "http://www.synd.info/2005/device">
+
+<!ELEMENT listener (#PCDATA)>
+<!ATTLIST listener
+	method		(soap|xmlrpc)	#REQUIRED
+	version		CDATA			"20050908"
+	action		CDATA			"http://schemas.microsoft.com/clr/nsassem/Inventory.RemoteService/InventoryService#{method}">
+
+<!ELEMENT motherboard (bios?, ram*, port*, slot*)>
+<!ATTLIST motherboard
+	vendor		CDATA	#REQUIRED
+	version		CDATA	#IMPLIED
+	release		CDATA	#IMPLIED
+	serial		CDATA	#IMPLIED>
+
+<!ELEMENT bios EMPTY>
+<!ATTLIST bios
+	vendor		CDATA	#REQUIRED
+	version		CDATA	#IMPLIED
+	release		CDATA	#IMPLIED>
+
+<!ELEMENT ram EMPTY>
+<!ATTLIST ram
+	name		CDATA	#REQUIRED
+	type		CDATA	#IMPLIED
+	bank		CDATA	#IMPLIED
+	slot		CDATA	#IMPLIED
+	size		CDATA	#IMPLIED
+	frequency	CDATA	#IMPLIED>
+
+<!ELEMENT port EMPTY>
+<!ATTLIST port
+	name		CDATA	#REQUIRED
+	type		CDATA	#IMPLIED
+	connector	CDATA	#IMPLIED>
+
+<!ELEMENT slot EMPTY>
+<!ATTLIST slot
+	name		CDATA	#REQUIRED
+	type		CDATA	#IMPLIED
+	occupied	(0|1)	"0">
+
+<!ELEMENT chassis EMPTY>
+<!ATTLIST chassis
+	type		CDATA	#REQUIRED
+	vendor		CDATA	#IMPLIED
+	version		CDATA	#IMPLIED
+	serial		CDATA	#IMPLIED
+	tag			CDATA	#IMPLIED>
+
+<!ELEMENT cpu EMPTY>
+<!ATTLIST cpu
+	vendor		CDATA	#REQUIRED
+	version		CDATA	#REQUIRED
+	frequency	CDATA	#REQUIRED
+	serial		CDATA	#IMPLIED>
+
+<!ELEMENT keyboard (#PCDATA)>
+<!ELEMENT pointingdevice (#PCDATA)>
+<!ATTLIST pointingdevice
+	vendor		CDATA	#IMPLIED>
+
+<!ELEMENT disk (partition*)>
+<!ATTLIST disk
+	name		CDATA	#REQUIRED
+	version		CDATA	#REQUIRED
+	size		CDATA	#REQUIRED
+	cache		CDATA	#IMPLIED>
+
+<!ELEMENT partition EMPTY>
+<!ATTLIST partition
+	name		CDATA	#REQUIRED
+	size		CDATA	#REQUIRED
+	type		CDATA	#IMPLIED>
+
+<!ELEMENT rom EMPTY>
+<!ATTLIST rom
+	name		CDATA	#REQUIRED
+	version		CDATA	#REQUIRED
+	mountpoint	CDATA	#IMPLIED>
+
+<!ELEMENT nic (interface*)>
+<!ATTLIST nic
+	mac			CDATA	#REQUIRED
+	version		CDATA	#IMPLIED>
+
+<!ELEMENT interface EMPTY>
+<!ATTLIST interface
+	ip			CDATA	#REQUIRED
+	netmask		CDATA	#IMPLIED
+	broadcast	CDATA	#IMPLIED
+	name		CDATA	#IMPLIED>
+
+<!ELEMENT videocard EMPTY>
+<!ATTLIST videocard
+	version		CDATA	#REQUIRED
+	ram			CDATA	#IMPLIED
+	hres		CDATA	#IMPLIED
+	vres		CDATA	#IMPLIED
+	bits		CDATA	#IMPLIED
+	frequency	CDATA	#IMPLIED>
+
+<!ELEMENT monitor EMPTY>
+<!ATTLIST monitor
+	vendor		CDATA	#REQUIRED
+	version		CDATA	#REQUIRED
+	size		CDATA	#IMPLIED>
+
+<!ELEMENT soundcard EMPTY>
+<!ATTLIST soundcard
+	version		CDATA	#REQUIRED>
+
+<!ELEMENT os (printer*, product*, image?)>
+<!ATTLIST os
+	name		CDATA	#REQUIRED
+	vendor		CDATA	#IMPLIED
+	version		CDATA	#IMPLIED
+	release		CDATA	#IMPLIED
+	machinename	CDATA	#IMPLIED
+	serial		CDATA	#IMPLIED
+	path		CDATA	#IMPLIED>
+
+<!ELEMENT printer EMPTY>
+<!ATTLIST printer
+	name		CDATA	#REQUIRED
+	version		CDATA	#IMPLIED
+	driver		CDATA	#IMPLIED
+	port		CDATA	#IMPLIED>
+
+<!ELEMENT product EMPTY>
+<!ATTLIST product
+	vendor		CDATA	#IMPLIED
+	name		CDATA	#REQUIRED
+	version		CDATA	#REQUIRED
+	release		CDATA	#IMPLIED
+	installdate	CDATA	#IMPLIED
+	state		(0|1)	"1">
+	
+<!ELEMENT image (#PCDATA)>

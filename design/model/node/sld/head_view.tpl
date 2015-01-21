@@ -1,0 +1,1 @@
+<a href="<?= tpl_link($node->getHandler(),'view',$node->nodeId) ?>" title="<?= tpl_attribute(tpl_chop($node->getDescription(),150)) ?>"><?= $node->toString() ?></a>

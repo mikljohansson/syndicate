@@ -1,0 +1,1 @@
+<? $this->render($node->getItem(),'head_view.tpl') ?>

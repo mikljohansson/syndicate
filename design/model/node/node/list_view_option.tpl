@@ -1,0 +1,1 @@
+<option value="<?= $node->nodeId ?>"<?= !empty($selected) && $selected->nodeId == $node->nodeId ? ' selected="selected"' : ''?>><?= $node->toString() ?></option>

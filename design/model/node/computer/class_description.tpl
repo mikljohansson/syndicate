@@ -1,0 +1,1 @@
+<?= tpl_text('Computer workstation that can be picked up by the inventory agent.') ?>

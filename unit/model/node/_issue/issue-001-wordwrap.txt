@@ -1,0 +1,2 @@
+> This line is not to be wrapped
+> > But this line should indeed be wrapped into two separate lines

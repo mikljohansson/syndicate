@@ -1,0 +1,60 @@
+.ContextMenu {
+	position: absolute;
+	z-index: 100;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	background-color: #d4d0c8;
+	border: 2px outset #fff;
+	list-style-type: none;
+}
+
+.ContextMenu li {
+	margin: 1px;
+	margin-left: 0;
+	padding: 2px 14px 3px 20px;
+	cursor: default;
+	color: black;
+	text-decoration: none;
+}
+
+.ContextItemHover, .ContextSubmenuItemHover {
+	color: #fff !important;
+	background-color: midnightblue;
+	text-decoration: none;
+}
+
+.ContextSubmenuItem {
+	background: url(../image/tree/collapsed.gif) no-repeat 96% 46%;
+}
+
+.ContextSubmenuItemHover {
+	background: midnightblue url(../image/tree/collapsed_white.gif) no-repeat 96% 46%;
+}
+
+.ContextMenu img {
+	margin-left: -14px;
+	padding-right: 5px;
+	height: 9px;
+	width: 9px;
+}
+
+.MultipleSelection img {
+	display: none;
+}
+
+.ContextMenu hr {
+	height: 2px;
+	text-align: center;
+	margin: 0px 3px 0px 4px;
+	border: 0;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #fff;
+}
+
+.ContextMenu .Expanded {
+	margin-left: 1em;
+	border-left: 1px solid;
+}

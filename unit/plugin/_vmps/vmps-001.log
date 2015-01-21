@@ -1,0 +1,2 @@
+Feb  5 04:17:00 example/example vmpsd: ALLOW: 010203040506 -> UnitTest, switch 192.168.0.2 port Fa0/8
+Feb  5 04:18:00 example/example vmpsd: ALLOW: 010203040507 -> unittest, switch 192.168.0.3 port Fa0/9

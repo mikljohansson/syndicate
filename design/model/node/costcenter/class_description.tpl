@@ -1,0 +1,1 @@
+<?= tpl_text('Costcenter is a billable organizational unit.') ?>

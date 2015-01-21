@@ -1,0 +1,18 @@
+Your issue regarding '{$TITLE}' has been received and assigned the case number '{$ID}'. You can follow the progress and provide more information at:
+
+ {$LINK}
+ 
+Assigned: {$ASSIGNED} ({$ASSIGNED_CONTACT_INFO})
+Customer: {$CUSTOMER} ({$CUSTOMER_CONTACT_INFO})
+
+{$NOTE}
+
+> {$DESCRIPTION}
+
+*** Are you satisfied with this solution ***
+ Yes  - {$FEEDBACK_LINK_YES}
+ No   - {$FEEDBACK_LINK_NO}
+
+The poll is anonymous; your feedback is valuable and helps us improve the quality of our service.
+
+*** This is an automatic email from {$PROJECT} ***

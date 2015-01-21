@@ -1,0 +1,1 @@
+<? $this->render($node->getChild(),'item.tpl',$_data) ?>

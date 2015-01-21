@@ -1,0 +1,1 @@
+<a href="<?= $this->quote($node->getLocation()) ?>"><?= $this->quote($node->getLocation()) ?></a>

@@ -1,0 +1,1 @@
+<h2><?= $node->toString() ?></h2>

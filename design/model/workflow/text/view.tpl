@@ -1,0 +1,1 @@
+<?= $this->quote($node->getDescription()) ?>

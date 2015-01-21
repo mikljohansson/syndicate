@@ -1,0 +1,112 @@
+.srte_area {
+	border: 1px solid;
+	padding: 2px;
+}
+
+.srte_area table, .srte_area td {
+	border: 1px dashed #ccc;
+}
+
+.srte_toolbar {
+	background-color: #dBd8d1;
+	border: 1px solid #777;
+	position: absolute;
+	z-index: 10;
+}
+
+.srte_toolbar table td {
+	font-family: Verdana;
+	font-size: 7pt;
+	color: #333;
+	cursor: default;
+}
+
+.srte_toolbar td {
+	vertical-align: middle;
+	line-height: 1.5em;
+}
+
+.srte_moveable {
+	cursor: move;
+}
+
+.srte_toolbar input, .srte_toolbar select, #srte_image_form input, .srte_toolbar option {
+	border: 1px solid #333;
+	background-color: #fff;
+	font-family: Verdana;
+	font-size: 7pt;
+	color: #333;
+}
+
+.srte_button {
+	border: 1px solid #dBd8d1;
+	height: 18px;
+	width: 18px; 
+}
+
+.srte_button img {
+	filter: DropShadow(offx=2,offy=2,color='#dBd8d1',positive='true'), Gray(enabled=1), Alpha(enabled=1,opacity=35);
+	margin: 1px;
+}
+
+#srte_button_properties img, #srte_button_dom img {
+	filter: DropShadow(offx=2,offy=2,color='#dBd8d1',positive='true'), Gray(enabled=0), Alpha(enabled=0,opacity=35);
+	margin: 1px;
+}
+
+.srte_toolbar .srte_toolbar_top td {
+	padding: 3px 3px 0px 3px;
+}
+
+.srte_toolbar .srte_toolbar_bottom td {
+	padding: 0px 3px 0px 3px;
+}
+
+.srte_component_dombrowsernode {
+	color: #444 !important;
+	text-decoration: none;
+	cursor: default;
+	font-size: 10pt;
+}
+
+a:hover.srte_component_dombrowsernode, .srte_highlight {
+	color: #000 !important;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.srte_context_menu {
+	position: absolute;
+	width: 95px;
+	margin: 0;
+	padding: 0;
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	background-color: #d4d0c8;
+	border: 2px outset #fff;
+	list-style-type: none;
+	z-index: 100;
+}
+
+.srte_context_menu li {
+	margin: 1px;
+	padding: 2px 2px 3px 20px;
+	cursor: default;
+	color: black;
+	text-decoration: none;
+}
+
+.srte_context_hover {
+	color: #fff !important;
+	background-color: midnightblue;
+	text-decoration: none;
+}
+
+.srte_context_menu hr {
+	height: 2px;
+	text-align: center;
+	margin: 0px 3px 0px 4px;
+	border: 0;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #fff;
+}

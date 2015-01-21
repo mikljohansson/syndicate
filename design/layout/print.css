@@ -1,0 +1,379 @@
+/**
+ * Page layout, look and feel
+ */
+html {
+	background-color: #fff;
+}
+
+body {
+	font-size: 69%;
+	font-family: verdana, sans-serif;
+	border-color: #000;
+	color: #000;
+}
+
+table {
+	border-color: #000;
+}
+
+a, button {
+	text-decoration: none;
+}
+
+p a, .Info a {
+	text-decoration: underline;
+}
+
+h1 {
+	font-size: 1.6em;
+}
+
+h2, h3 {
+	margin: 0.5em 0 0.2em 0;
+}
+
+h2 {
+	font-size: 1.3em;
+}
+
+h3 {
+	font-size: 1.1em;
+	padding-bottom: 0.2em;
+}
+
+h4 {
+	margin: 1em 0 0 0;
+	font-size: 1em;
+}
+
+h5 {
+	margin: 0;
+	font-size: 1em;
+	font-weight: normal;
+}
+
+p {
+	margin: 0.5em 0 0.5em 0;
+}
+
+h3:first-child, h4:first-child, p:first-child {
+	margin-top: 0.2em;
+}
+
+hr {
+	height: 1px;
+}
+
+dt {
+	margin: 0.5em 0 0 0;
+}
+
+dd {
+	margin: 0 0 0 1em;
+}
+
+caption {
+	margin-top: 0.4em;
+	text-align: left;
+	font-size: 1.2em;
+}
+
+table:first-child caption {
+	margin-top: 0;
+}
+
+.Info {
+	margin-bottom: 0.2em;
+	font-size: 0.85em;
+}
+
+/* Page layout */
+#Header {
+	display: none;
+}
+
+/* Sidebar */
+#Sidebar {
+	display: none;
+}
+
+/* Breadcrumb navigation */
+.Breadcrumbs a {
+	text-decoration: none;
+}
+
+.Breadcrumbs a:last-child {
+	text-decoration: underline;
+}
+
+/* Actions */
+ul.Actions {
+	list-style-image: url(../image/tree/leaf.gif);
+}
+
+.Item ul.Actions li:before {
+	content: url(../image/tree/leaf.gif);
+	margin-right: 0.5em;
+}
+
+/* Messages */
+.Dialogue, .Success, .Result, div.Notice, div.Warning, ul.Warning {
+	margin: 0.9em 0 0.9em 0;
+	padding: 0.5em;
+}
+
+.Dialogue h2, .Success h2, .Notice h2, div.Warning h2 {
+	margin: 0 0 0.2em 0;
+}
+
+.Dialogue h3, .Success h3, .Notice h3, div.Warning h3 {
+	margin: 1em 0 0.2em 0;
+}
+
+.Success div.Info, .Result div.Info, .Notice div.Info, .Warning div.Info {
+	margin-left: 0.6em;
+	margin-bottom: 0.4em;
+}
+
+.Success .Actions {
+	margin-bottom: 0;
+}
+
+.Success .Info a {
+	text-decoration: underline;
+	border: 0;
+}
+
+.Success {
+	background-color: #bbffbb;
+	border: 1px solid #000;
+}
+
+.Result {
+	background-color: #e3e8ed;
+	border: 1px solid #999;
+}
+
+div.Dialogue, div.Notice {
+	background-color: #ffffdd;
+	border: 1px solid #000;
+}
+
+.Warning h2 {
+	color: #f0000c;
+}
+
+ul.Warning, div.Warning {
+	background-color: #edf1f3;
+	border: 2px solid #f0000c;
+}
+
+ul.Warning {
+	list-style-type: none;
+	color: red;
+}
+
+/* Forms */
+fieldset {
+	padding: 0.2em;
+	margin: 0.5em 0 0.5em 0;
+}
+
+input[type="text"], input[type="password"], textarea {
+	padding: 1px 2px 1px 2px;
+	border: 1px solid;
+}
+
+input[type="submit"], input[type="button"] {
+	padding: 0 2px 0 2px;
+	border: 1px solid;
+}
+
+textarea {
+	font-size: 1.35em;
+}
+
+.RequiredField, .OptionalField {
+	margin-bottom: 0.4em;
+	padding: 0 1em 0.3em 0.5em;
+	width: 95%;
+}
+
+.RequiredField h3, .OptionalField h3 {
+	margin: 0 0 0 -0.5em;
+	font-size: 1em;
+}
+
+.RequiredField {
+	border-right: 0.5em solid #bbbbff;
+}
+
+.OptionalField {
+	border-right: 0.5em solid #eee;
+}
+
+.RequiredField .Info, .OptionalField .Info {
+	margin-bottom: 0.5em;
+}
+
+.InvalidField input[type="text"], .InvalidField select, .InvalidField textarea {
+	border: 2px solid red;
+}
+
+/* Tabbed pane */
+.PaneHeader, .TabbedHeader {
+	display: none;
+}
+
+.PaneBody {
+	padding: 0.5em;
+}
+
+/* Tables */
+th, td {
+	vertical-align: top;
+	padding: 0;
+}
+
+thead th {
+	vertical-align: middle;
+}
+
+thead th, tfoot th, .odd th, .even th, .odd td, .even td, .Vertical th, .Vertical td {
+	padding: 0.12em 0.25em 0.12em 0.25em;
+}
+
+thead th, tfoot th, .Vertical th, .Report th, .Header td {
+	background-color: #c3cddc;
+}
+
+.odd {
+	background-color: #f4f4f4;
+}
+
+.even {
+	background-color: #eaeaea;
+}
+
+.Enumeration .Actions, .Enumeration .OLE, th.OLE, td.OLE {
+	white-space: nowrap;
+	width: 1%;
+}
+
+.OLE input {
+	margin: 2px;
+}
+
+ul.Enumeration {
+	list-style-type: none;
+	padding: 0 0 0 0.8em;
+	margin: 0.2em;
+}
+
+/* Search */
+.SearchSuggestion {
+	margin-bottom: 0.5em;
+	font-size: 1.2em;
+}
+
+.SearchSuggestion a {
+	text-decoration: underline;
+}
+
+/* Calendar */
+.Week {
+	width: 100%;
+	background-color: #f0f0f0;
+	border-collapse: collapse;
+	border: 2px solid;
+}
+
+.Week td {
+	border: 1px solid;
+	margin: 0;
+	font-weight: normal;
+}
+
+.Week .Date, .Week .Time {
+	font-size: 0.8em;
+	color: #666;
+}
+
+.Week td.Time {
+	padding: 0.25em;
+	width: 4em;
+}
+
+.Week .Event {
+	margin: 0 0.25em 0 0.25em;
+	padding: 0.3em;
+	border: 1px solid;
+}
+
+span.EventType1, span.EventType2, span.EventType3, span.EventType4 {
+	border: 1px solid;
+}
+
+span.EventType1 img, span.EventType2 img, span.EventType3 img {
+	width: 0.65em;
+	height: 1.1em;
+}
+
+.EventType1 {
+	background-color: yellow;
+}
+
+.EventType2 {
+	background-color: #cfcfcf;
+}
+
+.EventType3 {
+	background-color: #cacaff;
+}
+
+.TentativeEvent {
+	background-color: red;
+}
+
+.ConfirmedEvent {
+	background-color: #90ee90; /* lightgreen */
+}
+
+/* Email */
+.EmailHeader {
+	margin-bottom: 1em;
+	font-family: courier new;
+}
+
+.Email .QuotedMessageLink {
+	display: none;
+}
+
+/* Report */
+.Report table {
+	margin-bottom: 1em;
+	border-collapse: collapse;
+	border: 1px solid;
+	width: 100%;
+}
+
+.Report th, .Report td {
+	padding: 0.2em 0.5em 0.2em 0.5em;
+}
+
+.Report select, .Report select option {
+	width: 20em;
+}
+
+.Report .TabbedPane table {
+	margin-bottom: 0;
+	border: 0;
+}
+
+.Report .TabbedPane th:first-child {
+	width: 12em;
+}
+
+.H2 {
+	background: none;
+}

@@ -1,0 +1,1 @@
+<a href="<?= tpl_link($node->getHandler(),$node->objectId()) ?>"><?= $node->getInvoiceNumber() ?></a>

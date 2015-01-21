@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>SyndRTE image toolbar</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<style type="text/css">
+		html, body {
+			background-color: #dbd8d1;
+			border: 0;
+		}
+
+		html, body, form {
+			margin: 0;
+			padding: 0;
+		}
+
+		input {
+			font-size: 8pt;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		var iStart, iEnd, sLocation = window.location.href;
+
+		if (-1 != (iStart = sLocation.indexOf('?error=')) ||
+			-1 != (iStart = sLocation.indexOf('&error='))) {
+			iStart += 7;
+			if (-1 == (iEnd = sLocation.indexOf('&', iStart)))
+				iEnd = sLocation.length;
+			if (iStart >= iEnd)
+				alert('An unknown error occurred');
+			else {
+				alert(unescape(sLocation.substring(iStart, iEnd)));
+				sLocation = sLocation.substring(0,iStart-1) + sLocation.substring(iEnd+1);
+			}
+		}
+		else if (-1 != (iStart = sLocation.indexOf('?image=')) ||
+			-1 != (iStart = sLocation.indexOf('&image='))) {
+			iStart += 7;
+			if (-1 == (iEnd = sLocation.indexOf('&', iStart)))
+				iEnd = sLocation.length;
+			if (iStart < iEnd) {
+				window.frameElement._callback_oninsert(unescape(sLocation.substring(iStart, iEnd)));
+				sLocation = sLocation.substring(0,iStart-1) + sLocation.substring(iEnd+1);
+			}
+		}
+	</script>
+	<form id="srte_image_form" enctype="multipart/form-data" method="post">
+		<input type="file" name="image" size="40" />
+		<input type="submit" value="Insert" />
+	</form>
+</body>
+</html>

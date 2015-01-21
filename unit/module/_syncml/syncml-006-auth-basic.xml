@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE SyncML PUBLIC "-//SYNCML//DTD SyncML 1.1//EN" "http://www.syncml.org/docs/syncml_represent_v11_20020213.dtd">
+<SyncML xmlns="syncml:SYNCML1.1">
+	<SyncHdr>
+		<VerDTD>1.1</VerDTD>
+		<VerProto>SyncML/1.1</VerProto>
+		<SessionID>1</SessionID>
+		<MsgID>1</MsgID>
+		<Target>
+			<LocURI>http://www.example.com/synd/syncml/</LocURI>
+		</Target>
+		<Source>
+			<LocURI>_unit_test_device</LocURI>
+		</Source>
+		<Cred>
+			<Meta>
+				<Format xmlns="syncml:metinf">b64</Format>
+				<Type xmlns="syncml:metinf">syncml:auth-basic</Type>
+			</Meta>
+			<Data>__DATA__</Data>
+		</Cred>
+	</SyncHdr>
+	<SyncBody>
+		<Final></Final>
+	</SyncBody>
+</SyncML>

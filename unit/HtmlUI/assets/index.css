@@ -1,0 +1,125 @@
+body {
+	font-size: 69%;
+	font-family: verdana, sans-serif;
+}
+
+table {
+	margin: 1em;
+	border-collapse: collapse;
+}
+
+table table {
+	width: 100%;
+	border: 1px solid #000;
+	background-color: #f9f9f9;
+}
+
+thead {
+	background-color: #59708c; 
+	color: #fff;
+}
+
+thead th {
+	border: 1px solid #000;
+	text-align: left;
+	padding: 0.2em 1em 0.2em 0.5em;
+}
+
+td {
+	vertical-align: top;
+}
+
+.Container {
+	width: 80%;
+}
+
+.Sidebar {
+	width: 15em;
+}
+
+.Folders ul {
+	margin: 0;
+	padding: 0 0 0 1em;
+}
+
+.Folders ul ul {
+	margin: 0 0 0 1em;
+	padding: 0;
+}
+
+.Folders li {
+	margin: 0.3em 0 0 0;
+	padding: 0;
+}
+
+.Folders td {
+	padding: 0.3em 1em 1em 1em;
+}
+
+.Suites th:first-child, .Suites td:first-child {
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+}
+
+.Suites thead .Status {
+	width: 1em;
+}
+
+.Suites thead .Title {
+	width: 15em;
+}
+
+.Suites thead .Time, .Suites thead .Line {
+	width: 3em;
+}
+
+.Suite td {
+	font-weight: bold;
+	border-bottom: 1px solid #000;
+	vertical-align: middle;
+}
+
+.Suite .Results {
+	font-weight: normal;
+	text-align: right;
+}
+
+.Test {
+	background-color: #dfdfdf;
+}
+
+.Test td {
+	border: 1px solid #000;
+}
+
+.Status {
+	border: 1px solid #000;
+}
+
+.Success .Status {
+	background-color: green;
+}
+
+.Failure .Status {
+	background-color: red;
+}
+
+.Trace {
+	position: absolute;
+	visibility: hidden;
+	padding: 5px;
+	background-color: #fff;
+	border: 1px solid #000;
+}
+
+.Trace p {
+	margin: 1em 0 0 0;
+	white-space: pre;
+	color: #666;
+}
+
+.Trace p:first-child {
+	margin-top: 0;
+	color: #000;
+}

@@ -1,0 +1,1 @@
+<?= tpl_text('Plain inventory item with default fields and functions.') ?>

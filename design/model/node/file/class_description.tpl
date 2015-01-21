@@ -1,0 +1,1 @@
+<?= tpl_text('Generic document or other file uploaded to the server') ?>

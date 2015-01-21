@@ -1,0 +1,1 @@
+<? $this->iterate($node->getActivities(),'js.tpl') ?>

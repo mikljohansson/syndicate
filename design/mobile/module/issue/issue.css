@@ -1,0 +1,9 @@
+.Issue .Body, .Task {
+	font-size: 0.9em;
+}
+
+.Task {
+	margin-top: 0;
+	padding-bottom: 0.6em;
+	border-bottom: 1px dashed #999;
+}

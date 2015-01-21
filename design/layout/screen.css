@@ -1,0 +1,822 @@
+html {
+	background-color: #fff;
+}
+
+body {
+	font-size: 69%;
+	font-family: verdana, sans-serif;
+	border-color: #000;
+	color: #424242;
+	margin: 0;
+}
+
+table {
+	border-color: #000;
+}
+
+a, button {
+	color: #333;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+a:active, a:hover {
+	color: #ff0000;
+}
+
+p a, .Info a {
+	text-decoration: underline;
+}
+
+p a {
+	color: #0000cc;
+}
+
+p a:visited {
+	color: #800080;
+}
+
+button:hover {
+	border-color: #000;
+}
+
+h1 {
+	font-size: 1.4em;
+}
+
+h2, h3 {
+	margin: 0.5em 0 0.2em 0;
+}
+
+h2 {
+	font-size: 1.3em;
+	padding-bottom: 0.2em;
+	border-bottom: 1px dotted;
+}
+
+h3 {
+	font-size: 1.1em;
+}
+
+h4 {
+	margin: 1em 0 0 0;
+	font-size: 1em;
+}
+
+h5 {
+	margin: 0;
+	font-size: 1em;
+}
+
+p {
+	margin: 0.5em 0 0.5em 0;
+}
+
+h3:first-child, h4:first-child, p:first-child {
+	margin-top: 0.2em;
+}
+
+hr {
+	height: 1px;
+}
+
+dt {
+	margin: 0.5em 0 0 0;
+}
+
+dd {
+	margin: 0 0 0 1em;
+}
+
+caption {
+	margin-top: 0.4em;
+	text-align: left;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+table:first-child caption {
+	margin-top: 0;
+}
+
+caption a:hover {
+	text-decoration: none;
+}
+
+.Item {
+	margin-bottom: 1.5em;
+}
+
+.Info {
+	margin-bottom: 0.2em;
+	font-size: 0.85em;
+	color: #555;
+}
+
+/* Page layout */
+#Container {
+	width: 80%;
+	margin: auto;
+	min-width: 975px;
+}
+
+#Header {
+	font-size: 0.9em;
+	padding: 0.2em 1em 0.2em 1em;
+	margin-bottom: 2em;
+	background-color: #dfff0c;
+	border-left: 1px solid #bbb;
+	border-right: 1px solid #777;
+	border-bottom: 1px solid #777;
+}
+
+#Header a {
+	font-weight: bold;
+}
+
+#Search {
+	text-align: right;
+}
+
+#Search input {
+	font-size: 1em;
+}
+
+#Navigation {
+	margin: 0.2em 0 0.2em 0;
+	height: 1.3em;
+	text-transform: lowercase;
+	text-align: right;
+}
+
+#Navigation h1 {
+	margin: 0;
+	font-weight: normal;
+	font-size: 1em;
+	float: left;
+}
+
+#Navigation .Menu {
+	margin: 0;
+}
+
+#Navigation .Menu li {
+	margin-left: 1em;
+	display: inline;
+}
+
+#Navigation .Menu em {
+	text-decoration: underline;
+	font-style: normal;
+}
+
+#Content {
+	width: 100%;
+}
+
+/* Sidebar */
+#Sidebar {
+	width: 14em;
+	white-space: nowrap;
+	padding-left: 1em;
+}
+
+#Sidebar ul.Menu {
+	margin: 0 0 0 1em;
+	padding: 0 0 0 0.5em;
+	list-style-type: none;
+}
+
+#Sidebar ul.Menu ul {
+	margin: 0 0 0 1em;
+	padding: 0;
+}
+
+#Sidebar ul.Menu li {
+	margin: 0.3em 0 0 0;
+	padding: 0;
+}
+
+li.Expanded {
+	list-style-type: circle;
+	list-style-image: url(../image/tree/expanded.gif);
+}
+
+li.Collapsed {
+	list-style-type: disc;
+	list-style-image: url(../image/tree/collapsed.gif);
+}
+
+li.Leaf {
+	list-style-type: square;
+	list-style-image: url(../image/tree/leaf.gif);
+}
+
+#Sidebar .Block select {
+	width: 90%;
+}
+
+#Sidebar .Block {
+	margin-bottom: 1em;
+}
+
+.Block {
+	background-color: #f4f4f4;
+	border: 1px solid;
+}
+
+.Enumeration .Block {
+	margin-top: 1em;
+}
+
+.Enumeration :first-child.Block {
+	margin-top: 0.2em;
+}
+
+.Block h3 {
+	margin: 0;
+	padding: 0.1em 0.5em 0.1em 0.5em;
+	border-bottom: 1px solid;
+	background-color: #ddd;
+	font-weight: bold;
+	text-align: center;
+}
+
+.Block .Contents {
+	padding: 0.5em;
+}
+
+.Block h4 {
+	margin-top: 0.5em;
+}
+
+table.Block {
+	width: 100%;
+}
+
+table.Block thead th {
+	font-weight: normal;
+}
+
+table.Block tbody th {
+	width: 10em;
+}
+
+#Sidebar table {
+	width: 100%;
+}
+
+/* Breadcrumb navigation */
+.Breadcrumbs a {
+	text-decoration: none;
+}
+
+.Breadcrumbs a:last-child {
+	text-decoration: underline;
+}
+
+/* Actions */
+ul.Actions {
+	list-style-image: url(../image/tree/leaf.gif);
+}
+
+.Item ul.Actions li:before {
+	content: url(../image/tree/leaf.gif);
+	margin-right: 0.5em;
+}
+
+ul.ExternalLinks {
+	list-style-image: url(../image/external.png);
+}
+
+/* Messages */
+.Dialogue, .Success, .Result, div.Notice, div.Warning, ul.Warning {
+	margin: 0.9em 0 0.9em 0;
+	padding: 0.5em;
+}
+
+.Dialogue h2, .Success h2, .Notice h2, div.Warning h2 {
+	margin: 0 0 0.2em 0;
+}
+
+.Dialogue h3, .Success h3, .Notice h3, div.Warning h3 {
+	margin: 1em 0 0.2em 0;
+}
+
+.Success div.Info, .Result div.Info, .Notice div.Info, .Warning div.Info {
+	margin-left: 0.6em;
+	margin-bottom: 0.4em;
+}
+
+.Success .Actions {
+	margin-bottom: 0;
+}
+
+.Success .Info a {
+	text-decoration: underline;
+	border: 0;
+}
+
+.Success {
+	background-color: #bbffbb;
+	border: 1px solid #000;
+}
+
+.Result {
+	background-color: #e3e8ed;
+	border: 1px solid #999;
+}
+
+div.Dialogue, div.Notice {
+	background-color: #ffffe1;
+	border: 1px solid #000;
+}
+
+span.Notice {
+	font-weight: bold;
+}
+
+.Warning h2 {
+	color: #f0000c;
+}
+
+ul.Warning, div.Warning {
+	background-color: #edf1f3;
+	border: 2px solid #f0000c;
+}
+
+ul.Warning {
+	list-style-type: none;
+	font-weight: bold;
+	color: red;
+}
+
+.Dialogue a, .Success a, .Notice a, ul.Warning a {
+	text-decoration: underline;
+}
+
+.Dialogue table td, .Success table td, .Notice table td {
+	padding: 0 0.2em 0 0.2em;
+}
+
+.Dialogue form, .Success form, .Notice form {
+	text-align: right;
+	white-space: nowrap;
+}
+
+/* Forms */
+fieldset {
+	padding: 0.2em;
+	margin: 0.5em 0 0.5em 0;
+}
+
+input[type="text"], input[type="password"], textarea {
+	padding: 1px 2px 1px 2px;
+	background-color: #fffdfa;
+	border: 1px solid;
+}
+
+input[type="submit"], input[type="button"] {
+	background-color: #fcfbf8;
+	border: 1px solid;
+}
+
+input[type="submit"] {
+	font-weight: bold;
+}
+
+textarea {
+	font-size: 1.35em;
+}
+
+form label:hover {
+	text-decoration: underline;
+}
+
+/* Flowing form layout */
+.FlowingForm {
+	width: 80em;
+}
+
+.FlowingForm fieldset {
+	border: 0;
+	border-top: 1px solid;
+	padding: 1.5em 1em 1.5em 1em;
+	clear: both;
+}
+
+.FlowingForm fieldset legend {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+.FlowingForm fieldset fieldset {
+	border: 1px solid #666;
+	background-color: #f3f3f3;
+	margin-left: 1em;
+}
+
+.FlowingForm fieldset fieldset fieldset {
+	border: 0;
+	margin-right: 0;
+}
+
+.FlowingForm fieldset fieldset legend {
+	font-size: 1em;
+}
+
+.FlowingForm fieldset .Required, .FlowingForm fieldset .Optional {
+	width: 100%;
+}
+
+.FlowingForm fieldset .Action {
+	float: right;
+}
+
+.FlowingForm label {
+	padding: 0 0.5em 0 0.5em;
+	display: block;
+	float: left;
+	width: 12em;
+}
+
+.FlowingForm p label {
+	float: none;
+	display: inline;
+}
+
+.FlowingForm small {
+	display: block;
+	margin-left: 15.5em;
+	width: 30em;
+}
+
+.FlowingForm .Required, .FlowingForm .Optional {
+	clear: left;
+	padding: 0.5em;
+}
+
+.FlowingForm .Invalid {
+	background: #ffffe1 url(../image/icon/error_bg.gif) no-repeat scroll top left;
+	border: 1px solid #ff0000;
+	width: 40em;
+}
+
+.FlowingForm .Required p, .FlowingForm .Optional p {
+	margin: 0;
+	float: left;
+	width: 18em;
+	color: #666;
+}
+
+.FlowingForm .Required table, .FlowingForm .Optional table {
+	width: 25em;
+	float: left;
+	margin-right: 1em;
+}
+
+.FlowingForm .Required table th, .FlowingForm .Required table td,
+.FlowingForm .Optional table th, .FlowingForm .Optional table td {
+	padding-bottom: 0.5em;
+	padding-right: 0.5em;
+}
+
+.FlowingForm .Required div, .FlowingForm .Optional div {
+	margin: 0;
+	float: left;
+	padding-left: 0.5em;
+}
+
+.FlowingForm .Required label {
+	font-weight: bold;
+}
+
+.FlowingForm .Required p label {
+	font-weight: normal;
+}
+
+.FlowingForm textarea {
+	font-size: 1.2em;
+	width: 20em;
+	height: 5em;
+	margin: 0;
+}
+
+.FlowingForm label input {
+	width: 8em;
+}
+
+.FlowingForm .Information {
+	float: right;
+	clear: left;
+	width: 15em;
+	color: #666;
+	background-color: #ffffe1;
+	border: 1px solid;
+	padding: 0.5em;
+}
+
+.FlowingForm .Information h4 {
+	padding: 0.5em 0.5em 0.5em 27px;
+	background: url(../image/icon/info.gif) no-repeat;
+	border-bottom: 1px solid;
+}
+
+/* @deprecated */
+.RequiredField, .OptionalField {
+	margin-bottom: 0.4em;
+	padding: 0 1em 0.3em 0.5em;
+	width: 95%;
+}
+
+.RequiredField h3, .OptionalField h3 {
+	margin: 0 0 0 -0.5em;
+	font-size: 1em;
+}
+
+.RequiredField {
+	border-right: 0.5em solid #bbbbff;
+}
+
+.OptionalField {
+	border-right: 0.5em solid #eee;
+}
+
+.RequiredField .Info, .OptionalField .Info {
+	margin-bottom: 0.5em;
+}
+
+.InvalidField input[type="text"], .InvalidField select, .InvalidField textarea {
+	border: 2px solid red;
+}
+
+/* Tabbed pane */
+.PaneTab, input.PaneTab {
+	background-color: #e3e3e3;
+}
+
+.TabbedPane .SelectedPaneTab, :hover.PaneTab {
+	background-color: #f9f9f9;
+}
+
+.TabbedPane .SelectedPaneTab {
+	border-bottom-color: #f9f9f9;
+}
+
+.TabbedPane .PaneBody {
+	background-color: #f9f9f9;
+	padding: 0.5em;
+}
+
+.TabbedHeader .SelectedPaneTab {
+	border-bottom-color: #fff;
+}
+
+input.PaneTab, input.SelectedPaneTab {
+	font-family: verdana, sans-serif;
+	font-size: 1em;
+}
+
+/* Tables */
+th, td {
+	vertical-align: top;
+	padding: 0;
+}
+
+thead th {
+	vertical-align: middle;
+}
+
+thead th, tfoot th, .odd th, .even th, .odd td, .even td, .Vertical th, .Vertical td {
+	padding: 0.12em 0.25em 0.12em 0.25em;
+}
+
+thead th, tfoot th, .Vertical th, .Report th, .Header td {
+	background-color: #c3cddc;
+}
+
+.odd {
+	background-color: #f4f4f4;
+}
+
+.even {
+	background-color: #eaeaea;
+}
+
+.Enumeration .Actions, .Enumeration .OLE, th.OLE, td.OLE {
+	white-space: nowrap;
+	width: 1%;
+}
+
+.OLE input {
+	margin: 2px;
+}
+
+tr[_checked=true] {
+	background-color: #ddd;
+}
+
+tr.odd[_checked=true], tr.even[_checked=true] {
+	background-color: #d3d3d3;
+}
+
+tr[_highlighted=true] {
+	background-color: #d8e0f7;
+}
+
+ul.Enumeration {
+	list-style-type: none;
+	padding: 0 0 0 0.8em;
+	margin: 0.2em;
+}
+
+.Pager {
+	font-weight: normal;
+}
+
+/* Search */
+.SearchSuggestion {
+	margin-bottom: 0.5em;
+	font-size: 1.2em;
+}
+
+.SearchSuggestion a {
+	text-decoration: underline;
+}
+
+.SearchSuggestion em {
+	font-weight: bold;
+}
+
+/* Auto complete */
+.AutoComplete {
+	background-color: #fff;
+	border: 1px solid;
+}
+
+.AutoComplete div {
+	padding: 0.2em 0.2em 0.1em 0.2em;
+	margin: 0;
+	line-height: 1.2em;
+	height: 1.2em;
+}
+
+.AutoComplete .Selected, .AutoComplete .Selected span {
+	color: #fff;
+}
+
+.AutoComplete .Selected {
+	background-color: #3366cc;
+}
+
+.AutoComplete .Matches {
+	font-size: 0.8em;
+	color: #999;
+}
+
+.AutoCompleteMessage {
+	font-style: italic;
+}
+
+/* Calendar */
+.Week {
+	width: 100%;
+	background-color: #f0f0f0;
+	border-collapse: collapse;
+	border: 2px solid;
+}
+
+.Week td {
+	border: 1px solid;
+	margin: 0;
+	font-weight: normal;
+}
+
+.Week .Date, .Week .Time {
+	font-size: 0.8em;
+	color: #666;
+}
+
+.Week td.Time {
+	padding: 0.25em;
+	width: 4em;
+}
+
+.Week .Event {
+	margin: 0 0.25em 0 0.25em;
+	padding: 0.3em;
+	border: 1px solid;
+}
+
+span.EventType1, span.EventType2, span.EventType3, span.EventType4 {
+	border: 1px solid;
+}
+
+span.EventType1 img, span.EventType2 img, span.EventType3 img {
+	width: 0.65em;
+	height: 1.1em;
+}
+
+.EventType1 {
+	background-color: yellow;
+}
+
+.EventType2 {
+	background-color: #cfcfcf;
+}
+
+.EventType3 {
+	background-color: #cacaff;
+}
+
+.TentativeEvent {
+	background-color: red;
+}
+
+.ConfirmedEvent {
+	background-color: #90ee90; /* lightgreen */
+}
+
+/* Email */
+.EmailHeader {
+	margin-bottom: 1em;
+	font-family: courier new;
+}
+
+.Email .QuotedMessageLink {
+	display: block;
+	margin-bottom: 0.5em;
+}
+
+.Email .QuotedMessageLink:before {
+	content: url(../image/external.png);
+	margin-right: 0.5em;
+}
+
+.Email .QuotedMessageBlock {
+	display: none;
+}
+
+.Quote {
+	display: block;
+	color: #000080;
+	background-color: #e6e6e6;
+	border-left: 1px solid;
+	padding-left: 1em;
+	padding-right: 0.5em;
+}
+
+.Quote .Quote {
+	color: #800000;
+	background-color: #dcdcdc;
+}
+
+.Quote .Quote .Quote {
+	color: #008000;
+	background-color: #d6d6d6;
+}
+
+.Quote .Quote .Quote .Quote {
+	color: #800080;
+	background-color: #cccccc;
+}
+
+/* Report */
+.Report table {
+	margin-bottom: 1em;
+	border-collapse: collapse;
+	border: 1px solid;
+	width: 100%;
+}
+
+.Report th, .Report td {
+	padding: 0.2em 0.5em 0.2em 0.5em;
+}
+
+.Report select, .Report select option {
+	width: 20em;
+}
+
+.Report .TabbedPane table {
+	margin-bottom: 0;
+	border: 0;
+}
+
+.Report .TabbedPane th:first-child {
+	width: 12em;
+}
+
+.H2 {
+	background: none;
+}
+
+/* Page sections */
+.Header {
+	margin-bottom: 1em;
+}
+
+.Footer {
+	margin-top: 0.5em;
+	padding-top: 0.2em;
+	border-top: 1px dotted #aaa;
+}

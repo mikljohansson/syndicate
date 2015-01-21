@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE device PUBLIC "-//Synd//DTD Device 1.0//EN" "http://svn.synd.info/synd/branches/php4/core/modules/inventory/agent/device.dtd">
+<device xmlns="http://www.synd.info/2005/device">
+	<listener method="soap" action="http://schemas.microsoft.com/clr/nsassem/Inventory.RemoteService/InventoryService#{method}" version="20050908">http://192.168.0.1/agent</listener>
+	<motherboard vendor="Intel" version="SE7500WV2A" release="A81418-404" serial="123456789">
+		<bios vendor="Intel Corporation" version="SWV20.86B.0501.P05.0211211659" release="11/21/2002" />
+		<ram name="DIMM1A" size="512" type="DDR" bank="BANK1" frequency="266" />
+		<ram name="DIMM1B" size="512" type="DDR" bank="BANK1" frequency="266" />
+		<ram name="DIMM2A" size="512" type="DDR" bank="BANK2" frequency="266" />
+		<ram name="DIMM2B" size="512" type="DDR" bank="BANK2" frequency="266" />
+		<port name="USB0" type="USB" connector="Access Bus (USB)" />
+		<port name="Serial Port B" type="Serial Port 16550A Compatible" connector="DB-9 male" />
+		<port name="Keyboard" type="Keyboard Port" connector="PS/2" />
+		<port name="PS/2 Mouse" type="Mouse Port" connector="PS/2" />
+		<port name="LVD CH A" type="SCSI Port" connector="50 Pin MiniSCSI" />
+		<slot name="PCI 1B (Full-Height)" type="64-bit PCI-X" occupied="1" />
+		<slot name="PCI 1C (Low Profile)" type="64-bit PCI-X" occupied="0" />
+	</motherboard>
+	<chassis type="Rack Mount Chassis" vendor="Intel Corporation" version="KSW" serial="AZSW1234567" tag="SomeOEM A123456" />
+	<cpu vendor="Intel Corporation" version="Intel(R) Xeon(TM) CPU 2.40GHz" frequency="2400" serial="BBABCABC00000ABC" />
+	<cpu vendor="Intel Corporation" version="Intel(R) Xeon(TM) CPU 2.40GHz" frequency="2400" serial="BBABCABC00000ABD" />
+	<keyboard>Enhanced (101- or 102-key)</keyboard>
+	<pointingdevice vendor="Logitech">Logitech USB Wheel Mouse</pointingdevice>
+	<disk name="hda" version="ST3120026A" size="38538" cache="8192">
+		<partition name="hda1" size="30000" type="Linux raid autodetect" />
+		<partition name="hda1" size="8538" type="Linux swap / Solaris" />
+	</disk>
+	<disk name="hdc" version="ST3120026A" size="38538" cache="8192">
+		<partition name="hda1" size="30000" type="Linux raid autodetect" />
+		<partition name="hda1" size="8538" type="Linux swap / Solaris" />
+	</disk>
+	<rom name="hdd" version="HL-DT-ST RW/DVD GCC-4480B" mountpoint="/mnt/cdrom" />
+	<nic mac="00:07:E9:AB:CD:EF" version="Intel Corporation 82546EB Gigabit Ethernet Controller (Copper) (rev 01)">
+		<interface name="eth0" ip="192.168.0.1" netmask="255.255.255.0" broadcast="192.168.0.255" />
+	</nic>
+	<nic mac="00:07:E9:BB:CC:DD" version="Intel Corporation 82546EB Gigabit Ethernet Controller (Copper) (rev 01)">
+ 		<interface name="eth1" ip="192.168.1.1" netmask="255.255.255.0" broadcast="192.168.1.255" />
+	</nic>
+	<videocard version="ATI Technologies Inc Rage XL (rev 27)" ram="8" hres="1280" vres="1024" bits="32" frequency="70" />
+	<soundcard version="SoundMAX Integrated Digital Audio" />
+	<monitor vendor="Dell" version="2001FP" size="20" />
+	<os name="Linux" vendor="Red Hat" version="Red Hat Enterprise Linux AS release 3 (Taroon Update 5)" release="Linux 2.6.13.2 #3 SMP Mon Sep 26 10:13:38 CEST 2005" machinename="host.example.com" serial="10497-OEM-0031416-71674" path="C:\WINDOWS">
+		<image>net://global/hdimages/linux/rhentws3_008.base</image>
+		<printer name="Adobe PDF" driver="Adobe PDF Converter" port="My Documents\*.pdf" />
+		<printer name="\\print\laser1" driver="HP LaserJet 5Si/5Si MX PS" port="Samba Printer Port" />
+		<printer name="\\print\laser2" driver="HP LaserJet 4345 mfp PCL 5e" port="Samba Printer Port" />
+		<product vendor="GNU" version="gcc" release="3.2.3-49" installdate="20050101" state="1" />
+		<product vendor="GNU" version="glibc" release="2.3.2-95.30" installdate="20050101" state="1" />
+		<product vendor="Procmail" version="procmail" release="3.22-9" installdate="20050101" state="1" />
+	</os>
+</device>

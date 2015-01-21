@@ -1,0 +1,59 @@
+  SyndRTE (Rich Text Editor)
+
+WHAT IS SYNDRTE
+
+  SyndRTE is an inline javascript Rich Text Editor with support for
+  Internet Explorer and Mozilla/Firefox.
+  
+  Lead developer is Mikael Johansson - mikael AT synd DOT info
+
+  Synd is distributed under the GNU General Public License - see the
+  accompanying LICENSE file for more details. Commercial non GPL 
+  licenses are available for users who prefer not to be restricted by
+  the terms of the GPL.
+  
+  You can find downloads, daily snapshots and support information at
+    http://www.synd.info/
+
+INSTALLATION
+
+  SyndRTE is tested on IE6 and Firefox 0.9.3 on Windows XP.
+  
+  A PHP and a javascript loader (loader.php/loader.js) are available, 
+  they will detect the browser version and load the corresponding API.
+  The PHP loader is preferable because it's much higher loading 
+  speed. To include the editor into a page:
+  
+    <script defer="defer" type="text/javascript" src="/path/to/syndrte/loader.php"></script>
+
+    or
+
+    <script id="srte_loader" type="text/javascript" src="/path/to/syndrte/loader.js"></script>
+    
+  Notice the difference on 'defer="defer"' and id="srte_loader", the 
+  javascript loader needs the id to work out the installation path and
+  can't be deferred as it uses document.write().
+
+  The javascript and PHP loader are desribed further in the
+  separate files loader.js and loader.php.
+  
+  Use one or several div/textarea's with a classname of 'srte_area' 
+  to enable the control, the id attribute determines the name of the 
+  variable to be sent on submit.
+    
+    <div class="srte_area" id="data[INFO_BODY]" upload="/syndrte/upload.php">
+    	Some <em>styled</em> text.
+    </div> 
+    
+    or
+    
+    <textarea class="srte_area" name="data[INFO_BODY]"
+		upload="/syndrte/upload.php">Some &lt;em&gt;styled&lt;/em&gt; text.</textarea>
+  
+  The file upload.php contains a fully functional example  of and 
+  documentation on the image upload API.
+
+  The Gecko API uses the eDOM extensions from Playsophy and parts of 
+  the Mozile editor which are licenced under MPL 1.1/GPL 2.0/LGPL 2.1
+  eDOM (http://www.playsophy.com/edom/edom.html) 
+  Mozile (http://mozile.mozdev.org/) 

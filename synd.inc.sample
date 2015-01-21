@@ -1,0 +1,243 @@
+<?php
+/**
+ * This file is intended to set include paths and local 
+ * settings/classpaths before including core/global.inc to 
+ * bootstrap the framework.
+ *
+ * @package	synd.core
+ */
+
+// Set include path (this should be done from server config or php.ini)
+$__path = dirname(dirname(__FILE__));
+//if (!isset($_SERVER['REMOTE_ADDR']))
+	set_include_path("$__path:$__path/local:".get_include_path());
+
+// Enable the class autoloader
+require_once 'core/lib/ClassLoader.class.inc';
+require_once 'core/lib/CacheStrategy.class.inc';
+
+function __autoload($class) {
+	static $loader = null; 
+
+	if (null == $loader) {
+		$loader = new CachingClassLoader(new DirectoryClassLoader(
+			explode(':', get_include_path()), 
+			array('/.*\\'.DIRECTORY_SEPARATOR.'{$CLASS}.class.inc$/iS',),
+			'/^synd_[a-z]+_\w+$/S', '/^synd_[a-z]+_/S'), CacheStrategyManager::localized());
+	}
+
+	$loader->load($class);
+}
+
+/**
+ * Main configuration variable
+ * @global	array	$GLOBALS['synd_config']
+ * @name	$synd_config
+ */
+$GLOBALS['synd_config'] = array(
+	'db' => array(
+		'main' => 'null://null',
+//		'main' => 'oci8://user:password@tnsname?persistent=1',
+//		'main' => 'mysql://user:password@localhost/db?persistent=1',
+//		'main' => array(
+//				array('mysql://user@master01.example.com/db', 'mysql://user@master02.example.com/db'),
+//				array('mysql://user@slave01.example.com/db', 'mysql://user@slave02.example.com/db'),
+//				'SyndDBHotstandbyStrategy'),
+		),
+	'debug_allowed_ips'	=> array(							// IPs allowed to use debug(), unit tests, ...
+		'127.0.0.1'			=> true,
+		),
+	'path' => '/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin',
+	'dirs' => array(
+		'cache'	=> isset($_SERVER['SERVER_NAME']) ? "/tmp/{$_SERVER['SERVER_NAME']}/" : '/tmp/local/',
+		'root' => array(
+			'path' => $__path.'/',
+			'uri'  => substr($__path, strlen($_SERVER['DOCUMENT_ROOT'])).'/'),
+		'var' => array(
+			'path' 	=> $__path.'/var/',
+			'uri' 	=> substr($__path, strlen($_SERVER['DOCUMENT_ROOT'])).'/var/'),
+		'design' => array(
+			$__path.'/design/',
+//			$__path.'/local/design/',
+			),
+		),
+	'rewrite' => array(										// Enable .htaccess mod_rewrite support
+		'base'		=> substr($__path, strlen($_SERVER['DOCUMENT_ROOT'])).'/',
+		'enable'	=> true,
+		),
+	'modules' => array(										// Modules to load on startup
+		'system',
+		'access',
+		'cache',
+		'node',
+		'user',
+		'log',
+		'rpc',
+		'device','tracker','storage',
+		'language',
+		'search',
+//		'issue',
+//		'inventory',
+//		'course',
+//		'poll',
+//		'plan',
+		'rte',
+//		'content',
+//		'syncml',
+//		'radio',
+		),
+	'system' => array(
+		'storage' => array(
+//			'auth_token_secret'	=> 'secret',				// Enable Apache mod_auth_token support
+			'path'				=> $__path.'/var/',
+			'uri'				=> substr($__path, strlen($_SERVER['DOCUMENT_ROOT'])).'/var/',
+			),
+		'gc_probability'	=> ini_get('session.gc_probability'),
+		'gc_divisor'		=> ini_get('session.gc_divisor'),
+		),
+//	'cache' => array(
+//		'memcached' => array(
+//			'node01.example.com:11211',
+//			'node02.example.com:11211',
+//			),
+//		),
+	'user' => array(
+		'user_class_ids' 		=> array('user'),			// The clsids of possible users
+		'role_class_ids' 		=> array('role','group'),	// The clsids of possible roles and groups
+		'enforce_session_ip'	=> false,					// Bind sessions to client IP address
+		),
+	'language' => array(
+//		'sv' => array('code' => 'sv_SE', 'name' => 'Svenska', 'include' => array('en')),
+		'en' => array('code' => 'en_US', 'name' => 'English')
+		),
+	'search' => array(
+		'backends' => array(
+			0x01 => 'local;search',
+//			0x01 => "php;http://node1.example.com/synd/rpc/php/search/",
+//			0x02 => "php;http://node2.example.com/synd/rpc/php/search/",
+			),
+		'field_extension_hashes' => array(
+			'author'	=> 'creator',
+			'abstract' 	=> 'description',
+			'date'		=> 'created',
+			'serial'	=> 'id',
+			),
+//		'index' => array(
+//			'strategy'		=> 'xapian',					// http://www.xapian.org
+//			'dsn'			=> '/var/www/run/xapian-db',	// Index DSN, must be writable by the webserver process
+//			'queue'			=> null,						// Refresh queue database, defaults to the main db
+//			'extensions'	=> array(
+//				'document',
+//				array('stem', STEM_ENGLISH),				// Use the pecl/stem extension
+//				array('stem', STEM_SWEDISH),
+//				'stopword',
+//				'text',
+//				),
+//			),
+		'index' => array(
+			'strategy'		=> 'term',						// Relational database search engine
+			'dsn'			=> null,						// Index DSN, defaults to the main db
+			'queue'			=> null,						// Refresh queue database, defaults to the main db
+			'extensions'	=> array(
+//				'age',
+				'bm25',
+//				'pagerank',
+				'document',
+//				'field',
+//				'fuzzy',
+				'partial',
+				'phrase',
+//				'range',
+//				array('stem', STEM_ENGLISH),				// Use the pecl/stem extension
+//				array('stem', STEM_SWEDISH),
+//				'stopword',
+				'text',
+				),
+			),
+		),
+	'device' => array(
+//		'auth_token_secret' => 'secret',					// Enable Apache mod_auth_token support
+		'path'				=> $_SERVER['DOCUMENT_ROOT'].'/var/',
+		'uri'				=> '/var/',
+		),
+	'tracker' => array(
+		'devices' => array(
+//			'php;http://rpcuser:password@node01.example.com/synd/rpc/php/device/',
+//			'php;http://rpcuser:password@node02.example.com/synd/rpc/php/device/',
+			'local;device',
+			),
+		),
+	'storage' => array(
+		'trackers'	=> array(
+//			'php;http://rpcuser:password@tracker01.example.com/synd/rpc/php/tracker/',
+//			'php;http://rpcuser:password@tracker02.example.com/synd/rpc/php/tracker/',
+			'local;device',
+			),
+		'namespace'	=> isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'local',
+		'replicas'	=> 2,		// Default number of file replicas to keep
+		'ttl'		=> 604800,	// Default token time-to-live 
+		),
+	'issue' => array(
+		'namespace'	=> isset($_SERVER['SERVER_NAME']) ? 
+			preg_replace('/^www\./i', '', $_SERVER['SERVER_NAME']) : null,
+		'plugins' => array(
+			'workflow'	=> null,
+			'svn'		=> null,
+//			'calendar'	=> 'ocal://SYSOP:password@calendar.example.com?sysop=1',
+			'crypto'	=> array(
+				'pgp'	=> array(
+					'http://subkeys.pgp.net:11371',
+					),
+				),
+			),
+		'status_codes'	=> array(							// Values are: CSS class, Title, Description
+			synd_node_issue::RECENT		=> array('Recent',	'Needs attention',		'The issue is is new, have been reassigned or needs attiontion'),
+			synd_node_issue::PENDING	=> array('Pending',	'Pending action',		'The issue is pending action'),
+//			synd_node_issue::PENDING+1	=> array('Pending',	'Waiting for response',	'The issue is pending customer feedback'),
+			synd_node_issue::ACTIVE		=> array('Active',	'Work in progress',		'Work in progress'),
+			synd_node_issue::CLOSED		=> array('Closed',	'Closed',				'Closed'),
+//			synd_node_issue::CLOSED+1	=> array('Closed',	'Resolved',				'The issue is resolved'),
+//			synd_node_issue::CLOSED+2	=> array('Closed',	'Won\'t fix',			'The issue will not be resolved'),
+			),
+		'priorities' => array(
+			synd_node_issue::HIGH		=> 'High', 
+//			synd_node_issue::HIGH-1		=> 'Escalated', 
+			synd_node_issue::NORMAL		=> 'Normal',
+			synd_node_issue::LOW		=> 'Low',
+			),
+		'project_context_levels'		=> 3,				// Number of project levels per contextmenu, sublevels are opened in submenues
+		'project_context_limit'			=> 25,				// Max number of items per contextmenu before number of levels is decreased
+		),
+	'inventory' => array(
+		'plugins' => array(
+			'dhcp'		=> null,
+			'vmps'		=> null,
+			'rembo'		=> null,
+			'raindance'	=> 'oci8://user:password@tnsname',
+			),
+		),
+	);
+
+// Detect mobile devices
+require_once 'core/lib/SyndHTTP.class.inc';
+if (SyndHTTP::isMobileDevice()) 
+	$GLOBALS['synd_config']['dirs']['design'][] = $__path.'/design/mobile/';
+else if (SyndHTTP::isHandheldDevice()) {
+	$GLOBALS['synd_config']['dirs']['design'][] = $__path.'/design/mobile/';
+	$GLOBALS['synd_config']['dirs']['design'][] = $__path.'/design/handheld/';
+}
+
+// Register distributed session handler
+//require_once 'core/lib/SessionHandler.class.inc';
+//require_once 'core/lib/CacheStrategy.class.inc';
+//require_once 'core/db/Database.class.inc';
+//SessionHandler::register(
+//	new BlockingSessionHandler(new CachedSessionHandler(new DatabaseSessionHandler(
+//	DatabaseManager::getConnection($synd_config['db']['main'])), CacheStrategy::factory())));
+
+// Start the session
+if (isset($_SERVER['REMOTE_ADDR']))
+	session_start();
+
+// Bootstrap the framework
+require_once 'core/global.inc';

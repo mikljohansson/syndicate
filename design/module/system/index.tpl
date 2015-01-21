@@ -1,0 +1,1 @@
+<h1><?= tpl_text('Welcome to %s', $_SERVER['SERVER_NAME']) ?></h1>

@@ -1,0 +1,24 @@
+Running cron.php with an Oracle backend might require you to setup
+the environment before executing cron.php in order for the database
+connection to word properly. 
+
+Create a shell script run by cron, that exports the variables and 
+then launches cron.php. It might also be necessary to run the script
+as the Oracle user depending on your specific setup. For example:
+
+#!/bin/sh
+# Setup the Oracle environment
+ORACLE_BASE=/usr/oracle
+ORACLE_HOME=${ORACLE_BASE}/product/9.2.0
+ORACLE_SID=somehostname
+ORACLE_TERM=vt100
+export ORACLE_BASE ORACLE_HOME ORACLE_SID ORACLE_TERM
+
+TNS_ADMIN=${ORACLE_HOME}/network/admin
+NLS_LANG=SWEDISH_SWEDEN.WE8ISO8859P1
+ORA_NLS33=${ORACLE_HOME}/ocommon/nls/admin/data
+PATH="${PATH}:${ORACLE_HOME}/bin"
+export TNS_ADMIN NLS_LANG ORA_NLS33 PATH
+
+# Run the Synd cron hooks
+/usr/bin/php /var/www/html/synd/cron.php

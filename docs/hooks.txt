@@ -1,0 +1,14 @@
+Hooks is attached to and run through SyndLib::attachHook()/runHook().
+
+Cache hook are implemented by the cache module and used by the 
+tpl_cache_* functions among others, SyndNodeLib uses it indirectly
+through the 'node_instance' that is implemented by the cache module.
+
+string cache_get(string id)
+	Returns a cached string or null if not found
+
+void cache_put(string id, string data, int ttl = 1800)
+	Stores a string in cache
+	
+void cache_del(string id)
+	Removes a cached string

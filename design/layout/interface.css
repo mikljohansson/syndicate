@@ -1,0 +1,169 @@
+/**
+ * Basic interface and functionality
+ */
+body {
+	line-height: 1.2em;
+	text-align: left;
+}
+
+a img {
+	border: 0;
+}
+
+caption {
+	padding: 0.2em 0 0.2em 0;
+}
+
+/* Actions */
+dl.Actions dt {
+	font-size: 1.1em;
+}
+
+dl.Actions dd {
+	margin-left: 0.6em;
+	margin-bottom: 1em;
+}
+
+ul.Actions, ul.ExternalLinks {
+	padding: 0;
+	margin: 0.25em 0 0.25em 0;
+}
+
+ul.Actions:last-child, ul.ExternalLinks:last-child {
+	margin-bottom: 0.25em;
+}
+
+ul.Actions li, ul.ExternalLinks li {
+	margin-left: 2em;
+}
+
+ul.Actions li.Caption {
+	list-style-image: none;
+	list-style-type: none;
+	margin-left: 0;
+	margin-bottom: 0.2em;
+	font-size: 1.1em;
+}
+
+.Item ul.Actions li {
+	display: inline;
+	margin-left: 0.7em;
+}
+
+/* Forms */
+form {
+	margin: 0;
+}
+
+/* Tabbed pane */
+.PaneTab, .SelectedPaneTab {
+	margin: 0 0 0 0.5em;
+	border: 1px solid;
+	font-weight: bold;
+}
+
+input.PaneTab, input.SelectedPaneTab {
+	cursor: pointer;
+	position: relative;
+	top: 1px;
+}
+
+.PaneTab a, .SelectedPaneTab a {
+	padding: 0px 5px 0px 5px;
+	text-decoration: none !important;
+}
+
+.TabbedPane .PaneBody {
+	border: 1px solid;
+}
+
+.TabbedPane .PaneBody .PaneBody {
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 0;
+}
+
+.TabbedHeader {
+	border-bottom: 1px solid;
+}
+
+/* Tables */
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th {
+	font-weight: bold;
+	text-align: left;
+}
+
+th td, th .Info {
+	font-weight: normal;
+}
+
+/* Help */
+.Help h2 {
+	margin-top: 1em;
+}
+
+.Info em, .Help em {
+	font-weight: bold;
+	font-style: normal;
+}
+
+.Help p {
+	margin-top: 0;
+}
+
+.Help code {
+	margin-left: 1em;
+	display: block;
+}
+
+/* Reports */
+table.Report {
+	width: 100%;
+}
+
+th.Numeric, td.Numeric, .Numeric input[type=text] {
+	text-align: right;
+}
+
+.Report input[type=text] {
+	padding: 0 1px 0 1px;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+.Report th, .Report td, .List th, .List td {
+	padding: 0 0.3em 0.1em 0.3em;
+}
+
+td.Collapsed, th.Collapsed {
+	white-space: nowrap;
+	width: 1%;
+}
+
+/* Auto complete */
+.AutoComplete {
+	white-space: nowrap;
+	overflow: hidden;
+	cursor: default;
+	padding: 0;
+	margin: 0;
+}
+
+.AutoComplete .Suggestion {
+	overflow: hidden;
+	float: left;
+	width: 60%;
+}
+
+.AutoComplete .Matches {
+	text-align: right;
+	float: right;
+	width: 39%;
+}

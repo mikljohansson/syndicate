@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>Autocomplete</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link rel="stylesheet" href="../../design/interface.css" type="text/css" />
+	<link rel="stylesheet" href="../../design/layout.css" type="text/css" />
+	<script type="text/javascript" src="../../design/js/xmlrpc.js"></script>
+	<script type="text/javascript" src="../../design/js/autocomplete.js"></script>
+	<script type="text/javascript">
+		<!--
+		if (document.getElementById) {
+			window.onload = function() {
+				new SyndAutoComplete(document.getElementById('query'), 'autocomplete.script.php', 'search');
+			}
+		}
+		//-->
+	</script>
+</head>
+<body>
+	<form method="get">
+	<p style="margin:5em;">
+		<input type="text" name="query" id="query" size="45" value="Some search" />
+		<br />
+		<br />
+		<select>
+			<option>Test overlapping in IE</option>
+		</select>
+	</p>
+	</form>
+</body>
+</html>

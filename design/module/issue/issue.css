@@ -1,0 +1,181 @@
+/* Full view */
+.Issue h1 {
+	margin-bottom: 0;
+}
+
+.Issue .Header div {
+	margin: 0.5em;
+}
+
+.Issue table {
+	width: 100%;
+	clear: both;
+}
+
+.Issue td table	{
+	border: 1px solid;
+}
+
+.Issue td table table, .Issue .TabbedPane table	{
+	border: 0;
+}
+
+.Issue th, .Issue td {
+	padding: 0 0 1em 0;
+}
+
+.Issue table table th, .Issue table table td, 
+.Issue table table th:first-child, .Issue table table td:first-child {
+	padding: 0.2em 0.5em 0.2em 0.5em;
+}
+
+.Issue table.Header th {
+	white-space: nowrap;
+	width: 6%; 
+}
+
+.Issue table.Header td {
+	width: 44%;
+}
+
+.Issue .Task {
+	margin-top: 1.5em;
+	padding-top: 1.5em;
+	border-top: 1px solid;
+}
+
+.Issue :first-child.Task {
+	margin-top: 0;
+	padding-top: 0;
+	border: 0;
+}
+
+/* Edit view */
+form .Issue .Properties th {
+	border-left: 1px solid;
+}
+
+form .Issue .Properties table				{margin-top: 1em;}
+form .Issue .Properties table:first-child	{margin-top: 0;}
+
+form .Issue .Vertical th {
+	width: 12em;
+}
+
+form .Issue .PaneBody .Vertical th {
+	width: 11.4em;
+}
+
+form .Issue .PaneBody {
+	padding: 0.5em;
+}
+
+.Issue select, .Issue select option {
+	width: 96%;
+}
+
+
+/* Comments */
+.Issue h4 img, .Issue h5 img {
+	float: right;
+	margin: 3px;
+}
+
+.Issue hr {
+	margin: 1em 0 1em 0;
+}
+
+@media print {
+	.Issue img {
+		display: none;
+	}
+
+	.Issues .Actions, .Issues .OLE {
+		display: none;
+	}
+}
+
+/* Listings */
+.Issues			{border-collapse: separate;}
+.Issue .Issues	{border-collapse: collapse;}
+
+.Issues th, .Issues td {
+	font-size: 0.9em;
+}
+
+.Issues img {
+	margin: 0 1px 0 0;
+}
+
+.Created, .Updated, .Due {
+	white-space: nowrap;
+}
+
+.Issues .Status div, .Legend .Status img {
+	border: 1px solid;
+}
+
+.Issues .Status img, .Legend .Status img {
+	width: 0.6em;
+	height: 1.1em;
+}
+
+.Issues .Active .Status * {
+	background-color: red;
+}
+
+.Issues .Recent .Status * {
+	background-color: yellow;
+}
+
+.Issues .Recent .Subject {
+	font-weight: bold;
+}
+
+.Issues .Pending .Status * {
+	background-color: #30cc30;
+}
+
+.Issues .Closed .Status * {
+	background-color: #ccc;
+}
+
+.Issues .Overdue .Due {
+	color: red;
+	font-weight: bold;
+}
+
+.Issues .Low .Due {
+	background-color: #c0f0c0;
+}
+
+.Issues .High .Due {
+	background-color: #f0c0c0;
+}
+
+.Legend {
+	font-size: 0.8em;
+}
+
+.Legend img {
+	margin-left: 1em;
+}
+
+/* SVN plugin */
+.Issue .Revision table {
+	margin-left: 0.5em;
+}
+
+.Issue .Revision td {
+	padding: 0;
+	font-size: 0.85em;
+}
+
+.FlowingForm fieldset fieldset.WorkflowSequence fieldset {
+	border-left: 2px dotted #999;
+}
+
+/* Keywords */
+.Article option.Keyword {
+	background-color: #ffffcc; /* pale yellow */
+}

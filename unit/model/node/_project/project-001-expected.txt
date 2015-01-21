@@ -1,0 +1,20 @@
+Your issue regarding '_unit_test: This issue is safe to delete' has been received and assigned the case number '{$ID}'. You can follow the progress and provide more information at:
+
+ {$LINK}
+ 
+Assigned: Mikael Johansson (mikael@example.com)
+Customer: Some Customer (customer@example.com)
+
+Latest note
+
+> Line 1
+> Line 2
+> Line 3
+
+*** Are you satisfied with this solution ***
+ Yes  - {$FEEDBACK_LINK_YES}
+ No   - {$FEEDBACK_LINK_NO}
+
+The poll is anonymous; your feedback is valuable and helps us improve the quality of our service.
+
+*** This is an automatic email from _unit_test: This project is safe to delete ***

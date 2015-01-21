@@ -1,0 +1,1 @@
+<a href="<?= tpl_link('issue','view',$node->nodeId) ?>"><?= $node->toString() ?></a>

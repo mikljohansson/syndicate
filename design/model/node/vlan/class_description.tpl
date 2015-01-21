@@ -1,0 +1,1 @@
+<?= tpl_text('Virtual LAN with a list of networks') ?>

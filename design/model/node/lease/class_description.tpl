@@ -1,0 +1,1 @@
+<?= tpl_text('Client lease with a timeperiod and one or more coupled items or service level descriptions') ?>

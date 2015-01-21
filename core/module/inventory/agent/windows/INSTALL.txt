@@ -1,0 +1,49 @@
+INSTALLATION
+
+ - Microsoft Installer (MSI) package
+  
+  Edit the Agent/Inventory.xml configuration file to suit your needs.
+  At the very least; the address of the inventory server needs to be 
+  provided. 
+  
+  Open Inventory.sln in Visual Studio 2005, select the Release build 
+  target and choose to build the Installer project. The MSI package 
+  (Installer/Release/Inventory.msi) can be installed directly or 
+  through some package distribution system such as SMS, CCM or an 
+  Active Directory domain.
+
+ - Manual installation
+  
+  Build the Agent project using the Release target. Copy the binary 
+  (Agent/bin/Release/Inventory.exe) and the example config file 
+  (Inventory.xml) to a suitable directory. Edit the config to suit 
+  your needs. 
+  
+  The Inventory.exe commandline parameters are:
+  
+    /install   - Installs the service (without starting it)
+    /uninstall - Removes the service 
+    /start     - Starts the service (can be combined with /install)
+    /stop      - Stop the service
+
+  Run "Inventory.exe /install /start" to install and start the agent.
+  Log and error messages are sent to the application log (Control 
+  Panes -> Administrative Tools -> Event Viewer)
+  
+CONFIGURATION
+  
+  ImageIdentifier defines the indentifier used for this operating
+  system image (unique per machine), the purpose being to avoid 
+  multiple OS copies when the os version/release is changed. Defaults
+  to the os release (ie. Microsoft Windows XP Professional)
+  
+  Defining the RemoteService element enables the RPC server on the
+  client, allowing central control of the installed agents. The 
+  port (defaults to TCP port 7500) should be firewalled for ips
+  other than the central server. Leaving out the RemoteService 
+  element will disable the remote control listener.
+  
+  The AntiVirus element defines the location in the registry where
+  the antivirus definitions version can be read. The LoadedImage 
+  element defines where the loaded operating system image version 
+  can be read. Neither element is required.

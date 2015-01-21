@@ -1,0 +1,2 @@
+%FDF-1.2%‚„œ”
+1 0 obj<< /FDF << /Fields [ << /T (Field1) /V (123) /ClrF 2 /ClrFf 1 >> << /T (Field2) /V (456) /ClrF 2 /ClrFf 1 >> << /T (Checkbox1) /V /Yes /ClrF 2 /ClrFf 1 >> << /T (Radiobutton2) /V /Off /ClrF 2 /ClrFf 1 >> ] /F (http://www.example.com/example.pdf) >> >> endobjtrailer<</Root 1 0 R >>%%EOF

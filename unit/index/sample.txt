@@ -1,0 +1,4 @@
+Synd Framework
+
+  Synd is a software framework written in PHP, used primarily for
+  building dynamic websites.

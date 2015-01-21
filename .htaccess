@@ -1,0 +1,34 @@
+Options -Indexes -Includes
+
+<FilesMatch "\.(inc|tpl)$">
+	Order		Allow,Deny
+	Satisfy		All
+</FilesMatch>
+
+php_value max_execution_time	600
+php_value ignore_user_abort		1
+php_value magic_quotes_gpc		0
+php_value magic_quotes_runtime	0
+php_value magic_quotes_sybase	0
+php_value short_open_tag		1
+php_value session.cache_limiter	"private, must-revalidate"
+
+# You will need to insert this fragment into the server (or vhost) config
+# due to a defect in mod_rewrite
+#
+#  http://issues.apache.org/bugzilla/show_bug.cgi?id=34602
+#  http://issues.apache.org/bugzilla/show_bug.cgi?id=32328
+#
+#<IfModule mod_rewrite.c>
+#        RewriteMap		escape	int:escape
+#</IfModule>	
+
+<IfModule mod_rewrite.c>
+	RewriteEngine 	on
+
+	# Modify the RewriteBase if you are using Synd in a subdirectory 
+	#RewriteBase		/synd
+
+	RewriteCond		%{REQUEST_FILENAME} !-f
+	RewriteRule		^(.*)$	index.php?sq=${escape:$1}		[L,QSA]
+</IfModule>
