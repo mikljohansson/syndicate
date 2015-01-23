@@ -8,26 +8,22 @@ class synd_type_class_indexer_task extends synd_type_indexer_task {
 	var $_offset = 0;
 	
 	/**
-	 * The number of nodes in each batch (<= 1000)
-	 * @access	protected
-	 */
-	var $_limit  = 100;
-	
-	/**
 	 * @access	private
 	 */
 	var $_clsid = null;
 	
+	/**
+	 * @access	private
+	 */
+	var $_order = null;
+
 	function __construct($index, $clsid, $order = array()) {
 		parent::__construct($index, $clsid);
 		$this->_clsid = $clsid;
 		$this->_order = $order;
 	}
 	
-	function getBatch() {
-		ini_set('memory_limit', '2048M');
-		set_time_limit(60*30);
-
+	function getBatch($limit) {
 		$storage = SyndNodeLib::getDefaultStorage($this->_clsid);
 		$storage->flush();
 
@@ -39,7 +35,7 @@ class synd_type_class_indexer_task extends synd_type_indexer_task {
 		foreach ($this->_order as $value)
 			$query->order($value[0], $value[1]);
 
-		$result = $database->execute($query, $this->_offset, $this->_limit);
+		$result = $database->execute($query, $this->_offset, $limit);
 		$ids = array();
 
 		while (false != ($row = $result->fetchRow())) {
@@ -48,6 +44,7 @@ class synd_type_class_indexer_task extends synd_type_indexer_task {
 			$this->_offset++;
 		}
 		
-		return $persistent->getInstances($ids);
+		$nodes = $persistent->getInstances($ids);
+		return array($nodes, $ids);
 	}
 }

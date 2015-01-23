@@ -52,6 +52,7 @@ class SyndTaskHandler extends SyndTask {
 	
 	var $_lockStack = array();
 	var $_lockHandles = array();
+	var $_failureCount = 0;
 	
 	function SyndTaskHandler($id) {
 		parent::SyndTask();
@@ -77,8 +78,16 @@ class SyndTaskHandler extends SyndTask {
 		unset($vars['_lockHandles']);
 		return array_keys($vars);
 	}
+	
+	function setFailureCount($failureCount) {
+		$this->_failureCount = $failureCount;
+	}
 
-	function appendTask($task, $id = null, $time = 0) {
+	function getFailureCount() {
+		return $this->_failureCount;
+	}
+
+	function appendTask($task, $id = null, $timelimit = 0) {
 		if (!$this->lockHandler())
 			return trigger_error('Could not aquire lock on handler.', E_USER_WARNING);
 		
@@ -89,7 +98,7 @@ class SyndTaskHandler extends SyndTask {
 		if (null == $id)
 			$id = get_class($task).'.'.md5(uniqid(''));
 		
-		$buffer = serialize(array('task' => serialize($task), 'time' => $time));
+		$buffer = serialize(array('task' => serialize($task), 'timelimit' => $timelimit));
 		if (!SyndLib::file_put_contents("{$storage}{$id}.obj", $buffer))
 			return trigger_error('Could not write task file.', E_USER_WARNING);
 
@@ -139,7 +148,7 @@ class SyndTaskHandler extends SyndTask {
 
 		// Write handler task file
 		$handler = $this->getStoragePath().'handler.obj';
-		$buffer = serialize(array('task' => serialize($this), 'time' => null));
+		$buffer = serialize(array('task' => serialize($this), 'timelimit' => null));
 		if (!SyndLib::file_put_contents($handler, $buffer))
 			return trigger_error("Could not write to '$handler'.", E_USER_WARNING);
 
@@ -172,41 +181,68 @@ class SyndTaskHandler extends SyndTask {
 		$mtime = null;
 
 		for (;;) {
+			// Find list of scheduled tasks
 			if (!$this->lockHandler()) {
 				$this->log('Could not aquire read lock on handler.');
 				return 1;
 			}
 			
-			clearstatcache();
-			if (null != $file && (null == $mtime || filemtime($file) == $mtime) && !unlink($file)) {
-				$this->log("Handler: Could not delete taskfile ($file)\n");
-				break;
-			}
-
 			$tasks = SyndLib::scanDirectory($this->getStoragePath().'tasks/');
 			if (null == ($file = reset($tasks)))
-				break;
+				$this->log("Handler: Done $count tasks\n");
+				
+				// Must keep lock until task directory is deleted
+				SyndLib::unlink($this->getStoragePath(), true);
+				$this->unlockHandler();
+				return;
+			}
 
-			$this->unlockHandler();
-			
-			if (null == ($buffer = file_get_contents($file)) || null == ($mtime = filemtime($file)) || null == ($info = unserialize($buffer)))
+			// Unserialize task to get the timelimit field
+			if (null == ($buffer = file_get_contents($file)) || null == ($mtime = filemtime($file)) || null == ($info = unserialize($buffer))) {
+				unlink($file);
 				$this->log("Handler: Could not read taskfile ($file)\n");
-			else {
-				$this->log("Handler: Launching worker process ($file)\n");
+			}
+			
+			// Release lock while processing task
+			$this->unlockHandler();
 
-				$pd = $this->openProcess($file, $info['time']);
+			// Attempt to run task and retry on failure
+			$this->log("Handler: Launching worker process ($file)\n");
+			$failures = 0;
+			$status = 0;
+
+			for (;;) {
+				$pd = $this->openProcess($file, $info['timelimit']);
 				$this->pipeOutput($pd);
 				$status = pclose($pd);
 
-				$count++;
-				$this->log("Handler: Worker done (exit status $status)\n");
+				// Check if task succeeded or has failed too much
+				if ($status == 0 || $failures >= 16) {
+					if (!$this->lockHandler()) {
+						$this->log('Could not aquire read lock on handler.');
+						return 1;
+					}
+
+					// Delete task file if exit status is ok and file hasn't been changed
+					clearstatcache();
+					if ((null == $mtime || filemtime($file) == $mtime) && !unlink($file)) {
+						$this->log("Handler: Could not delete taskfile ($file)\n");
+					}
+
+					$this->unlockHandler();
+					break;
+				}
+
+				// Retry task in case of error
+				$failures++;
+
+				// Sleep a while to avoid looping too fast
+				sleep($failures);
 			}
+
+			$count++;
+			$this->log("Handler: Worker done (exit status $status after $failures failures)\n");
 		}
-
-		$this->log("Handler: Done $count tasks\n");
-
-		SyndLib::unlink($this->getStoragePath(), true);
-		$this->unlockHandler();
 	}
 
 	/**
@@ -216,8 +252,6 @@ class SyndTaskHandler extends SyndTask {
 	 */
 	function pipeOutput($pd) {
 		static $length = 0;
-		$time = time();
-		$rows = 0;
 
 		while (!feof($pd)) {
 			$buffer = fgets($pd, 4096);
@@ -241,7 +275,7 @@ class SyndTaskHandler extends SyndTask {
 	 * @access	private
 	 * @return	resource
 	 */
-	function openProcess($file, $time = 0, $output = null) {
+	function openProcess($file, $timelimit = 0, $output = null, $failures = 0) {
 		if (null == ($interpretor = SyndLib::which('php'))) {
 			trigger_error('PHP CLI does not exist or is not executable', E_USER_ERROR);
 			return false;
@@ -251,7 +285,7 @@ class SyndTaskHandler extends SyndTask {
 		$id = escapeshellarg($this->_id);
 		
 		// Launch worker
-		$command  = "$interpretor $launcher $file $path $time $id";
+		$command  = "$interpretor $launcher $file $path $timelimit $id $failures";
 		$command .= null != $output ? " 1>$output 2>&1 &" : " 2>&1";
 		return popen($command, 'r');
 	}

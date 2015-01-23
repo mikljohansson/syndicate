@@ -10,7 +10,7 @@
  */
 
 if (count($argv) < 2) {
-	print "Usage: php launcher.inc [TASK FILE] [INCLUDE PATH] [MAX EXECUTION TIME] [HANDLER ID]\n";
+	print "Usage: php launcher.inc [TASK FILE] [INCLUDE PATH] [MAX EXECUTION TIME] [HANDLER ID] [FAILURE COUNT]\n";
 	print "Takes the path to a serialized task object file which is unserialized \n";
 	print "before invoking run() on the resulting object.\n";
 	exit;
@@ -28,6 +28,8 @@ error_reporting(E_ALL);
 ob_implicit_flush(1);
 
 print "Launcher: Running (pid ".posix_getpid().")\n";
+$status = 1;
+
 if (isset($argv[1]) && file_exists($argv[1])) {
 	print "Launcher: Running task: {$argv[1]}\n";
 	$info = unserialize(file_get_contents($argv[1]));
@@ -36,7 +38,11 @@ if (isset($argv[1]) && file_exists($argv[1])) {
 		print "Launcher: Failed to unserialize task\n";
 	else {
 		$ts = time();
-		$status = $task->run(new SyndTaskHandler($argv[4]));
+		$handler = new SyndTaskHandler($argv[4]);
+		if (isset($argv[5]))
+			$handler->setFailureCount($argv[5]);
+		
+		$status = $task->run($handler);
 		print "Launcher: Task done in ".(time()-$ts)." seconds\n";
 	}
 }

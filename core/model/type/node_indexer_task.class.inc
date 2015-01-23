@@ -3,12 +3,6 @@ require_once 'core/model/type/indexer_task.class.inc';
 
 class synd_type_node_indexer_task extends synd_type_indexer_task {
 	/**
-	 * The number of nodes in each batch (<= 1000)
-	 * @access	protected
-	 */
-	var $_limit = 100;
-	
-	/**
 	 * Number of seconds between rounds
 	 *
 	 * The indexer will index all nodes in the queue, sleep the 
@@ -19,12 +13,6 @@ class synd_type_node_indexer_task extends synd_type_indexer_task {
 	 * @access	protected
 	 */
 	var $_delay = 60;
-	
-	/**
-	 * Ids returned in the last batch
-	 * @access	protected
-	 */
-	var $_batch = null;
 
 	/**
 	 * @access	private
@@ -62,58 +50,64 @@ class synd_type_node_indexer_task extends synd_type_indexer_task {
 		$this->_notify = $notify;
 	}
 
-	function getBatch() {
+	function getBatch($limit) {
 		$index = $this->getIndex();
 		$search = Module::getInstance('search');
 		$database = $search->getIndexDatabase();
-
-		if (!empty($this->_batch)) {
-			$sql = "
-				DELETE FROM synd_search_queue
-				WHERE 
-					namespace = ".$database->quote($this->_namespace)." AND
-					node_id IN (".implode(', ', $database->quote($this->_batch)).") AND
-					backends + ".$database->quote($this->_key)." >= ".$database->quote($this->_keys);
-			$result = $database->query($sql);
-
-			if (SyndLib::isError($result)) {
-				trigger_error($result->getMessage(), E_USER_WARNING);
-				return array();
-			}
-
-			if ($database->affectedRows() < count($this->_batch)) {
-				$sql = "
-					UPDATE synd_search_queue
-					SET backends = backends + ".$database->quote($this->_key)."
-					WHERE
-						namespace = ".$database->quote($this->_namespace)." AND
-						node_id IN (".implode(', ', $database->quote($this->_batch)).")";
-				$result = $database->query($sql);
-				
-				if (SyndLib::isError($result)) {
-					trigger_error($result->getMessage(), E_USER_WARNING);
-					return array();
-				}
-			}
-		}
 
 		$sql = "
 			SELECT DISTINCT q.node_id FROM synd_search_queue q
 			WHERE 
 				q.namespace = ".$database->quote($this->_namespace)." AND
 				".$database->bitand('q.backends',$database->quote($this->_key))." = 0";
-		$this->_batch = $database->getCol($sql, 0, 0, $this->_limit);
+		$ids = $database->getCol($sql, 0, 0, $limit);
 
-		if (SyndLib::isError($this->_batch)) {
-			trigger_error($this->_batch->getMessage(), E_USER_WARNING);
-			return array();
+		if (SyndLib::isError($ids)) {
+			trigger_error($ids->getMessage(), E_USER_WARNING);
+			return array(array(), array());
 		}
 
 		// Instantiate queue and check for deleted nodes
-		$nodes = SyndNodeLib::getInstances($this->_batch);
-		if (count($deleted = array_diff($this->_batch, array_keys($nodes))))
+		$nodes = SyndNodeLib::getInstances($ids);
+		if (count($deleted = array_diff($ids, array_keys($nodes))))
 			$index->delDocumentBatch($deleted);
-		return $nodes;
+		return array($nodes, $ids);
+	}
+	
+	function completed($nodes, $ids) {
+		if (count($ids) == 0)
+			return;
+		
+		$search = Module::getInstance('search');
+		$database = $search->getIndexDatabase();
+		
+		$sql = "
+			DELETE FROM synd_search_queue
+			WHERE 
+				namespace = ".$database->quote($this->_namespace)." AND
+				node_id IN (".implode(', ', $database->quote($ids)).") AND
+				backends + ".$database->quote($this->_key)." >= ".$database->quote($this->_keys);
+		$result = $database->query($sql);
+
+		if (SyndLib::isError($result)) {
+			trigger_error($result->getMessage(), E_USER_WARNING);
+			return;
+		}
+
+		if ($database->affectedRows() < count($ids)) {
+			$sql = "
+				UPDATE synd_search_queue
+				SET backends = backends + ".$database->quote($this->_key)."
+				WHERE
+					namespace = ".$database->quote($this->_namespace)." AND
+					node_id IN (".implode(', ', $database->quote($ids)).")";
+			$result = $database->query($sql);
+
+			if (SyndLib::isError($result)) {
+				trigger_error($result->getMessage(), E_USER_WARNING);
+				return;
+			}
+		}
 	}
 	
 	function run($handler) {
