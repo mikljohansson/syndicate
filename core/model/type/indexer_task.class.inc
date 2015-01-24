@@ -43,7 +43,11 @@ class synd_type_indexer_task extends synd_type_task {
 	function run($handler) {
 		parent::run($handler);
 
-		ini_set('memory_limit', '2048M');
+		// Increase memory limit if very low to avoid too much out-of-memory problems
+		if ($this->_toBytes(ini_get('memory_limit')) < $this->_toBytes('512M'))
+			ini_set('memory_limit', '512M');
+		
+		// Increase time limit to have time to index everything
 		set_time_limit(60*30);
 
 		// Reset the success count in case of a previous failure on this same batch
@@ -95,5 +99,24 @@ class synd_type_indexer_task extends synd_type_task {
 			print "Rescheduling task after processing ".count($ids)." nodes.\n";
 			$handler->appendTask($this, $this->classId().'.'.$this->objectId());
 		}
+	}
+	
+	function _toBytes($val) {
+		if ($val == null)
+			return 0;
+		
+		$val = trim($val);
+		$last = strtolower($val[strlen($val)-1]);
+		switch($last) {
+			// The 'G' modifier is available since PHP 5.1.0
+			case 'g':
+				$val *= 1024;
+			case 'm':
+				$val *= 1024;
+			case 'k':
+				$val *= 1024;
+		}
+
+		return $val;
 	}
 }
