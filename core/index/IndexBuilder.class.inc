@@ -69,7 +69,7 @@ class ForwardingIndexBuilder implements IndexBuilder {
 	}
 	
 	function visitFile($file, $type = null, $buffer = null) {
-		$this->_next->visitFile($path, $type, $buffer);
+		$this->_next->visitFile($file, $type, $buffer);
 	}
 	
 	function visitFragment($fragment, $field = null, $weight = 1) {

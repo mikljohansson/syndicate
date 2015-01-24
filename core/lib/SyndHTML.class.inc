@@ -202,8 +202,14 @@ class SyndHTML {
 	static function getContextSummary($text, $terms, $length = 200, $maxContexts = 3) {
 		if (is_array($text))
 			$text = implode('. ', $text);
+		
+		// Characters used in english and national words
+		$wordchars = "\wŠšŸÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜİàáâãäåçèéêëìíîïñòóôõöøùúûüıÿŞşĞğßŒœÆæµ";
+		
+		// If no work highlighting, just return $length chars from the text and avoid 
+		// splitting in the middle of a word.
 		if (empty($terms))
-			return preg_replace('/\w+$/', '', substr($text, 0, $length+10));
+			return preg_replace("/[{$wordchars}]+$/", '', substr($text, 0, $length+10));
 		
 		$terms = array_map('strtolower', $terms);
 		$lower = strtolower($text);
@@ -214,8 +220,10 @@ class SyndHTML {
 				$offsets[$i] = $term;
 		}
 		
+		// If terms weren't found, just return $length chars from the text and avoid 
+		// splitting in the middle of a word.
 		if (empty($offsets))
-			return preg_replace('/\w+$/', '', substr($text, 0, $length+10));
+			return preg_replace("/[{$wordchars}]+$/", '', substr($text, 0, $length+10));
 		
 		ksort($offsets);
 		$size = round(max(32, $length / count($offsets) / 2));
@@ -249,7 +257,7 @@ class SyndHTML {
 			$offset = 0;
 			foreach ($offsets as $term) {
 				if (false !== ($index = strpos($lower, $term, $offset))) {
-					$chunk = preg_replace('/^[^\w]+|[^\w]+$/', '', 
+					$chunk = preg_replace("/^[^{$wordchars}]+|[^{$wordchars}]+$/", '', 
 						substr($text, max($index-$size*2,$offset,0), $size*4));
 						
 					$contexts[] = $chunk;
@@ -263,9 +271,9 @@ class SyndHTML {
 			}
 		}
 		
-		$contexts = preg_replace("/[^\w.,?!;:'\"\/\\#%&\[\]()=+\-*@<>]+|^[^\w<]+|[^\w.!?>]+$|[#\s\-_.]{3,}/", ' ', $contexts);
+		$contexts = preg_replace("/[^{$wordchars}.,?!;:'\"\/\\#%&\[\]()=+\-*@<>]+|^[^{$wordchars}<]+|[^{$wordchars}.!?>]+$|[#\s\-_.]{3,}/", ' ', $contexts);
 		$contexts = preg_replace('/\b('.implode('|', 
-			array_map('preg_quote', $terms)).')\w*/i', '<b>\0</b>', 
+			array_map('preg_quote', $terms))."){$wordchars}*/i", '<b>\0</b>', 
 			array_map('htmlspecialchars', $contexts));
 
 		return implode(' <b>..</b> ', $contexts);

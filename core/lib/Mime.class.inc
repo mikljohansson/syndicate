@@ -773,7 +773,7 @@ abstract class MimePart {
 		if (isset($headers[$name])) {
 			if (null == $attribute)
 				return Mime::charset(SyndLib::reset(SyndLib::reset($headers[$name])), $this->_charset);
-			$attributes = array_change_key_case(SyndLib::reset($headers[$name]), CASE_LOWER);
+			$attributes = array_change_key_case((array)SyndLib::reset($headers[$name]), CASE_LOWER);
 			if (isset($attributes[$attribute]))
 				return Mime::charset($attributes[$attribute], $this->_charset);
 		}
@@ -1106,7 +1106,7 @@ class MimeTextpart extends MimeTextpart_2_0_0 {
 
 	function __wakeup() {
 		if (!$this->_converted) {
-			foreach ($this->_headers as $key => $value) {
+			foreach ((array)$this->_headers as $key => $value) {
 				$this->_headers[$key] = array($value);
 			}
 
@@ -1120,7 +1120,7 @@ class MimeMultipart extends MimeMultipart_2_0_0 {
 
 	function __wakeup() {
 		if (!$this->_converted) {
-			foreach ($this->_headers as $key => $value) {
+			foreach ((array)$this->_headers as $key => $value) {
 				$this->_headers[$key] = array($value);
 			}
 

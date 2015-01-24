@@ -5,7 +5,7 @@ require_once 'core/index/AbstractIndex.class.inc';
 class synd_type_indexer_task extends synd_type_task {
 	var $_buffer = null;
 	var $_index = null;
-	var $_limit = 1000;
+	var $_limit = 750;
 	
 	/**
 	 * Tracks the running failure count used a modifier for the batch size limit.
