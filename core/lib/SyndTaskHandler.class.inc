@@ -126,7 +126,7 @@ class SyndTaskHandler extends SyndTask {
 		$pidFile = $this->getStoragePath().'handler.pid';
 		if (file_exists($pidFile) && is_numeric($pid = file_get_contents($pidFile))) {
 			// Check if process is alive
-			if (0 != $pid) {
+			if (0 != $pid)
 				return posix_kill($pid, 0);
 			
 			// Temporary pid, check the mtime to allow the handler a few seconds to start
@@ -374,4 +374,3 @@ class SyndTaskHandler extends SyndTask {
 		return $this->_lockHandles[$id];
 	}
 }
-
