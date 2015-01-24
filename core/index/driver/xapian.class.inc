@@ -464,7 +464,7 @@ class XapianDatabase {
 			try {
 				$handle = new_WritableDatabase($dsn, DB_CREATE_OR_OPEN);
 				if ($handle != null)
-					WritableDatabase_close($handle);
+					Database_close($handle);
 			}
 			catch (DatabaseLockError $e) {}
 		}
