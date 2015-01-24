@@ -64,7 +64,7 @@ class synd_type_indexer_task extends synd_type_task {
 		list($nodes, $ids) = $this->getBatch($limit);
 
 		if (count($nodes) > 0) {
-			print date('Y-m-d H:i:s').' Got '.count($nodes)." ($count total) nodes, indexing ..\n";
+			print date('Y-m-d H:i:s').' Got '.count($nodes)." nodes, indexing ..\n";
 			foreach ($nodes as $node) {
 				$indexer->open($node->id(), $node->getIndexSection(), $node->getSecurityAttributes());
 

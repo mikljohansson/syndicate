@@ -102,9 +102,7 @@ class SyndTaskHandler extends SyndTask {
 		if (!SyndLib::file_put_contents("{$storage}{$id}.obj", $buffer))
 			return trigger_error('Could not write task file.', E_USER_WARNING);
 
-		if (!$this->isRunning())
-			$this->runHandler();
-		
+		$this->runHandler();
 		$this->unlockHandler();
 	}
 
@@ -114,8 +112,7 @@ class SyndTaskHandler extends SyndTask {
 	 */
 	function isScheduled($id) {
 		if (file_exists($this->getStoragePath()."tasks/{$id}.obj")) {
-			if (!$this->isRunning())
-				$this->runHandler();
+			$this->runHandler();
 			return true;
 		}
 		return false;
@@ -127,13 +124,16 @@ class SyndTaskHandler extends SyndTask {
 	 */
 	function isRunning() {
 		$pidFile = $this->getStoragePath().'handler.pid';
-		if (file_exists($pidFile)) {
-			if (!is_numeric($pid = file_get_contents($pidFile)) || 0 == $pid || !posix_kill($pid, 0)) {
-				unlink($pidFile);
-				return false;
-			}
-			return true;
+		if (file_exists($pidFile) && is_numeric($pid = file_get_contents($pidFile))) {
+			// Check if process is alive
+			if (0 != $pid) {
+				return posix_kill($pid, 0);
+			
+			// Temporary pid, check the mtime to allow the handler a few seconds to start
+			$mtime = filemtime($pidFile);
+			return $mtime >= time() - 30;
 		}
+		
 		return false;
 	}
 	
@@ -143,23 +143,43 @@ class SyndTaskHandler extends SyndTask {
 	 */
 	function runHandler() {
 		global $synd_config;
-		if (!SyndLib::createDirectory($this->getStoragePath()))
+		if (!$this->lockHandler())
+			return trigger_error('Could not aquire lock on handler.', E_USER_WARNING);
+		
+		// Check if handler is running while holding lock, to avoid race condition
+		if ($this->isRunning()) {
+			$this->unlockHandler();
+			return;
+		}
+		
+		if (!SyndLib::createDirectory($this->getStoragePath())) {
+			$this->unlockHandler();
 			return trigger_error('Could not create storage directory.', E_USER_WARNING);
+		}
 
 		// Write handler task file
 		$handler = $this->getStoragePath().'handler.obj';
 		$buffer = serialize(array('task' => serialize($this), 'timelimit' => null));
-		if (!SyndLib::file_put_contents($handler, $buffer))
+		if (!SyndLib::file_put_contents($handler, $buffer)) {
+			$this->unlockHandler();
 			return trigger_error("Could not write to '$handler'.", E_USER_WARNING);
+		}
 
-		// Start handler process 
+		// Write a temporary pid file to signal isRunning() that the handler is about to statr
 		$pidFile = $this->getStoragePath().'handler.pid';
-		if (!SyndLib::file_put_contents($this->getStoragePath().'handler.pid', 0))
+		if (!SyndLib::file_put_contents($this->getStoragePath().'handler.pid', 0)) {
+			$this->unlockHandler();
 			return trigger_error("Could not write temporary pid.", E_USER_WARNING);
-		if (!is_resource($pd = $this->openProcess($handler, 0, $this->getOutputFile())))
+		}
+		
+		// Start handler process 
+		if (!is_resource($pd = $this->openProcess($handler, 0, $this->getOutputFile()))) {
+			$this->unlockHandler();
 			return trigger_error("Could not launch handler process.", E_USER_WARNING);
+		}
 		
 		pclose($pd);
+		$this->unlockHandler();
 	}
 
 	/**
@@ -188,7 +208,7 @@ class SyndTaskHandler extends SyndTask {
 			}
 			
 			$tasks = SyndLib::scanDirectory($this->getStoragePath().'tasks/');
-			if (null == ($file = reset($tasks)))
+			if (null == ($file = reset($tasks))) {
 				$this->log("Handler: Done $count tasks\n");
 				
 				// Must keep lock until task directory is deleted

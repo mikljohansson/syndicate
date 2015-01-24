@@ -459,13 +459,17 @@ class XapianDatabase {
 	}
 	
 	function _openDatabase($dsn) {
-		assert('is_dir($dsn)');
-		if (file_exists(rtrim($dsn,'/').'/flintlock')) 
-			$this->_handle = new_Database($dsn);
-		else  {
-			$this->_handle = new_WritableDatabase($dsn, DB_CREATE_OR_OPEN);
-			$this->_isWritable = true;
+		// Try to automatically create the database if it doesn't exist
+		if (!file_exists(rtrim($dsn,'/').'/flintlock')) {
+			try {
+				$handle = new_WritableDatabase($dsn, DB_CREATE_OR_OPEN);
+				if ($handle != null)
+					WritableDatabase_close($handle);
+			}
+			catch (DatabaseLockError $e) {}
 		}
+		
+		$this->_handle = new_Database($dsn);
 	}
 	
 	function get_doccount() {

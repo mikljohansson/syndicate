@@ -58,7 +58,7 @@ foreach ($config['backends'] as $key => $urn) {
 			</td>
 			<td><?= tpl_def($stats[$urn]['refresh_queue_size']) ?></td>
 			<td>
-				<? if (@$backends[$urn]->isIndexing()) { ?>
+				<? if ($backends[$urn]->isIndexing()) { ?>
 				<?= tpl_text('Indexing in progress ...') ?>
 				<? } else { ?>
 				<a href="<?= tpl_link_call('search','runIndexer',array('urn'=>$urn)) ?>"><?= tpl_text('Start indexer') ?></a>
@@ -93,7 +93,7 @@ foreach ($config['backends'] as $key => $urn) {
 			<td><b><?= $clsid ?></b></td>
 			<? foreach (array_keys($backends) as $urn) { ?>
 			<td><?= tpl_def($stats[$urn]['sections']['n.'.SyndNodeLib::getInheritedBranch($clsid)]) ?></td>
-				<? if (@$backends[$urn]->isIndexing($clsid)) { ?>
+				<? if ($backends[$urn]->isIndexing($clsid)) { ?>
 				<td><em>(<?= tpl_text('Indexing in progress ...') ?>)</em></td>
 				<? } else { ?>
 				<td><a href="<?= tpl_link_call('search','runClassIndexer',$clsid,array('urn'=>$urn)) ?>"><?= tpl_text('Reindex') ?></a></td>
