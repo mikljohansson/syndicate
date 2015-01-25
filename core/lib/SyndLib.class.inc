@@ -625,7 +625,7 @@ class SyndLib {
 	 * @see		reset()
 	 */
 	static function reset($a) {
-		return reset($a);
+		return is_array($a) ? reset($a) : null;
 	}
 	
 	/**

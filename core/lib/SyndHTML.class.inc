@@ -272,9 +272,7 @@ class SyndHTML {
 		}
 		
 		$contexts = preg_replace("/[^{$wordchars}.,?!;:'\"\/\\#%&\[\]()=+\-*@<>]+|^[^{$wordchars}<]+|[^{$wordchars}.!?>]+$|[#\s\-_.]{3,}/", ' ', $contexts);
-		$contexts = preg_replace('/\b('.implode('|', 
-			array_map('preg_quote', $terms))."){$wordchars}*/i", '<b>\0</b>', 
-			array_map('htmlspecialchars', $contexts));
+		$contexts = preg_replace('/\b('.implode('|', array_map('preg_quote', $terms)).")[{$wordchars}]*/i", '<b>\0</b>', $contexts);
 
 		return implode(' <b>..</b> ', $contexts);
 	}
