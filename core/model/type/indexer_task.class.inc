@@ -38,7 +38,9 @@ class synd_type_indexer_task extends synd_type_task {
 		return array(array(), array());
 	}
 	
-	function completed($nodes, $ids) {}
+	function completed($ids) {}
+	
+	function skip($i) {}
 	
 	function run($handler) {
 		parent::run($handler);
@@ -51,13 +53,22 @@ class synd_type_indexer_task extends synd_type_task {
 		set_time_limit(60*30);
 
 		// Reset the success count in case of a previous failure on this same batch
-		if ($handler->getFailureCount() > 0) {
+		if ($failures > 0)
 			$this->_prevSuccess = 0;
-		}
-		
+
 		// Decrease limit exponentially in case of failure/crashes/out-of-memory
-		$failures = $handler->getFailureCount() + $this->_prevFailures;
-		$limit = max($this->_limit / pow(2, $failures), 1);
+		$failures = $handler->getFailureCount();
+		$limit = $this->_getLimit($failures + $this->_prevFailures);
+		print "$failures previous failures on this batch, running failure count is {$this->_prevFailures}, batch size is $limit\n";
+		
+		// Check if this single node causes crashes
+		if ($this->_limit > 1 && $limit == 1 && $this->_getLimit($failures + $this->_prevFailures - 1) == 1) {
+			print "Skipping one item due to crashes on that single object\n";
+			$this->skip(1);
+			$this->_prevFailures = $failures + $this->_prevFailures - 1;
+			$handler->appendTask($this, $this->classId().'.'.$this->objectId());
+			return;
+		}
 		
 		$index = $this->getIndex();
 		$indexer = $index->getIndexer();
@@ -82,10 +93,10 @@ class synd_type_indexer_task extends synd_type_task {
 			$indexer->flush();
 		}
 		
-		$this->completed($nodes, $ids);
+		$this->completed($ids);
 		
 		// Keep the running failure and success counts
-		$this->_prevFailures = max($handler->getFailureCount(), $this->_prevFailures);
+		$this->_prevFailures = max($failures, $this->_prevFailures);
 		$this->_prevSuccess++;
 		
 		// Try increasing the batch size again after 10 successesful batches
@@ -99,6 +110,10 @@ class synd_type_indexer_task extends synd_type_task {
 			print "Rescheduling task after processing ".count($ids)." nodes.\n";
 			$handler->appendTask($this, $this->classId().'.'.$this->objectId());
 		}
+	}
+
+	function _getLimit($failures) {
+		return (int)max($this->_limit / pow(2, $failures), 1);
 	}
 	
 	function _toBytes($val) {

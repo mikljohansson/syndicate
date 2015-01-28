@@ -47,4 +47,8 @@ class synd_type_class_indexer_task extends synd_type_indexer_task {
 		$nodes = $persistent->getInstances($ids);
 		return array($nodes, $ids);
 	}
+	
+	function skip($i) {
+		$this->_offset += $i;
+	}
 }

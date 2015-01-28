@@ -51,30 +51,17 @@ class synd_type_node_indexer_task extends synd_type_indexer_task {
 	}
 
 	function getBatch($limit) {
-		$index = $this->getIndex();
-		$search = Module::getInstance('search');
-		$database = $search->getIndexDatabase();
-
-		$sql = "
-			SELECT DISTINCT q.node_id FROM synd_search_queue q
-			WHERE 
-				q.namespace = ".$database->quote($this->_namespace)." AND
-				".$database->bitand('q.backends',$database->quote($this->_key))." = 0";
-		$ids = $database->getCol($sql, 0, 0, $limit);
-
-		if (SyndLib::isError($ids)) {
-			trigger_error($ids->getMessage(), E_USER_WARNING);
-			return array(array(), array());
-		}
-
+		$ids = $this->_fetch($limit);
+	
 		// Instantiate queue and check for deleted nodes
+		$index = $this->getIndex();
 		$nodes = SyndNodeLib::getInstances($ids);
 		if (count($deleted = array_diff($ids, array_keys($nodes))))
 			$index->delDocumentBatch($deleted);
 		return array($nodes, $ids);
 	}
-	
-	function completed($nodes, $ids) {
+
+	function completed($ids) {
 		if (count($ids) == 0)
 			return;
 		
@@ -108,6 +95,30 @@ class synd_type_node_indexer_task extends synd_type_indexer_task {
 				return;
 			}
 		}
+	}
+	
+	function skip($i) {
+		$this->completed($this->_fetch($i));
+	}
+	
+	function _fetch($limit) {
+		$index = $this->getIndex();
+		$search = Module::getInstance('search');
+		$database = $search->getIndexDatabase();
+
+		$sql = "
+			SELECT DISTINCT q.node_id FROM synd_search_queue q
+			WHERE 
+				q.namespace = ".$database->quote($this->_namespace)." AND
+				".$database->bitand('q.backends',$database->quote($this->_key))." = 0";
+		$ids = $database->getCol($sql, 0, 0, $limit);
+
+		if (SyndLib::isError($ids)) {
+			trigger_error($ids->getMessage(), E_USER_WARNING);
+			return array();
+		}
+		
+		return $ids;
 	}
 	
 	function run($handler) {

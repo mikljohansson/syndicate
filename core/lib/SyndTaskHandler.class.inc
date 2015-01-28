@@ -208,6 +208,8 @@ class SyndTaskHandler extends SyndTask {
 			}
 			
 			$tasks = SyndLib::scanDirectory($this->getStoragePath().'tasks/');
+			sort($tasks);
+			
 			if (null == ($file = reset($tasks))) {
 				$this->log("Handler: Done $count tasks\n");
 				
