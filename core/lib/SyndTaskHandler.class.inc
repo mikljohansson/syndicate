@@ -234,7 +234,7 @@ class SyndTaskHandler extends SyndTask {
 			$status = 0;
 
 			for (;;) {
-				$pd = $this->openProcess($file, $info['timelimit']);
+				$pd = $this->openProcess($file, $info['timelimit'], null, $failures);
 				$this->pipeOutput($pd);
 				$status = pclose($pd);
 
@@ -257,9 +257,10 @@ class SyndTaskHandler extends SyndTask {
 
 				// Retry task in case of error
 				$failures++;
+				$this->log("Retrying task due to non-zero exit code $status (task failed $failures times)\n");
 
 				// Sleep a while to avoid looping too fast
-				sleep($failures);
+				sleep(1);
 			}
 
 			$count++;

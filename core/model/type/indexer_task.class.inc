@@ -53,13 +53,13 @@ class synd_type_indexer_task extends synd_type_task {
 		set_time_limit(60*30);
 
 		// Reset the success count in case of a previous failure on this same batch
+		$failures = $handler->getFailureCount();
 		if ($failures > 0)
 			$this->_prevSuccess = 0;
 
 		// Decrease limit exponentially in case of failure/crashes/out-of-memory
-		$failures = $handler->getFailureCount();
 		$limit = $this->_getLimit($failures + $this->_prevFailures);
-		print "$failures previous failures on this batch, running failure count is {$this->_prevFailures}, batch size is $limit\n";
+		print "$failures previous failures on this batch, previous failure count is {$this->_prevFailures}, batch size is $limit\n";
 		
 		// Check if this single node causes crashes
 		if ($this->_limit > 1 && $limit == 1 && $this->_getLimit($failures + $this->_prevFailures - 1) == 1) {
@@ -96,7 +96,7 @@ class synd_type_indexer_task extends synd_type_task {
 		$this->completed($ids);
 		
 		// Keep the running failure and success counts
-		$this->_prevFailures = max($failures, $this->_prevFailures);
+		$this->_prevFailures += $failures;
 		$this->_prevSuccess++;
 		
 		// Try increasing the batch size again after 10 successesful batches
