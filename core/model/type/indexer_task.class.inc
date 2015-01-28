@@ -99,8 +99,8 @@ class synd_type_indexer_task extends synd_type_task {
 		$this->_prevFailures += $failures;
 		$this->_prevSuccess++;
 		
-		// Try increasing the batch size again after 10 successesful batches
-		if ($this->_prevSuccess >= 10) {
+		// Try increasing the batch size again after some successesful batches
+		if ($this->_prevSuccess >= 5) {
 			$this->_prevFailures = max($this->_prevFailures - 1, 0);
 			$this->_prevSuccess = 0;
 		}
