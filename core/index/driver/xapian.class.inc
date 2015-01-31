@@ -73,12 +73,6 @@ class synd_index_xapian extends AbstractIndex {
 	 */
 	var $_maxPostings = 8192;
 	
-	/**
-	 * Terms will be chopped at this length
-	 * @access	protected
-	 */
-	var $_maxTermLength = 32;
-	
 	function __construct($dsn, $removelock = true) {
 		parent::__construct();
 
@@ -116,42 +110,7 @@ class synd_index_xapian extends AbstractIndex {
 		}
 		return $this->_enquire;
 	}
-
-	function lexerExpression() {
-		return array_merge((array)$this->runHook('query_lexer_expression'), array(
-				'[()]',
-				'[&|]{1,2}',
-				'(?<!\w)[+\-!]',
-				'(?<![a-zедц\d])[a-zедц\d]{1,'.$this->_maxTermLength.'}'));
-	}
 	
-	function createExpression($token) {
-		switch ($token) {
-			case '+':
-				$expression = new SyndBooleanInclude();
-				break;
-
-			case '-':
-			case '!':
-				$expression = new SyndBooleanExclude();
-				break;
-
-			case '&':
-			case '&&':
-				$expression = new SyndBooleanAND();
-				break;
-
-			case '|':
-			case '||':
-				$expression = new SyndBooleanOR();
-				break;
-
-			default: 
-				$expression = new SyndTermQuery(strtolower($token));
-		}
-		return $expression;
-	}
-
 	private function _parse($query, $force = false) {
 		if (null == ($expression = $query->createExpression($this)) && !$force)
 			return null;
@@ -381,11 +340,6 @@ class synd_index_xapian extends AbstractIndex {
 		$db->delete_document(md5("__section__:$section"));
 		
 		parent::clearSection($section);
-	}
-
-	function termProcess($term) {
-		$this->runHook('query_process_term', array(&$term));
-		return $term;
 	}
 }
 

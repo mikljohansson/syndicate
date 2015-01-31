@@ -33,16 +33,6 @@ class synd_index_term extends DatabaseIndex {
 	var $_maxPostings = 8192;
 	
 	/**
-	 * Terms will be chopped at this length
-	 *
-	 * This value must correspond to the width of the 
-	 * synd_search_term.term column in the database.
-	 *
-	 * @access	private
-	 */
-	var $_maxTermLength = 32;
-	
-	/**
 	 * Deleted documents buffer
 	 * @access	private
 	 */
@@ -345,7 +335,7 @@ class synd_index_term extends DatabaseIndex {
 		// Insert the NULL term to be used when balancing expressions
 		$this->_db->query("INSERT INTO synd_search_term (termid, n) VALUES (0, 0)");
 		
-		// Deallocate memory properly
+		// Release memory properly
 		unset($this->_postings, $this->_terms);
 		$this->_postings = array();
 		$this->_terms = array();
@@ -425,7 +415,7 @@ class synd_index_term extends DatabaseIndex {
 		if (SyndLib::isError($result = $this->_db->load('synd_search_termindex', $this->_postings)))
 			return $result;
 
-		// Deallocate memory properly
+		// Release memory properly
 		unset($this->_postings, $this->_terms, $this->_deleted);
 		$this->_postings = array();
 		$this->_terms = array();
@@ -503,11 +493,6 @@ class synd_index_term extends DatabaseIndex {
 		return 0 != ($id= crc32($term)) ? $id : 1;
 	}
 
-	function termProcess($term) {
-		$this->runHook('query_process_term', array(&$term));
-		return $term;
-	}
-
 	/**
 	 * Default extension hook
 	 * @access	protected
@@ -520,44 +505,6 @@ class synd_index_term extends DatabaseIndex {
 	function _callback_query_visit_null(&$result, $builder, $expression) {
 		$t = $builder->allocate('synd_search_termindex','t',array('docid','termid'));
 		$result = "$t.termid = 0";
-	}
-	
-	function lexerExpression() {
-		return array_merge((array)$this->runHook('query_lexer_expression'), array(
-				'[()]',
-				'[&|]{1,2}',
-				'(?<!\w)[+\-!]',
-				'(?<![a-zедц])[a-zедц]{1,'.$this->_maxTermLength.'}',
-				'(?<!\d)\d{1,'.$this->_maxTermLength.'}'));
-	}
-	
-	function createExpression($token) {
-		if (null === ($expression = $this->runHook('query_create_expression', array($token)))) {
-			switch ($token) {
-				case '+':
-					$expression = new SyndBooleanInclude();
-					break;
-
-				case '-':
-				case '!':
-					$expression = new SyndBooleanExclude();
-					break;
-
-				case '&':
-				case '&&':
-					$expression = new SyndBooleanAND();
-					break;
-
-				case '|':
-				case '||':
-					$expression = new SyndBooleanOR();
-					break;
-					
-				default: 
-					$expression = new SyndTermQuery(strtolower($token));
-			}
-		}
-		return $expression;
 	}
 }
 

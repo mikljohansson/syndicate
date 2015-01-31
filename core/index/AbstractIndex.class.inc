@@ -27,6 +27,16 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 	var $_exitHandler = false;
 	
 	/**
+	 * Terms will be chopped at this length
+	 *
+	 * This value must correspond to the width of the 
+	 * synd_search_term.term column in the database.
+	 *
+	 * @access	private
+	 */
+	var $_maxTermLength = 32;
+	
+	/**
 	 * Constructor
 	 * @param	Database to use
 	 */
@@ -182,5 +192,47 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 	function _callback_text_strip_query(&$result, &$text) {
 		$result = $text;
 		return true;
+	}
+	
+	function lexerExpression() {
+		return array_merge((array)$this->runHook('query_lexer_expression'), array(
+				'[()]',
+				'[&|]{1,2}',
+				'(?<!\w)[+\-!]',
+				'(?<![a-zедц\d])[a-zедц\d]{1,'.$this->_maxTermLength.'}'));
+	}
+
+	function createExpression($token) {
+		if (null === ($expression = $this->runHook('query_create_expression', array($token)))) {
+			switch ($token) {
+				case '+':
+					$expression = new SyndBooleanInclude();
+					break;
+
+				case '-':
+				case '!':
+					$expression = new SyndBooleanExclude();
+					break;
+
+				case '&':
+				case '&&':
+					$expression = new SyndBooleanAND();
+					break;
+
+				case '|':
+				case '||':
+					$expression = new SyndBooleanOR();
+					break;
+					
+				default: 
+					$expression = new SyndTermQuery(strtolower($token));
+			}
+		}
+		return $expression;
+	}
+	
+	function termProcess($term) {
+		$this->runHook('query_process_term', array(&$term));
+		return $term;
 	}
 }
