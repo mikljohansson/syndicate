@@ -1,5 +1,5 @@
 <?php
-require_once 'core/defines.inc';
+require_once 'core/i18n.inc';
 require_once 'core/index/SyndEventProducer.class.inc';
 require_once 'core/index/Index.class.inc';
 require_once 'core/lib/SyndLib.class.inc';
@@ -226,7 +226,7 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 					break;
 					
 				default: 
-					$expression = new SyndTermQuery(strtolower($token));
+					$expression = new SyndTermQuery(synd_strtolower($token));
 			}
 		}
 		return $expression;

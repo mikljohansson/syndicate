@@ -1,5 +1,5 @@
 <?php
-require_once 'core/defines.inc';
+require_once 'core/i18n.inc';
 require_once 'core/Module.class.inc';
 require_once 'core/index/SearchBackend.class.inc';
 require_once 'core/lib/rpc/RpcTransport.class.inc';
@@ -185,7 +185,7 @@ class synd_module_search extends Module implements SearchBackend {
 	}
 	
 	function _callback_spelling(&$result, $query) {
-		if (preg_match_all('/\b[\w.]+(?!:)\b/', $query, $matches)) {
+		if (preg_match_all("/\b[{$SYND_WORDCHARS}.]+(?!:)\b/", $query, $matches)) {
 			$index = $this->getIndex();
 			$result = $index->getSpellingSuggestions($matches[0]);
 			return true;

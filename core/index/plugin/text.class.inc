@@ -1,4 +1,5 @@
 <?php
+require_once 'core/i18n.inc';
 require_once 'core/index/SyndIndexExtension.class.inc';
 
 /**
@@ -27,7 +28,7 @@ class synd_plugin_text extends SyndIndexExtension {
 	}
 
 	function _callback_query_process_term(&$result, &$term) {
-		$term = strtolower($this->normalize($term));
+		$term = synd_strtolower($this->normalize($term));
 	}
 
 	function _callback_text_strip_query(&$result, &$text) {
@@ -40,7 +41,7 @@ class synd_plugin_text extends SyndIndexExtension {
 	function _callback_document_fragment(&$result, $document) {
 		// Keep href'ed urls
 		$text = preg_replace('/<a .*?href=(")?(.*)(?(1)"|\s).*?>/s', ' \2 ', $document->toString());
-		$document->setText(strtolower($this->normalize(strip_tags($text))));
+		$document->setText(synd_strtolower($this->normalize(strip_tags($text))));
 	}
 }
 

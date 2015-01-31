@@ -1,5 +1,5 @@
 <?php
-require_once 'core/defines.inc';
+require_once 'core/i18n.inc';
 
 /**
  * HTML Utility class.

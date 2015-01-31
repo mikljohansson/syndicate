@@ -1,4 +1,5 @@
 <?php
+require_once 'core/i18n.inc';
 require_once 'core/index/SyndIndexExtension.class.inc';
 
 /**
@@ -130,7 +131,7 @@ class synd_plugin_fuzzy extends SyndIndexExtension {
 	 */
 	function _callback_query_spelling_suggestions(&$result, $terms) {
 		$processed = array_map(array($this->_index, 'termProcess'), 
-			array_map('strtolower', $terms));
+			array_map('synd_strtolower', $terms));
 		
 		$N = $this->_index->getDocumentCount();
 		$sql = "

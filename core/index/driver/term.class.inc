@@ -1,4 +1,5 @@
 <?php
+require_once 'core/i18n.inc';
 require_once 'core/index/DatabaseIndex.class.inc';
 require_once 'core/index/SyndExpression.class.inc';
 require_once 'core/index/SqlQueryBuilder.class.inc';
@@ -225,8 +226,8 @@ class synd_index_term extends DatabaseIndex {
 			return;
 
 		profiler_enter('preg_split');
-		$terms = preg_split('/[^a-zедц\d]+|(?<=[a-zедц])(?=\d)|(?<=\d)(?=[a-zедц])/S', 
-			strtolower($document->toString()), $count);
+		$terms = preg_split("/[^{$SYND_WORDCHARS}]+/S", 
+			synd_strtolower($document->toString()), $count, PREG_SPLIT_NO_EMPTY);
 		profiler_leave('preg_split');
 		
 		// Increase document length

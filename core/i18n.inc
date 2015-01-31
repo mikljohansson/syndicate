@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * PRCE regexp expression to match word characters
+ */
+$SYND_WORDCHARS = "\w\dŠŽšžŸÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜÝàáâãäåçèéêëìíîïñòóôõöøùúûüýÿÞþÐðßŒœÆæµ";
+
+/**
+ * Lowercase ISO-8858-1 characters
+ */
+$SYND_LOWERCHARS = "abcdefghijklmnopqrstuvwxyzšžàáâãäåçèéêëìíîïñòóôõöøùúûüýÿþðßœæµ";
+
+/**
+ * Uppercase ISO-8858-1 characters
+ */
+$SYND_UPPERCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZŠŽÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜÝŸÞÐßŒÆµ";
+
+function synd_strtolower($s) {
+	return strtr($s, $SYND_UPPERCHARS, $SYND_LOWERCHARS);
+}
