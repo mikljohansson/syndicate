@@ -16,5 +16,6 @@ $SYND_LOWERCHARS = "abcdefghijklmnopqrstuvwxyzšžàáâãäåçèéêëìíîïñòóôõöøùúûüýÿþðßœ
 $SYND_UPPERCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZŠŽÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜÝŸÞÐßŒÆµ";
 
 function synd_strtolower($s) {
+	global $SYND_UPPERCHARS, $SYND_LOWERCHARS;
 	return strtr($s, $SYND_UPPERCHARS, $SYND_LOWERCHARS);
 }

@@ -185,6 +185,7 @@ class synd_module_search extends Module implements SearchBackend {
 	}
 	
 	function _callback_spelling(&$result, $query) {
+		global $SYND_WORDCHARS;
 		if (preg_match_all("/\b[{$SYND_WORDCHARS}.]+(?!:)\b/", $query, $matches)) {
 			$index = $this->getIndex();
 			$result = $index->getSpellingSuggestions($matches[0]);
@@ -193,7 +194,7 @@ class synd_module_search extends Module implements SearchBackend {
 	}
 	
 	function _view_index(Request $request, Template $page) {
-		global $synd_user;
+		global $synd_user, $SYND_WORDCHARS;
 		require_once 'core/lib/rpc/RpcTransport.class.inc';
 		if (!$this->isPermitted('read'))
 			throw new ForbiddenException();
