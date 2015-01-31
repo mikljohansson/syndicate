@@ -103,6 +103,7 @@ class synd_plugin_range extends SyndIndexExtension {
 	 * @access	private
 	 */
 	function _parse($string) {
+		global $SYND_WORDCHARS;
 		if (preg_match('/\b\d{2}((?:\d{2})?[\-:]\d{2}[\-:]\d{2}(?=\b|T)|\/\d{2}\/(?:\d{2}|\d{4})\b)/i', $string, $matches) &&
 			-1 != ($timestamp = strtotime(strtr($matches[0], ':', '-').(isset($matches[1])?'':'-01'))))
 			return date('Ymd', $timestamp);

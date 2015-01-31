@@ -65,6 +65,7 @@ class synd_plugin_phrase extends SyndIndexExtension {
 	 * Adds the " token to the lexer
 	 */
 	function _callback_query_lexer_expression(&$result) {
+		global $SYND_WORDCHARS;
 		$result[] = '"';
 		$result[] = "[{$SYND_WORDCHARS}]+(?:[\-_\/\\\\]|(?<!\d)\d|\d(?!\d))[{$SYND_WORDCHARS}][{$SYND_WORDCHARS}\-_\/\\\\]*";
 		$result[] = '\b([\da-f]{2}:)+[\da-f]{2}\b'; // MAC addresses
@@ -74,6 +75,7 @@ class synd_plugin_phrase extends SyndIndexExtension {
 	 * Instantiates the " token
 	 */
 	function _callback_query_create_expression(&$result, $token) {
+		global $SYND_WORDCHARS;
 		if ('"' == $token) {
 			$result = new SyndPhraseQuery();
 			return true;
@@ -253,6 +255,7 @@ class SyndPhraseQuery extends SyndTermQuery {
 	}
 	
 	function _token($token) {
+		global $SYND_WORDCHARS;
 		foreach (array_filter(preg_split("/[^{$SYND_WORDCHARS}]+|(?<=\d)(?!\d)|(?<!\d)(?=\d)/", $token, -1), 'strlen') as $term) {
 			if (is_numeric($term) && strlen($term) > 4)
 				$this->_terms = array_merge($this->_terms, explode(' ',wordwrap($term,4,' ',true)));

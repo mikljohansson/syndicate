@@ -201,6 +201,7 @@ class SyndHTML {
 	 * @return	string
 	 */
 	static function getContextSummary($text, $terms, $length = 200, $maxContexts = 3) {
+		global $SYND_WORDCHARS;
 		if (is_array($text))
 			$text = implode('. ', $text);
 		

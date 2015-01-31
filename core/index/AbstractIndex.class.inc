@@ -196,6 +196,7 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 	}
 	
 	function lexerExpression() {
+		global $SYND_WORDCHARS;
 		return array_merge((array)$this->runHook('query_lexer_expression'), array(
 				'[()]',
 				'[&|]{1,2}',

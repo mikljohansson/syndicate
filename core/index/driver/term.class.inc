@@ -218,6 +218,7 @@ class synd_index_term extends DatabaseIndex {
 	 * on the form array($extension, '_callback_index_posting').
 	 */
 	function visitDocumentFragment($document) {
+		global $SYND_WORDCHARS;
 		parent::visitDocumentFragment($document);
 		profiler_enter(__METHOD__);
 

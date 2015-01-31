@@ -84,6 +84,7 @@ class IndexQuery {
 	 * @return	integer
 	 */
 	function getLength($index) {
+		global $SYND_WORDCHARS;
 		preg_match_all("/([{$SYND_WORDCHARS}]+)/", $this->toString($index), $matches);
 		return ($c = count(array_unique($matches[1]))) ? $c : count($this->_rset);
 	}

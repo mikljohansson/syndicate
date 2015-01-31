@@ -127,6 +127,7 @@ class ISyndTextIndexStrategy {
  */
 class SyndMySQLTextIndexStrategy extends ISyndTextIndexStrategy {
 	function _getMatch(synd_index_text $index, $text) {
+//		global $SYND_WORDCHARS;
 //		if (preg_match("/[^{$SYND_WORDCHARS}][+\-><()~*:\"&|][{$SYND_WORDCHARS}]/", $text))
 //			return "MATCH(ti.text) AGAINST (".$index->_db->quote($text)." IN BOOLEAN MODE)";
 		return "MATCH(ti.text) AGAINST (".$index->_db->quote($text).")";
