@@ -1,4 +1,5 @@
 <?php
+require_once 'core/defines.inc';
 require_once 'core/index/SyndIndexExtension.class.inc';
 require_once 'core/index/SyndExpression.class.inc';
 
@@ -65,7 +66,7 @@ class synd_plugin_phrase extends SyndIndexExtension {
 	 */
 	function _callback_query_lexer_expression(&$result) {
 		$result[] = '"';
-		$result[] = '\w+(?:[\-_\/\\\\]|(?<!\d)\d|\d(?!\d))\w[\w\-_\/\\\\]*';
+		$result[] = "[{$SYND_WORDCHARS}]+(?:[\-_\/\\\\]|(?<!\d)\d|\d(?!\d))[{$SYND_WORDCHARS}][{$SYND_WORDCHARS}\-_\/\\\\]*";
 		$result[] = '\b([\da-f]{2}:)+[\da-f]{2}\b'; // MAC addresses
 	}
 
@@ -78,7 +79,7 @@ class synd_plugin_phrase extends SyndIndexExtension {
 			return true;
 		}
 		
-		if (preg_match('/^\w+(?:[\-_\/\\\\]|(?<!\d)\d|\d(?!\d))\w[\w\-_\/\\\\]*$/', $token) ||
+		if (preg_match("/^[{$SYND_WORDCHARS}]+(?:[\-_\/\\\\]|(?<!\d)\d|\d(?!\d))[{$SYND_WORDCHARS}][{$SYND_WORDCHARS}\-_\/\\\\]*$/", $token) ||
 			preg_match('/^([\da-f]{2}:)+[\da-f]{2}$/', $token)) {
 			$result = new SyndPhraseQuery($token);
 			return true;
@@ -252,7 +253,7 @@ class SyndPhraseQuery extends SyndTermQuery {
 	}
 	
 	function _token($token) {
-		foreach (array_filter(preg_split('/[^\w]+|(?<=\d)(?!\d)|(?<!\d)(?=\d)/', $token, -1), 'strlen') as $term) {
+		foreach (array_filter(preg_split("/[^{$SYND_WORDCHARS}]+|(?<=\d)(?!\d)|(?<!\d)(?=\d)/", $token, -1), 'strlen') as $term) {
 			if (is_numeric($term) && strlen($term) > 4)
 				$this->_terms = array_merge($this->_terms, explode(' ',wordwrap($term,4,' ',true)));
 			else 

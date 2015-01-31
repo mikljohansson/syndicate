@@ -1,4 +1,5 @@
 <?php
+require_once 'core/defines.inc';
 
 /**
  * HTML Utility class.
@@ -204,7 +205,7 @@ class SyndHTML {
 			$text = implode('. ', $text);
 		
 		// Characters used in english and national words
-		$wordchars = "\wŠŽšžŸÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜÝàáâãäåçèéêëìíîïñòóôõöøùúûüýÿÞþÐðßŒœÆæµ";
+		$wordchars = $SYND_WORDCHARS;
 		
 		// If no work highlighting, just return $length chars from the text and avoid 
 		// splitting in the middle of a word.

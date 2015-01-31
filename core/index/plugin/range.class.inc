@@ -1,4 +1,5 @@
 <?php
+require_once 'core/defines.inc';
 require_once 'core/index/SyndIndexExtension.class.inc';
 require_once 'core/index/SyndExpression.class.inc';
 
@@ -105,7 +106,7 @@ class synd_plugin_range extends SyndIndexExtension {
 		if (preg_match('/\b\d{2}((?:\d{2})?[\-:]\d{2}[\-:]\d{2}(?=\b|T)|\/\d{2}\/(?:\d{2}|\d{4})\b)/i', $string, $matches) &&
 			-1 != ($timestamp = strtotime(strtr($matches[0], ':', '-').(isset($matches[1])?'':'-01'))))
 			return date('Ymd', $timestamp);
-		return preg_replace('/[^\w]/', '', $string);
+		return preg_replace("/[^{$SYND_WORDCHARS}]/", '', $string);
 	}
 	
 	function _callback_query_visit_operator(&$result, $builder, $expression) {

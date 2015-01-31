@@ -1,4 +1,5 @@
 <?php
+require_once 'core/defines.inc';
 require_once 'core/index/DatabaseIndex.class.inc';
 require_once 'core/db/SyndDBLib.class.inc';
 
@@ -126,7 +127,7 @@ class ISyndTextIndexStrategy {
  */
 class SyndMySQLTextIndexStrategy extends ISyndTextIndexStrategy {
 	function _getMatch(synd_index_text $index, $text) {
-//		if (preg_match('/[^\w][+\-><()~*:"&|]\w/', $text))
+//		if (preg_match("/[^{$SYND_WORDCHARS}][+\-><()~*:\"&|][{$SYND_WORDCHARS}]/", $text))
 //			return "MATCH(ti.text) AGAINST (".$index->_db->quote($text)." IN BOOLEAN MODE)";
 		return "MATCH(ti.text) AGAINST (".$index->_db->quote($text).")";
 	}

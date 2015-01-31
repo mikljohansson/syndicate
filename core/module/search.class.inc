@@ -1,4 +1,5 @@
 <?php
+require_once 'core/defines.inc';
 require_once 'core/Module.class.inc';
 require_once 'core/index/SearchBackend.class.inc';
 require_once 'core/lib/rpc/RpcTransport.class.inc';
@@ -284,7 +285,7 @@ class synd_module_search extends Module implements SearchBackend {
 				$page->assign('duration', $ts2 - $ts1);
 
 				// Extract keywords for highlighting and spelling suggestions
-				preg_match_all('/\b[\w.]+(?!:)\b/', $query, $matches);
+				preg_match_all("/\b[{$SYND_WORDCHARS}.]+(?!:)\b/", $query, $matches);
 				$page->assign('highlight', $matches[0]);
 				
 				if (0 == $offset && $mset[1] < 10) {

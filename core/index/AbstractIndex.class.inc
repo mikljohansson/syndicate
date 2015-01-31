@@ -1,4 +1,5 @@
 <?php
+require_once 'core/defines.inc';
 require_once 'core/index/SyndEventProducer.class.inc';
 require_once 'core/index/Index.class.inc';
 require_once 'core/lib/SyndLib.class.inc';
@@ -198,8 +199,8 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 		return array_merge((array)$this->runHook('query_lexer_expression'), array(
 				'[()]',
 				'[&|]{1,2}',
-				'(?<!\w)[+\-!]',
-				'(?<![a-zедц\d])[a-zедц\d]{1,'.$this->_maxTermLength.'}'));
+				"(?<![{$SYND_WORDCHARS}])[+\-!]",
+				"(?<![{$SYND_WORDCHARS}])[{$SYND_WORDCHARS}]{1,".$this->_maxTermLength."}"));
 	}
 
 	function createExpression($token) {

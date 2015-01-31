@@ -1,4 +1,5 @@
 <?php
+require_once 'core/defines.inc';
 
 /**
  * Search query parser
@@ -83,7 +84,7 @@ class IndexQuery {
 	 * @return	integer
 	 */
 	function getLength($index) {
-		preg_match_all('/(\w+)/', $this->toString($index), $matches);
+		preg_match_all("/([{$SYND_WORDCHARS}]+)/", $this->toString($index), $matches);
 		return ($c = count(array_unique($matches[1]))) ? $c : count($this->_rset);
 	}
 

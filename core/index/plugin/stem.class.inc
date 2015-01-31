@@ -1,4 +1,5 @@
 <?php
+require_once 'core/defines.inc';
 require_once 'core/index/SyndIndexExtension.class.inc';
 require_once 'core/index/IndexBuilder.class.inc';
 
@@ -53,7 +54,7 @@ class synd_plugin_stem extends SyndIndexExtension {
 	}
 	
 	function _callback_query_visit_term(&$result, $builder, $expression) {
-		$expression->setString(preg_replace_callback('/\w+/', 
+		$expression->setString(preg_replace_callback("/[{$SYND_WORDCHARS}]+/", 
 			array($this,'_callback_stem'), $expression->toString()));
 	}
 
