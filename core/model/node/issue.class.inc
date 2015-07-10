@@ -1444,7 +1444,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 		}
 
 		// Set issue status
-		if (isset($data['INFO_STATUS'])) {
+		if ($this->isPermitted('status') && isset($data['INFO_STATUS'])) {
 			$this->setStatus($data['INFO_STATUS']);
 			unset($data['INFO_STATUS']);
 		}
