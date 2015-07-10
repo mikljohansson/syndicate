@@ -66,7 +66,7 @@ if (!count($order = tpl_sort_order('issue',"$i.")))
 ?>
 <? if (($count = count($assigned)) || $lowprio) { 
 	$offset = (int)$request['aoffset'];
-	$limit = 75; ?>
+	$limit = 50; ?>
 	<div class="Result">
 		<table style="width:100%;">
 			<tr>

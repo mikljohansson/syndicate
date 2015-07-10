@@ -250,17 +250,17 @@ abstract class CachingDomainObjectIterator implements Iterator {
 	}
 	
 	function next() {
-		if ($this->_index < $this->_count)
-			$this->_index++;
-		else {
+		if (++$this->_index >= $this->_count) {
 			$this->_buffer = null;
 			$this->_keys = null;
+			$this->_index = 0;
 		}
 	}
 	
 	function rewind() {
 		$this->_buffer = null;
 		$this->_keys = null;
+		$this->_index = 0;
 	}
 	
 	function valid() {
