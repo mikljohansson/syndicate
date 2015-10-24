@@ -1134,10 +1134,10 @@ class synd_node_issue extends AbstractDatabaseEntity {
 	/**
 	 * Validates an authentication token
 	 * @param	string	Authentication token
-	 * @param	integer	Time to live
+	 * @param	integer	Time to live in seconds, default to 30 days
 	 * @return	bool
 	 */
-	function validateAuthenticationToken($token, $ttl = null) {
+	function validateAuthenticationToken($token, $ttl = 3600*24*30) {
 		$ts = hexdec(substr($token,16));
 		return substr(md5($ts.$this->getPrivateKey()),0,16) == substr($token,0,16) && 
 			(null == $ttl || $ts*3600*24 >= time()-$ttl && $ts*3600*24 <= time());
