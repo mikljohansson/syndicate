@@ -1,12 +1,12 @@
 <?php
 require_once 'PHPUnit2/Framework/TestCase.php';
-require_once 'core/lib/SessionHandler.class.inc';
+require_once 'core/lib/SessionManager.class.inc';
 require_once 'core/lib/CacheStrategy.class.inc';
 
-class _lib_SessionHandler extends PHPUnit2_Framework_TestCase {
+class _lib_SessionManager extends PHPUnit2_Framework_TestCase {
 	function testDatabase() {
 		global $synd_maindb;
-		$handler = new	DatabaseSessionHandler($synd_maindb);
+		$handler = new	DatabaseSessionManager($synd_maindb);
 		$this->assertTrue($handler->write('_unit_test', 'Test'));
 		
 		$actual = $handler->read('_unit_test');
@@ -21,7 +21,7 @@ class _lib_SessionHandler extends PHPUnit2_Framework_TestCase {
 	function testCached() {
 		global $synd_maindb;
 		$strategy = CacheStrategyManager::factory();
-		$handler = new CachedSessionHandler(new DatabaseSessionHandler($synd_maindb), $strategy);
+		$handler = new CachedSessionManager(new DatabaseSessionManager($synd_maindb), $strategy);
 		$this->assertTrue($handler->write('_unit_test', 'Test'));
 
 		$actual = $handler->read('_unit_test');
@@ -40,8 +40,8 @@ class _lib_SessionHandler extends PHPUnit2_Framework_TestCase {
 	}
 	
 	function testBlocking() {
-		$canary = new UnittestSessionHandler();
-		$handler = new BlockingSessionHandler($canary);
+		$canary = new UnittestSessionManager();
+		$handler = new BlockingSessionManager($canary);
 
 		$this->assertTrue($handler->write('_unit_test', 'Test'));
 		$this->assertEquals(1, $canary->_writes);
@@ -53,8 +53,8 @@ class _lib_SessionHandler extends PHPUnit2_Framework_TestCase {
 		$this->assertEquals(2, $canary->_writes);
 
 		// Test blocking empty new sessions writes
-		$canary = new UnittestSessionHandler();
-		$handler = new BlockingSessionHandler($canary);
+		$canary = new UnittestSessionManager();
+		$handler = new BlockingSessionManager($canary);
 
 		$this->assertTrue($handler->write('_unit_test', ''));
 		$this->assertEquals(0, $canary->_writes);
@@ -69,14 +69,14 @@ class _lib_SessionHandler extends PHPUnit2_Framework_TestCase {
 		$this->assertEquals(3, $canary->_writes);
 
 		// Test letting write empty through with old session
-		$handler = new BlockingSessionHandler($canary);
+		$handler = new BlockingSessionManager($canary);
 		$this->assertEquals('Test2', $handler->read('_unit_test'));
 		$this->assertTrue($handler->write('_unit_test', ''));
 		$this->assertEquals(4, $canary->_writes);
 	}
 }
 
-class UnittestSessionHandler extends SessionHandler {
+class UnittestSessionManager extends SessionManager {
 	var $_writes = 0;
 	var $_values = array();
 

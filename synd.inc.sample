@@ -228,11 +228,11 @@ else if (SyndHTTP::isHandheldDevice()) {
 }
 
 // Register distributed session handler
-//require_once 'core/lib/SessionHandler.class.inc';
+//require_once 'core/lib/SessionManager.class.inc';
 //require_once 'core/lib/CacheStrategy.class.inc';
 //require_once 'core/db/Database.class.inc';
-//SessionHandler::register(
-//	new BlockingSessionHandler(new CachedSessionHandler(new DatabaseSessionHandler(
+//SessionManager::register(
+//	new BlockingSessionManager(new CachedSessionManager(new DatabaseSessionManager(
 //	DatabaseManager::getConnection($synd_config['db']['main'])), CacheStrategy::factory())));
 
 // Start the session

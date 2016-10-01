@@ -5,25 +5,25 @@
  *
  * <code>
  * // Register distributed session handler
- * require_once 'core/lib/SessionHandler.class.inc';
+ * require_once 'core/lib/SessionManager.class.inc';
  * require_once 'core/lib/CacheStrategy.class.inc';
  * require_once 'core/db/Database.class.inc';
  *
  * $dsn = 'cluster://mysql://master.example.com/db;mysql://slave1.example.com/db,mysql://slave2.example.com/db';
  *
- * SessionHandler::register(
- *     new BlockingSessionHandler(new CachedSessionHandler(
- *     new DatabaseSessionHandler(DatabaseManager::getConnection($dsn)), 
+ * SessionManager::register(
+ *     new BlockingSessionManager(new CachedSessionManager(
+ *     new DatabaseSessionManager(DatabaseManager::getConnection($dsn)), 
  *     CacheStrategyManager::factory())));
  * </code>
  *
  * @access		public
  * @package		synd.core.lib
  */
-abstract class SessionHandler {
+abstract class SessionManager {
 	/**
 	 * Register a session handler
-	 * @param	SessionHandler	The session handler to use
+	 * @param	SessionManager	The session handler to use
 	 */
 	static function register($handler) {
 		session_set_save_handler(
@@ -78,7 +78,7 @@ abstract class SessionHandler {
 /**
  * Database session handler
  */
-class DatabaseSessionHandler extends SessionHandler {
+class DatabaseSessionManager extends SessionManager {
 	/**
 	 * @access	protected
 	 */
@@ -187,16 +187,16 @@ class DatabaseSessionHandler extends SessionHandler {
 /**
  * Cached session handler
  */
-class CachedSessionHandler extends SessionHandler {
+class CachedSessionManager extends SessionManager {
 	protected $_next = null;
 	protected $_strategy = null;
 	
 	/**
 	 * @see		CacheStrategyManager::factory()
-	 * @param	SessionHandler		Next in chain
+	 * @param	SessionManager		Next in chain
 	 * @param	CacheStrategy		Caching strategy
 	 */
-	function __construct(SessionHandler $next, CacheStrategy $strategy) {
+	function __construct(SessionManager $next, CacheStrategy $strategy) {
 		$this->_next = $next;
 		$this->_strategy = $strategy;
 	}
@@ -236,14 +236,14 @@ class CachedSessionHandler extends SessionHandler {
  * This requires persistent handlers down the chain to be able to
  * refresh their expiry times using only the get() callback.
  */
-class BlockingSessionHandler extends SessionHandler {
+class BlockingSessionManager extends SessionManager {
 	protected $_next = null;
 	protected $_checksums = null;
 
 	/**
-	 * @param	SessionHandler		Next in chain
+	 * @param	SessionManager		Next in chain
 	 */
-	function __construct(SessionHandler $next) {
+	function __construct(SessionManager $next) {
 		$this->_next = $next;
 	}
 
