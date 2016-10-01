@@ -20,16 +20,25 @@
  * @access		public
  * @package		synd.core.lib
  */
-abstract class SessionManager {
+abstract class SessionManager implements SessionHandlerInterface {
 	/**
 	 * Register a session handler
 	 * @param	SessionManager	The session handler to use
 	 */
 	static function register($handler) {
-		session_set_save_handler(
-			array($handler, 'open'), array($handler, 'close'), array($handler, 'read'), 
-			array($handler, 'write'), array($handler, 'destroy'), array($handler, 'gc'));
+		if (!session_set_save_handler($handler, true)) {
+			throw new RuntimeException('Failed to register session handler');
+		}
 	}
+
+	/**
+	 * Return a new session ID
+	 * @return	string	A session ID valid for the default session handler.
+	 */
+	function create_sid() {
+		return md5(uniqid(''));
+	}
+
 	
 	/**
 	 * Opens the session
