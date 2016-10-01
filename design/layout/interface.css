@@ -62,6 +62,14 @@ form {
 	font-weight: bold;
 }
 
+/* Applies to Chrome only which has off-by-1px box model in this case */
+@media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) { 
+	.PaneTab, .SelectedPaneTab {
+		position: relative;
+		top: 1px;
+	}
+}
+
 input.PaneTab, input.SelectedPaneTab {
 	cursor: pointer;
 	position: relative;
