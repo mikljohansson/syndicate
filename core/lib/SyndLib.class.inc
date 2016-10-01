@@ -1283,8 +1283,9 @@ class Delegate {
  */
 function profiler_start() {
 	if (!isset($GLOBALS['_profiler_instance'])) {
+		global $_profiler_instance;
 		require_once 'Benchmark/Profiler.php';
-		$GLOBALS['_profiler_instance'] = new Benchmark_Profiler(true);
+		$_profiler_instance = new Benchmark_Profiler(true);
 	}
 }
 

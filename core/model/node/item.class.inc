@@ -17,15 +17,19 @@ class synd_node_item extends synd_node_instance {
 		if (null != $data['DATA_FILES'])
 			$data['DATA_FILES'] = unserialize($data['DATA_FILES']);
 		parent::__construct($storage, $database, $data);
-		$GLOBALS['_synd_item_deferred'][] = $this->nodeId;
+
+		global $_synd_item_deferred;
+		$_synd_item_deferred[] = $this->nodeId;
 	}
 
 	function __wakeup() {
 		parent::__wakeup();
+
+		global $_synd_item_deferred;
 		if (-1 != $this->_client)
 			SyndNodeLib::preload($this->_client);
 		else if (null != $this->_client)
-			$GLOBALS['_synd_item_deferred'][] = $this->nodeId;
+			$_synd_item_deferred[] = $this->nodeId;
 	}
 	
 	static function getEntityQuery(DomainStorage $storage) {
@@ -293,12 +297,13 @@ class synd_node_item extends synd_node_instance {
 	 * @return	User
 	 */
 	function getCustomer() {
+		global $_synd_item_deferred;
 		if (null !== $this->_relation && null != ($relation = $this->_storage->getInstance($this->_relation)))
 			return $relation->getCustomer();
 		
 		if (-1 == $this->_client) {
-			$GLOBALS['_synd_item_deferred'][] = $this->nodeId;
-			$deferred = $this->_db->quote($GLOBALS['_synd_item_deferred']);
+			$_synd_item_deferred[] = $this->nodeId;
+			$deferred = $this->_db->quote($_synd_item_deferred);
 
 			$sql = "
 				SELECT u.child_node_id, u.parent_node_id 
@@ -309,14 +314,14 @@ class synd_node_item extends synd_node_instance {
 			$clients = $this->_db->getAssoc($sql);
 			SyndNodeLib::getInstances($clients);
 			
-			foreach ($GLOBALS['_synd_item_deferred'] as $id) {
+			foreach ($_synd_item_deferred as $id) {
 				if (null !== ($item = SyndNodeLib::getInstance($id))) {
 					$item->_client = isset($clients[$id]) ? $clients[$id] : null;
 					$item->_node_onchange_internal();
 				}
 			}
 
-			unset($GLOBALS['_synd_item_deferred']);
+			unset($_synd_item_deferred);
 		}
 		
 		if (-1 == $this->_client || null == ($client = SyndNodeLib::getInstance($this->_client)))

@@ -17,7 +17,7 @@ class synd_module_user extends synd_module_node {
 	var $_title = null;
 
 	function __construct($config = null) {
-		global $synd_maindb;
+		global $synd_maindb, $synd_user;
 		parent::__construct($config);
 
 		// Enforce session IP binding
@@ -30,11 +30,11 @@ class synd_module_user extends synd_module_node {
 		
 		if (isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
 			if (false !== ($user = $this->validateLogin($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])))
-				$GLOBALS['synd_user'] = $user;
+				$synd_user = $user;
 		}
 		else if (isset($_SESSION['synd']['perm']['auth_node_id'])) {
 			if (null !== ($user = SyndNodeLib::getInstance($_SESSION['synd']['perm']['auth_node_id'])))
-				$GLOBALS['synd_user'] = $user;
+				$synd_user = $user;
 			else
 				unset($_SESSION['synd']['perm']['auth_node_id']);
 		}

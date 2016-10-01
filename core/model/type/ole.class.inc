@@ -14,16 +14,20 @@ class synd_type_ole extends SyndType {
 	
 	function __construct() {
 		parent::__construct();
-		$GLOBALS['_synd_ole'][$this->id()] = $this;
+
+		global $_synd_ole;
+		$_synd_ole[$this->id()] = $this;
 	}
 
 	function __wakeup() {
-		$GLOBALS['_synd_ole'][$this->id()] = $this;
+		global $_synd_ole;
+		$_synd_ole[$this->id()] = $this;
 	}
 
 	static function __instance($id) {
-		if (isset($GLOBALS['_synd_ole'][$id]))
-			return $GLOBALS['_synd_ole'][$id];
+		global $_synd_ole;
+		if (isset($_synd_ole[$id]))
+			return $_synd_ole[$id];
 		return parent::__instance($id);
 	}
 

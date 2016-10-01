@@ -237,7 +237,9 @@ function tpl_cache_display($id, $loadlevel = -1) {
 		}
 		return false;
 	}
-	return $GLOBALS['_tpl_cache_ignore'][$id] = false;
+	
+	global $_tpl_cache_ignore;
+	return $_tpl_cache_ignore[$id] = false;
 }
 
 /**
@@ -253,7 +255,8 @@ function tpl_cache_delete($id) {
  * @param	string	Id of section
  */
 function tpl_cache_enter($id) {
-	if (!isset($GLOBALS['_tpl_cache_ignore'][$id]))
+	global $_tpl_cache_ignore;
+	if (!isset($_tpl_cache_ignore[$id]))
 		ob_start();
 }
 

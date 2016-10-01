@@ -34,7 +34,8 @@ function __autoload($class) {
  * @global	array	$GLOBALS['synd_config']
  * @name	$synd_config
  */
-$GLOBALS['synd_config'] = array(
+global $synd_config;
+$synd_config = array(
 	'db' => array(
 		'main' => 'null://null',
 //		'main' => 'oci8://user:password@tnsname?persistent=1',
@@ -221,10 +222,10 @@ $GLOBALS['synd_config'] = array(
 // Detect mobile devices
 require_once 'core/lib/SyndHTTP.class.inc';
 if (SyndHTTP::isMobileDevice()) 
-	$GLOBALS['synd_config']['dirs']['design'][] = $__path.'/design/mobile/';
+	$synd_config['dirs']['design'][] = $__path.'/design/mobile/';
 else if (SyndHTTP::isHandheldDevice()) {
-	$GLOBALS['synd_config']['dirs']['design'][] = $__path.'/design/mobile/';
-	$GLOBALS['synd_config']['dirs']['design'][] = $__path.'/design/handheld/';
+	$synd_config['dirs']['design'][] = $__path.'/design/mobile/';
+	$synd_config['dirs']['design'][] = $__path.'/design/handheld/';
 }
 
 // Register distributed session handler
