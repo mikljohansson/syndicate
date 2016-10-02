@@ -321,7 +321,7 @@ class synd_node_item extends synd_node_instance {
 				}
 			}
 
-			unset($_synd_item_deferred);
+			$_synd_item_deferred = array();
 		}
 		
 		if (-1 == $this->_client || null == ($client = SyndNodeLib::getInstance($this->_client)))

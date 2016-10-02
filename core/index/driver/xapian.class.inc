@@ -445,6 +445,8 @@ class XapianWritableDatabase extends XapianDatabase {
 	function _openDatabase($dsn) {
 		if ($this->_removelock && file_exists($lock = rtrim($dsn, DIRECTORY_SEPARATOR).'/db_lock'))
 			unlink($lock);
+		if ($this->_removelock && file_exists($lock = rtrim($dsn, DIRECTORY_SEPARATOR).'/flintlock'))
+			unlink($lock);
 		$this->_handle = new_WritableDatabase($dsn, DB_CREATE_OR_OPEN);
 		$this->_isWritable = true;
 	}
