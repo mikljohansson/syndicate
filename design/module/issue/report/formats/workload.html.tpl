@@ -52,7 +52,7 @@ require tpl_design_path('module/issue/report/formats/workload.inc');
 				</td>
 				<td><a href="<?= tpl_link($issues[$key]->getHandler(),$issues[$key]->objectId()) ?>" title="<?= 
 					tpl_attribute($issues[$key]->getExcerpt()) ?>"><?= $issues[$key]->getTitleCategories() ?> <?= 
-					htmlspecialchars(tpl_chop($issues[$key]->getTitle(),65)) ?></a></td>
+					synd_htmlspecialchars(tpl_chop($issues[$key]->getTitle(),65)) ?></a></td>
 				<td class="Due" title="<?= ucwords(tpl_strftime('%A, %d %B %Y', $issues[$key]->getResolveBy())) ?>"><?= 
 					ucwords(tpl_strftime('%a, %d %b', $issues[$key]->getResolveBy())) ?></td>
 				<td>

@@ -36,7 +36,7 @@ function _synd_language_input($name, $tabindex, $string, $translation) {
 	<tbody>
 		<? foreach ($strings as $string) { ?>
 		<tr class="<?= tpl_cycle(array('odd','even')) ?>">
-			<td width="250"><?= htmlspecialchars($string['STRING']) ?></td>
+			<td width="250"><?= synd_htmlspecialchars($string['STRING']) ?></td>
 			<? $i=1; foreach (array_keys($locales) as $code) { ?>
 			<td><?= _synd_language_input("strings[$code][{$string['LID']}]", $i++, 
 					$string['STRING'], $translations[$code][$string['STRING']]) ?></td>

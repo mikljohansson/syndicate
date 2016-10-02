@@ -607,7 +607,7 @@ function tpl_form_textarea($id, $content, $attrib = null, $max = 20, $min = 4, $
 	$default = '<textarea name="'.$id.'"';
 	if (null != $attrib)
 		$default .= ' '.tpl_html_implode($attrib);
-	$default .= '>'.htmlspecialchars($content).'</textarea>';
+	$default .= '>'.synd_htmlspecialchars($content).'</textarea>';
 	
 	return $default;
 }
@@ -623,7 +623,7 @@ function tpl_form_htmlarea($id, $content, $style = null, $attrib = null) {
 		$default .= ' style="'.tpl_html_implode($style,':','; ').'"';
 	if (null != $attrib)
 		$default .= ' '.tpl_html_implode($attrib);
-	$default .= '>'.htmlspecialchars($content).'</textarea>';
+	$default .= '>'.synd_htmlspecialchars($content).'</textarea>';
 
 	if (null != ($result = Module::runHook('htmlarea', $id, $content, $style, $attrib, $default)))
 		return $result;
@@ -809,7 +809,7 @@ function tpl_html_format($text) {
 			"&nbsp;&nbsp;&nbsp;&nbsp;",
 			"&nbsp;&nbsp;",
 			),
-		tpl_html_links(htmlspecialchars(trim($text))));
+		tpl_html_links(synd_htmlspecialchars(trim($text))));
 }
 
 /**
@@ -933,28 +933,28 @@ function tpl_value() {
 
 /**
  * Html quotes the first non-empty parameter
- * @see		htmlspecialchars()
+ * @see		synd_htmlspecialchars()
  * @param	string,...
  * @return	string
  */
 function tpl_quote() {
 	for ($i=0, $c=func_num_args(); $i<$c; $i++) {
 		if (null != ($arg = func_get_arg($i)))
-			return htmlspecialchars($arg);
+			return synd_htmlspecialchars($arg);
 	}
 	return null;
 }
 
 /**
  * Html quotes the first non-empty parameter and removes newlines
- * @see		htmlspecialchars()
+ * @see		synd_htmlspecialchars()
  * @param	string,...
  * @return	string
  */
 function tpl_attribute() {
 	for ($i=0, $c=func_num_args(); $i<$c; $i++) {
 		if (null !== ($arg = func_get_arg($i)) || '' !== $arg)
-			return htmlspecialchars(strtr($arg, "\r\n", "  "));
+			return synd_htmlspecialchars(strtr($arg, "\r\n", "  "));
 	}
 	return null;
 }
@@ -1100,10 +1100,10 @@ class EmailReplaceFunctor {
  * Formats a mailto: link
  * 
  * If no user is logged in the email will be obfuscated using the
- * 'example AT example DOT com' style. Will use htmlspecialchars()
+ * 'example AT example DOT com' style. Will use synd_htmlspecialchars()
  * to escape any html chars
  *
- * @see		htmlspecialchars()
+ * @see		synd_htmlspecialchars()
  * @param	string	Email address
  * @return	string
  */
@@ -1111,5 +1111,5 @@ function tpl_email($email, $subject = null) {
 	return preg_replace_callback(
 		'/[\w\-\+\._]+@[\w\-\.]+/', 
 		array(new EmailReplaceFunctor($subject), 'replace'), 
-		htmlspecialchars($email));
+		synd_htmlspecialchars($email));
 }

@@ -192,14 +192,14 @@ class synd_node_user extends synd_node_node implements User {
 
 	function merge($data) {
 		if (isset($data['USERNAME']))
-			$data['USERNAME'] = htmlspecialchars($data['USERNAME']);
+			$data['USERNAME'] = synd_htmlspecialchars($data['USERNAME']);
 		if (empty($this->data['INFO_HEAD']) && empty($data['INFO_HEAD']))
 			$data['INFO_HEAD'] = $data['USERNAME'];
 
 		if (isset($data['INFO_DESC'])) {
 			$data['INFO_DESC'] = preg_replace('/(?<=\s) /', '', $data['INFO_DESC']);
 			$data['INFO_DESC'] = preg_replace('/(?<=\s{2})\s/', '', $data['INFO_DESC']);
-			$data['INFO_DESC'] = htmlspecialchars($data['INFO_DESC']);
+			$data['INFO_DESC'] = synd_htmlspecialchars($data['INFO_DESC']);
 		}
 
 		if (!empty($data['INFO_PHOTO']['tmp_name']) &&

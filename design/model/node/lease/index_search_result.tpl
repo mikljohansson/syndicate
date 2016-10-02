@@ -8,7 +8,7 @@ if (null != $node->getExpire())
 	$info .= ' '.tpl_text('to %s', date('Y-m-d', $node->getExpire()));
 ?>
 <div class="SearchResult">
-	<h3><img src="<?= tpl_design_uri('image/icon/16x16/lease.gif') ?>" alt="" height="16" width="16" /> <a href="<?= tpl_link('user','summary',$customer->nodeId) ?>"><?= htmlspecialchars($node->getTitle()) ?></a></h3>
+	<h3><img src="<?= tpl_design_uri('image/icon/16x16/lease.gif') ?>" alt="" height="16" width="16" /> <a href="<?= tpl_link('user','summary',$customer->nodeId) ?>"><?= synd_htmlspecialchars($node->getTitle()) ?></a></h3>
 	<? if ('' != ($info = trim($info, ', '))) { ?><div class="Info"><?= ucfirst($info) ?></div><? } ?>
 	<div class="Abstract">
 		<?= SyndHTML::getContextSummary($node->getDescription(), $highlight, 200) ?>

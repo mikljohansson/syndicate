@@ -1,1 +1,1 @@
-<pre><?= htmlspecialchars($node->getMessage()->toString()) ?></pre>
+<pre><?= synd_htmlspecialchars($node->getMessage()->toString()) ?></pre>

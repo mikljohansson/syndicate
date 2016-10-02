@@ -149,7 +149,7 @@ class synd_node_question extends AbstractDatabaseEntity {
 	function isCorrect($answer) {}
 	
 	function getCorrectAnswer() {
-		return htmlspecialchars(strtr($this->data['INFO_CORRECT_ANSWER'], '<>', '  '));
+		return synd_htmlspecialchars(strtr($this->data['INFO_CORRECT_ANSWER'], '<>', '  '));
 	}
 	
 	function isProgressQuestion() {

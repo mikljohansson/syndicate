@@ -23,8 +23,8 @@
 		$uri = tpl_chop($uriParsed['host'], 90);
 
 	?>
-	<div class="Abstract"><?= SyndHTML::getContextSummary(htmlspecialchars($node->getContents()), $highlight, 300) ?></div>
-	<div class="Footer"><?= htmlspecialchars($uri) ?> -  - <a href="<?= 
+	<div class="Abstract"><?= SyndHTML::getContextSummary(synd_htmlspecialchars($node->getContents()), $highlight, 300) ?></div>
+	<div class="Footer"><?= synd_htmlspecialchars($uri) ?> -  - <a href="<?= 
 		tpl_link('search',array('query'=>$request['query'],'rset'=>$rset,'docids'=>$docids)) 
 		?>"><?= tpl_text('Similar pages') ?></a></div>
 </div>

@@ -144,7 +144,6 @@ class synd_module_storage extends Module {
 			$token = md5($this->getPrivateKey().'/'.trim($variable,'/').$timestamp);
 			$result = tpl_request_host().tpl_view('storage').$token.'/'.$timestamp.$relative;
 		}
-		debug($variable,$result);
 		return true;
 	}
 

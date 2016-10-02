@@ -246,7 +246,7 @@ class _model_Node_Issue extends SyndNodeTestCase {
 		$issue->setTitle('_unit_test: This issue is safe to delete "&');
 		$issue->setDescription('Test #'.$issue->objectId().' a link');
 		$this->assertEquals(
-			'Test <a href="'.tpl_link('issue', $issue->objectId()).'" title="'.htmlspecialchars($issue->getTitle()).'">#'.$issue->objectId().'</a> a link', 
+			'Test <a href="'.tpl_link('issue', $issue->objectId()).'" title="'.synd_htmlspecialchars($issue->getTitle()).'">#'.$issue->objectId().'</a> a link', 
 			trim(strip_tags(tpl_gui_node($issue->getContent(),'full_view.tpl',array('filter' => array($issue, '_callback_filter'))), '<a>')));
 	}
 	

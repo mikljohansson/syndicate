@@ -13,7 +13,7 @@ if (null !== ($task = $node->_storage->getInstance($node->_task)))
 		<? if ($node->isNew()) { ?>
 		<h1><?= $this->translate('New issue for %s', $this->fetchnode($node->getParent(),'head_view.tpl')) ?></h1>
 		<? } else { ?>
-		<h1><?= htmlspecialchars(tpl_chop($node->getTitle(),50)) ?></h1>
+		<h1><?= synd_htmlspecialchars(tpl_chop($node->getTitle(),50)) ?></h1>
 		<? } ?>
 		<div class="Info"><?
 			$issue = $node->getParentIssue(); 

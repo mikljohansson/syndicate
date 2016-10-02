@@ -333,7 +333,7 @@ class synd_module_log extends Module {
 			else if (is_numeric($arr[$key]))
 				$args[] = $arr[$key];
 			else {
-				$arr[$key] = htmlspecialchars(substr((string)$arr[$key], 0, $maxlen));
+				$arr[$key] = synd_htmlspecialchars(substr((string)$arr[$key], 0, $maxlen));
 				if (strlen($arr[$key]) >= $maxlen) 
 					$arr[$key] .= '..';
 				$args[] = '"'.$arr[$key].'"';

@@ -12,7 +12,7 @@ if (null != $node->data['INFO_SERIAL_MAKER'])
 
 ?>
 <div class="SearchResult">
-	<h3><img src="<?= tpl_design_uri('image/icon/16x16/computer.gif') ?>" alt="" height="16" width="16" /> <a href="<?= tpl_link($node->getHandler(),'view',$node->nodeId) ?>"><?= htmlspecialchars($node->getTitle()) ?></a></h3>
+	<h3><img src="<?= tpl_design_uri('image/icon/16x16/computer.gif') ?>" alt="" height="16" width="16" /> <a href="<?= tpl_link($node->getHandler(),'view',$node->nodeId) ?>"><?= synd_htmlspecialchars($node->getTitle()) ?></a></h3>
 	<? if ('' != ($info = trim($info, ', '))) { ?><div class="Info"><?= ucfirst($info) ?></div><? } ?>
 	<div class="Abstract"></div>
 	<div class="Footer"><?= tpl_request_host() ?><?= tpl_link($node->getHandler(),'view',$node->nodeId) ?></div>

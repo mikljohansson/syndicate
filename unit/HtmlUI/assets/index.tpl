@@ -43,7 +43,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<form action="<?= htmlspecialchars($uripath) ?>" method="get">
+					<form action="<?= synd_htmlspecialchars($uripath) ?>" method="get">
 						<input type="hidden" name="sq" value="<?= $sq ?>" />
 						<table class="Options">
 							<thead>
@@ -72,7 +72,7 @@
 				</td>
 				<td>
 					<? if (!empty($suites)) { ?>
-					<form action="<?= htmlspecialchars($uri) ?>" method="post">
+					<form action="<?= synd_htmlspecialchars($uri) ?>" method="post">
 						<table class="Suites">
 							<thead>
 								<tr>
@@ -132,10 +132,10 @@
 													$i++;
 											?>
 											<td>
-												<a href="javascript:toggle('<?= $id = md5(uniqid('')) ?>')"><?= htmlspecialchars($message) ?></a>
+												<a href="javascript:toggle('<?= $id = md5(uniqid('')) ?>')"><?= synd_htmlspecialchars($message) ?></a>
 												<div class="Trace" id="<?= $id ?>">
-													<p><?= htmlspecialchars($result->getException()->getMessage()) ?></p>
-													<p><?= htmlspecialchars($result->getException()->getTraceAsString()) ?></p>
+													<p><?= synd_htmlspecialchars($result->getException()->getMessage()) ?></p>
+													<p><?= synd_htmlspecialchars($result->getException()->getTraceAsString()) ?></p>
 												</div>
 											</td>
 											<td><?= isset($trace[$i]['line']) ? $trace[$i]['line'] : '&nbsp;' ?></td>

@@ -219,7 +219,7 @@ class Template {
 	 * @return	string
 	 */
 	function quote($value) {
-		return htmlspecialchars($value);
+		return synd_htmlspecialchars($value);
 	}
 	
 	/**
@@ -350,7 +350,7 @@ class Template {
 				"&nbsp;&nbsp;",
 				"\n&nbsp;",
 				),
-			$this->links(htmlspecialchars($text)));
+			$this->links(synd_htmlspecialchars($text)));
 	}
 	
 	protected function _rewrite($args, $stack = null, $separator = '&') {

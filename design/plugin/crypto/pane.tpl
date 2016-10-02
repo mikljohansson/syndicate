@@ -26,7 +26,7 @@
 		<tbody>
 			<? foreach ($matches as $key) { ?>
 			<tr>
-				<td><?= htmlspecialchars($key->getIdentity()->toString()) ?></td>
+				<td><?= synd_htmlspecialchars($key->getIdentity()->toString()) ?></td>
 				<td><a href="<?= tpl_link('issue','project',$node->getProjectId(),'admin','crypto',$key->getKeyid()) ?>"><?= $key->getKeyid() ?></a></td>
 				<td><?
 					if ($key->isEncryptionKey() && $key->isDecryptionKey())

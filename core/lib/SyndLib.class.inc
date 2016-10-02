@@ -4,6 +4,7 @@
  * @package		synd.core.lib
  * @filesource
  */
+require_once 'core/i18n.inc';
 
 /**
  * General utility class
@@ -241,7 +242,7 @@ class SyndLib {
 		if (null != ($result = self::runHook('text', $args[0])))
 			$args[0] = $result;
 		for ($i = 1, $last = count($args); $i < $last; $i++)
-			$args[$i] = htmlspecialchars($args[$i]);
+			$args[$i] = synd_htmlspecialchars($args[$i]);
 		return call_user_func_array('sprintf', $args);
 	}
 	
@@ -1077,7 +1078,7 @@ if (!function_exists('debug')) {
 		else if (null === $args)
 			return 'null';
 		else if (is_string($args))
-			return htmlspecialchars($args);
+			return synd_htmlspecialchars($args);
 		
 		return $args;
 	}

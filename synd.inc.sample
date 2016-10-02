@@ -6,6 +6,7 @@
  *
  * @package	synd.core
  */
+require_once 'core/i18n.inc';
 
 // Set include path (this should be done from server config or php.ini)
 $__path = dirname(dirname(__FILE__));

@@ -5,7 +5,7 @@
 	<? include tpl_gui_path('synd_node_issue','confirm_email_status.tpl') ?>
 	
 	<div class="Header">
-		<h1><?= htmlspecialchars(tpl_chop($node->getTitle(),50)) ?></h1>
+		<h1><?= synd_htmlspecialchars(tpl_chop($node->getTitle(),50)) ?></h1>
 		<div class="Info"><?
 			$issue = $node->getParentIssue(); 
 			if (!$issue->isNull() && $issue->isPermitted('read')) {

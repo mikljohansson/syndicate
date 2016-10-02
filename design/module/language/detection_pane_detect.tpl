@@ -27,7 +27,7 @@
 <form method="post">
 	<div class="RequiredField">
 		<h3><?= tpl_text('Text to test') ?></h3>
-		<textarea name="text" cols="76" rows="15"><?= htmlspecialchars($request['text']) ?></textarea>
+		<textarea name="text" cols="76" rows="15"><?= synd_htmlspecialchars($request['text']) ?></textarea>
 	</div>
 	<input type="submit" name="detect" value="<?= tpl_text('Detect') ?>" />
 </form>

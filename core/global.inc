@@ -1,4 +1,5 @@
 <?php
+require_once 'core/i18n.inc';
 
 // Include debugging support
 if (isset($_SERVER['REMOTE_ADDR'], $synd_config['debug_allowed_ips'][$_SERVER['REMOTE_ADDR']]))

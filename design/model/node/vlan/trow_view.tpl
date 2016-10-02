@@ -6,6 +6,6 @@
 				<? } else print '&nbsp;'; ?>
 			</td>
 			<td><a href="<?= tpl_link($node->getHandler(),'view',$node->nodeId) ?>"><?= $node->toString() ?></a></td>
-			<td><?= htmlspecialchars(tpl_chop($node->getDescription(),50)) ?></td>
+			<td><?= synd_htmlspecialchars(tpl_chop($node->getDescription(),50)) ?></td>
 			<td class="OLE" onmouseover="this.parentNode.setAttribute('_checked',true);" onmouseout="this.parentNode.setAttribute('_checked',this.firstChild.checked);"><input type="checkbox" name="selection[]" value="<?= $node->id() ?>" /></td>
 		</tr>

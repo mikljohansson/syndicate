@@ -86,7 +86,7 @@ function _synd_callback_error($errno, $errstr, $errfile, $errline, $errcontext) 
 
 	ob_start();
 	print_r($context);
-	$contextOutput = '<pre>'.htmlspecialchars(ob_get_clean()).'</pre>';
+	$contextOutput = '<pre>'.synd_htmlspecialchars(ob_get_clean()).'</pre>';
 	
 	// File the error occurred in
 	$synd_dir = dirname(dirname(__FILE__));
@@ -229,7 +229,7 @@ function _error_format_array($arr, $maxlen = 100, $rec = 0) {
 		else if (is_numeric($arr[$key]))
 			$args[] = $arr[$key];
 		else {
-			$arr[$key] = htmlspecialchars(substr($arr[$key], 0, $maxlen));
+			$arr[$key] = synd_htmlspecialchars(substr($arr[$key], 0, $maxlen));
 			if (strlen($arr[$key]) >= $maxlen) 
 				$arr[$key] .= '..';
 			$args[] = '"'.$arr[$key].'"';

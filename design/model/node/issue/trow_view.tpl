@@ -15,7 +15,7 @@
 		</td>
 		<td class="Subject" width="75%"><a href="<?= $this->href('issue',$node->objectId()) ?>" title="<?= 
 			tpl_attribute($node->getExcerpt()) ?>"><?= $node->getTitleCategories() ?> <?= 
-			htmlspecialchars(tpl_chop($node->getTitle(),65)) ?></a></td>
+			synd_htmlspecialchars(tpl_chop($node->getTitle(),65)) ?></a></td>
 		<td><? $this->render($node->getParent(),'code.tpl') ?></td>
 		<td class="Created" title="<?= ucwords(tpl_strftime('%A, %d %B %Y %H:%M', $node->data['TS_CREATE'])) ?>"><?= 
 			ucwords(tpl_strftime('%Y-%m-%d', $node->data['TS_CREATE'])) ?></td>

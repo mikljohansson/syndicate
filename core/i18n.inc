@@ -19,3 +19,12 @@ function synd_strtolower($s) {
 	global $SYND_UPPERCHARS, $SYND_LOWERCHARS;
 	return strtr($s, $SYND_UPPERCHARS, $SYND_LOWERCHARS);
 }
+
+/**
+ * ISO-8859-1 compatible synd_htmlspecialchars
+ * @link	http://php.net/manual/en/migration54.incompatible.php#115441
+ */
+function synd_htmlspecialchars($s) {
+        return htmlspecialchars($s, ENT_COMPAT | ENT_HTML401 , 'ISO-8859-1');
+}
+
