@@ -14,7 +14,7 @@ class SyndType extends AbstractController {
 		$this->_oid = null != $oid ? $oid : md5(uniqid(''));
 	}
 	
-	static function __factory($class, $args = null) {
+	static function __factory($class, $args = array()) {
 		return call_user_func_array(array(new ReflectionClass($class), 'newInstance'), $args);
 	}
 	
