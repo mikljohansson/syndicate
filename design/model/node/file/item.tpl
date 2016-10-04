@@ -3,7 +3,7 @@
 	<div class="Header">
 		<h4><a href="<?= tpl_link($node->getHandler(),'view',$node->nodeId) ?>"><?= $node->toString() ?></a></h4>
 		<div class="Info">
-			<?= tpl_text('Posted by %s on %s', $this->fetchnode($node->getCustomer(),'head_view.tpl'), 
+			<?= tpl_translate('Posted by %s on %s', $this->fetchnode($node->getCustomer(),'head_view.tpl'), 
 				ucwords(tpl_strftime('%A, %d %B %Y', $node->data['TS_CREATE']))) ?>; 
 			<?= ceil($file->getSize()/1024) ?>Kb<? 
 			if ($node->isPermitted('write')) { ?>;
