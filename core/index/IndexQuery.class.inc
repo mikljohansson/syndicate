@@ -167,8 +167,8 @@ class IndexQuery {
 		$this->_index = $index;
 		
 		// Tokenize operators, words and phrases
-        $lexer = implode('|', $index->lexerExpression());
-        preg_match_all("/$lexer/i", $this->toString($index), $matches);
+		$lexer = implode('|', $index->lexerExpression());
+		preg_match_all("/$lexer/i", $this->toString($index), $matches);
 		$stream = $matches[0];
 		
 		// Strip empty tokens

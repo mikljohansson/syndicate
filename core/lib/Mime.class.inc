@@ -887,7 +887,12 @@ abstract class MimePart {
 	/**
 	 * Allows this message to be indexed effectivly
 	 */
-	function acceptIndexer($indexer) {}
+	function acceptIndexer($indexer) {
+		$indexer->visitFragment($this->getHeader('From'));
+		$indexer->visitFragment($this->getHeader('To'));
+		$indexer->visitFragment($this->getHeader('CC'));
+		$indexer->visitFragment($this->getHeader('Subject'));
+	}
 }
 
 /**
@@ -958,6 +963,7 @@ class MimeTextpart_2_0_0 extends MimePart {
 	}
 
 	function acceptIndexer($indexer) {
+		parent::acceptIndexer($indexer);
 		$indexer->visitFragment($this->_body);
 	}
 }
@@ -1096,6 +1102,7 @@ class MimeMultipart_2_0_0 extends MimePart {
 	}
 
 	function acceptIndexer($indexer) {
+		parent::acceptIndexer($indexer);
 		foreach ($this->_parts as $part)
 			$part->acceptIndexer($indexer);
 	}

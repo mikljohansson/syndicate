@@ -743,8 +743,8 @@ class synd_node_issue extends AbstractDatabaseEntity {
 		$indexer->visitFragment($this->data['INFO_HEAD'], 'title');
 
 		$this->getContent()->acceptIndexer($indexer);
-//		$this->getCustomer()->acceptIndexer($indexer);
-//		$this->getAssigned()->acceptIndexer($indexer);
+		$this->getCustomer()->acceptIndexer($indexer);
+		$this->getAssigned()->acceptIndexer($indexer);
 		
 		foreach ($this->getNotes() as $note)
 			$note->acceptIndexer($indexer);

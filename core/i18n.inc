@@ -15,6 +15,16 @@ $SYND_LOWERCHARS = "abcdefghijklmnopqrstuvwxyzšàáâãäåçèéêëìíîïñòóôõöøùúûüıÿşğßœ
  */
 $SYND_UPPERCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZŠÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜİŸŞĞßŒÆµ";
 
+/**
+ * Regex character class to split tokens on
+ */
+$SYND_TOKENIZE_SPLIT = "\s<>*&|()\[\]{}\"'!,;?=";
+
+/**
+ * Regex character class that can join words
+ */
+$SYND_TOKENIZE_GLUE = "+\-.:";
+
 function synd_strtolower($s) {
 	global $SYND_UPPERCHARS, $SYND_LOWERCHARS;
 	return strtr($s, $SYND_UPPERCHARS, $SYND_LOWERCHARS);

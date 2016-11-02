@@ -109,7 +109,7 @@ class synd_node_task extends AbstractDatabaseEntity {
 		parent::acceptIndexer($indexer);
 		
 		$this->getContent()->acceptIndexer($indexer);
-//		$this->getCreator()->acceptIndexer($indexer);
+		$this->getCreator()->acceptIndexer($indexer);
 		
 		foreach ($this->getFiles() as $file)
 			$indexer->visitFile($file->path());
