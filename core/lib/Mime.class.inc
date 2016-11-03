@@ -757,7 +757,7 @@ abstract class MimePart {
 	 * @return	array
 	 */
 	function getHeaders() {
-		return array_change_key_case(Mime::charset($this->_headers, $this->_charset), CASE_LOWER);
+		return array_change_key_case(Mime::charset((array)$this->_headers, $this->_charset), CASE_LOWER);
 	}
 
 	/**
@@ -768,7 +768,7 @@ abstract class MimePart {
 	 */
 	function getHeader($header, $attribute = null) {
 		$name = strtolower($header);
-		$headers = array_change_key_case($this->_headers, CASE_LOWER);
+		$headers = array_change_key_case((array)$this->_headers, CASE_LOWER);
 
 		if (isset($headers[$name])) {
 			if (null == $attribute)
@@ -815,7 +815,7 @@ abstract class MimePart {
 	 * @return	array
 	 */
 	function getMessageHeaders() {
-		return $this->_headers;
+		return (array)$this->_headers;
 	}
 	
 	/**
