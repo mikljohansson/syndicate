@@ -50,7 +50,7 @@ class synd_type_indexer_task extends synd_type_task {
 			ini_set('memory_limit', '512M');
 		
 		// Increase time limit to have time to index everything
-		set_time_limit(60*30);
+		set_time_limit(60*5);
 
 		// Reset the success count in case of a previous failure on this same batch
 		$failures = $handler->getFailureCount();

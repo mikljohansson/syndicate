@@ -23,7 +23,7 @@ $SYND_TOKENIZE_SPLIT = "\s<>*&|()\[\]{}\"'!,;?=";
 /**
  * Regex character class that can join words
  */
-$SYND_TOKENIZE_GLUE = "+\-.:";
+$SYND_TOKENIZE_GLUE = "+\-.:\\/\\\\";
 
 function synd_strtolower($s) {
 	global $SYND_UPPERCHARS, $SYND_LOWERCHARS;

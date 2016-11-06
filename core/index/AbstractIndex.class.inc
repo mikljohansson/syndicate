@@ -204,7 +204,7 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 				'[()]',
 				'[&|]{1,2}',
 				"(?<![$SYND_WORDCHARS])[+\-!]",
-				"(?<![$SYND_WORDCHARS])([^$split$glue]|(?<![$split])[$glue](?![$split])){1,".$this->_maxTermLength."}"));
+				"(?<![$SYND_WORDCHARS])([^$split$glue]|(?<![$split$glue])[$glue](?![$split$glue])){1,".$this->_maxTermLength."}"));
 	}
 
 	function createExpression($token) {
