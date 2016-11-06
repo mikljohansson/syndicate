@@ -203,11 +203,13 @@ class SyndTaskHandler extends SyndTask {
 		for (;;) {
 			// Find list of scheduled tasks
 			if (!$this->lockHandler()) {
-				$this->log('Could not aquire read lock on handler.');
+				$this->log('Handler: Could not aquire read lock on handler.');
 				return 1;
 			}
 			
+			clearstatcache();
 			$tasks = SyndLib::scanDirectory($this->getStoragePath().'tasks/');
+			$this->log('Handler: Found '.count($tasks).' tasks in queue');
 			sort($tasks);
 			
 			if (null == ($file = reset($tasks))) {
@@ -241,7 +243,7 @@ class SyndTaskHandler extends SyndTask {
 				// Check if task succeeded or has failed too much
 				if ($status == 0 || $failures >= 16) {
 					if (!$this->lockHandler()) {
-						$this->log('Could not aquire read lock on handler.');
+						$this->log('Handler: Could not aquire read lock on handler.');
 						return 1;
 					}
 
@@ -257,7 +259,7 @@ class SyndTaskHandler extends SyndTask {
 
 				// Retry task in case of error
 				$failures++;
-				$this->log("Retrying task due to non-zero exit code $status (task failed $failures times)\n");
+				$this->log("Handler: Retrying task due to non-zero exit code $status (task failed $failures times)\n");
 
 				// Sleep a while to avoid looping too fast
 				sleep(1);

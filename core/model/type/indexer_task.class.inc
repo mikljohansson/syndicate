@@ -8,7 +8,7 @@ class synd_type_indexer_task extends synd_type_task {
 	var $_limit = 750;
 	
 	/**
-	 * Tracks the running failure count used a modifier for the batch size limit.
+	 * Tracks the running failure count used as a modifier for the batch size limit.
 	 */
 	var $_prevFailures = 0;
 	
@@ -59,11 +59,11 @@ class synd_type_indexer_task extends synd_type_task {
 
 		// Decrease limit exponentially in case of failure/crashes/out-of-memory
 		$limit = $this->_getLimit($failures + $this->_prevFailures);
-		print "$failures previous failures on this batch, previous failure count is {$this->_prevFailures}, batch size is $limit\n";
+		print "Indexer: $failures previous failures on this batch, previous failure count is {$this->_prevFailures}, batch size is $limit\n";
 		
 		// Check if this single node causes crashes
 		if ($this->_limit > 1 && $limit == 1 && $this->_getLimit($failures + $this->_prevFailures - 1) == 1) {
-			print "Skipping one item due to crashes on that single object\n";
+			print "Indexer: Skipping one item due to crashes on that single object\n";
 			$this->skip(1);
 			$this->_prevFailures = $failures + $this->_prevFailures - 1;
 			$handler->appendTask($this, $this->classId().'.'.$this->objectId());
@@ -75,7 +75,7 @@ class synd_type_indexer_task extends synd_type_task {
 		list($nodes, $ids) = $this->getBatch($limit);
 
 		if (count($nodes) > 0) {
-			print date('Y-m-d H:i:s').' Got '.count($nodes)." nodes, indexing ..\n";
+			print 'Indexer: '.date('Y-m-d H:i:s').' Got '.count($nodes)." nodes, indexing ..\n";
 			foreach ($nodes as $node) {
 				$indexer->open($node->id(), $node->getIndexSection(), $node->getSecurityAttributes());
 
@@ -83,7 +83,7 @@ class synd_type_indexer_task extends synd_type_task {
 					$node->acceptIndexer($indexer);
 				}
 				catch (DatabaseException $e) {
-					print date('Y-m-d H:i:s').' '.$e->getMessage()."\n";
+					print 'Indexer: '.date('Y-m-d H:i:s').' '.$e->getMessage()."\n";
 					sleep(1);
 				}
 
@@ -107,7 +107,7 @@ class synd_type_indexer_task extends synd_type_task {
 
 		// Reschedule task if limit number of nodes was returned
 		if (count($ids) >= $limit) {
-			print "Rescheduling task after processing ".count($ids)." nodes.\n";
+			print "Indexer: Rescheduling task after processing ".count($ids)." nodes.\n";
 			$handler->appendTask($this, $this->classId().'.'.$this->objectId());
 		}
 	}
