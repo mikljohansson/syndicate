@@ -207,7 +207,6 @@ class SyndTaskHandler extends SyndTask {
 				return 1;
 			}
 			
-			clearstatcache();
 			$tasks = SyndLib::scanDirectory($this->getStoragePath().'tasks/');
 			$this->log("Handler: Found ".count($tasks)." tasks in queue.\n");
 			sort($tasks);
@@ -222,21 +221,26 @@ class SyndTaskHandler extends SyndTask {
 			}
 
 			// Unserialize task to get the timelimit field
-			if (null == ($buffer = file_get_contents($file)) || null == ($mtime = filemtime($file)) || null == ($info = unserialize($buffer))) {
+			if (null == ($buffer = file_get_contents($file)) || null == ($info = unserialize($buffer))) {
 				unlink($file);
-				$this->log("Handler: Could not read taskfile ($file)\n");
+				$this->log("Handler: Could not read taskfile ($file), skipping it\n");
+				continue;
 			}
-			
+
+			// Rename the file so we can detect if its recreated as a continuation
+			$tmpfile = $file.'-'.md5(uniqid(''));
+			rename($file, $tmpfile);
+
 			// Release lock while processing task
 			$this->unlockHandler();
 
 			// Attempt to run task and retry on failure
-			$this->log("Handler: Launching worker process ($file)\n");
+			$this->log("Handler: Launching worker process ($tmpfile)\n");
 			$failures = 0;
 			$status = 0;
 
 			for (;;) {
-				$pd = $this->openProcess($file, $info['timelimit'], null, $failures);
+				$pd = $this->openProcess($tmpfile, $info['timelimit'], null, $failures);
 				$this->pipeOutput($pd);
 				$status = pclose($pd);
 
@@ -247,10 +251,10 @@ class SyndTaskHandler extends SyndTask {
 						return 1;
 					}
 
-					// Delete task file if exit status is ok and file hasn't been changed
+					// Delete task file if exit status is ok
 					clearstatcache();
-					if ((null == $mtime || filemtime($file) == $mtime) && !unlink($file)) {
-						$this->log("Handler: Could not delete taskfile ($file)\n");
+					if (!unlink($tmpfile)) {
+						$this->log("Handler: Could not delete taskfile ($tmpfile)\n");
 					}
 
 					$this->unlockHandler();
