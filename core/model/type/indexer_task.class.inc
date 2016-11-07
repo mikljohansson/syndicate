@@ -76,6 +76,10 @@ class synd_type_indexer_task extends synd_type_task {
 
 		if (count($nodes) > 0) {
 			print 'Indexer: '.date('Y-m-d H:i:s').' Got '.count($nodes)." nodes, indexing ..\n";
+			if ($limit == 1) {
+				print 'Indexer: Attempting to index single node '.$ids[0]."\n";
+			}
+
 			foreach ($nodes as $node) {
 				$indexer->open($node->id(), $node->getIndexSection(), $node->getSecurityAttributes());
 

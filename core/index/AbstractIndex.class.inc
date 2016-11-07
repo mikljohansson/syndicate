@@ -196,15 +196,15 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 	}
 	
 	function lexerExpression() {
-		global $SYND_WORDCHARS, $SYND_TOKENIZE_SPLIT, $SYND_TOKENIZE_GLUE;
-		$split = $SYND_TOKENIZE_SPLIT;
+		global $SYND_WORDCHARS, $SYND_TOKENIZE_GLUE;
+		$word = $SYND_WORDCHARS;
 		$glue = $SYND_TOKENIZE_GLUE;
 
 		return array_merge((array)$this->runHook('query_lexer_expression'), array(
 				'[()]',
 				'[&|]{1,2}',
-				"(?<![$SYND_WORDCHARS])[+\-!]",
-				"(?<![$SYND_WORDCHARS])([^$split$glue]|(?<![$split$glue])[$glue](?![$split$glue])){1,".$this->_maxTermLength."}"));
+				"(?<![$word+\-!])[+\-!]",
+				"[$word]([$word]|[$glue](?=[$word]))*"));
 	}
 
 	function createExpression($token) {
@@ -230,7 +230,7 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 					break;
 					
 				default: 
-					$expression = new SyndTermQuery(synd_strtolower($token));
+					$expression = new SyndTermQuery($token);
 			}
 		}
 		return $expression;

@@ -6,6 +6,12 @@
 $SYND_WORDCHARS = "\w\dְֱֲֳִֵַָֹÊֻּֽ־ֿׁׂ׃װױײ״ÙÚÛÜÝאבגדהוחטיךכלםמןסעףפץצרשתûü‎ÿÞ‏׀נßֶזµ";
 
 /**
+ * Characters that can join words
+ */
+$SYND_GLUECHARS = "+-.:/\\@";
+$SYND_TOKENIZE_GLUE = str_replace('/', '\\/', preg_quote($SYND_GLUECHARS));
+
+/**
  * Lowercase ISO-8858-1 characters
  */
 $SYND_LOWERCHARS = "abcdefghijklmnopqrstuvwxyzאבגדהוחטיךכלםמןסעףפץצרשתûü‎ÿ‏נßזµ";
@@ -14,16 +20,6 @@ $SYND_LOWERCHARS = "abcdefghijklmnopqrstuvwxyzאבגדהוחטיךכלםמןסעףפץצרשתûü‎ÿ‏נß
  * Uppercase ISO-8858-1 characters
  */
 $SYND_UPPERCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZְֱֲֳִֵַָֹÊֻּֽ־ֿׁׂ׃װױײ״ÙÚÛÜÝÞ׀ßֶµ";
-
-/**
- * Regex character class to split tokens on
- */
-$SYND_TOKENIZE_SPLIT = "\s<>*&|()\[\]{}\"'!,;?=";
-
-/**
- * Regex character class that can join words
- */
-$SYND_TOKENIZE_GLUE = "+\-.:\\/\\\\";
 
 function synd_strtolower($s) {
 	global $SYND_UPPERCHARS, $SYND_LOWERCHARS;

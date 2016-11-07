@@ -111,7 +111,7 @@ class SyndTaskHandler extends SyndTask {
 	 * @param	string	Id of the task to check for
 	 */
 	function isScheduled($id) {
-		if (file_exists($this->getStoragePath()."tasks/{$id}.obj")) {
+		if (count(glob($this->getStoragePath()."tasks/{$id}.obj*")) > 0) {
 			$this->runHandler();
 			return true;
 		}
@@ -252,7 +252,6 @@ class SyndTaskHandler extends SyndTask {
 					}
 
 					// Delete task file if exit status is ok
-					clearstatcache();
 					if (!unlink($tmpfile)) {
 						$this->log("Handler: Could not delete taskfile ($tmpfile)\n");
 					}
