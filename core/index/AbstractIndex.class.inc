@@ -16,7 +16,7 @@ abstract class AbstractIndex extends SyndEventProducer implements Index {
 	const PRIO_BUILDER_TERM		= 500;
 	const PRIO_BUILDER_FRAGMENT	= 250;
 	const PRIO_BUILDER_FILE		= 0;
-	const MAX_TERM_LENGTH		= 32;
+	const MAX_TERM_LENGTH		= 240;
 	
 	/**
 	 * @access	private
