@@ -888,10 +888,14 @@ abstract class MimePart {
 	 * Allows this message to be indexed effectivly
 	 */
 	function acceptIndexer($indexer) {
-		$indexer->visitFragment($this->getHeader('From'));
-		$indexer->visitFragment($this->getHeader('To'));
-		$indexer->visitFragment($this->getHeader('CC'));
-		$indexer->visitFragment($this->getHeader('Subject'));
+		$indexer->visitFragment(self::_striptags($this->getHeader('From')));
+		$indexer->visitFragment(self::_striptags($this->getHeader('To')));
+		$indexer->visitFragment(self::_striptags($this->getHeader('CC')));
+		$indexer->visitFragment(self::_striptags($this->getHeader('Subject')));
+	}
+
+	static function _striptags($fragment) {
+		return strtr($fragment, array('<'=>'', '>'=>''));
 	}
 }
 

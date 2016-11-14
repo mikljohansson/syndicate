@@ -2,6 +2,7 @@
 require_once 'core/index/SyndIndexExtension.class.inc';
 require_once 'core/index/IndexBuilder.class.inc';
 require_once 'core/index/SyndDocument.class.inc';
+require_once 'core/lib/TemplateLib.inc';
 
 define('SYND_WEIGHT_TITLE', 1);
 define('SYND_WEIGHT_HEADING', 0.8);
@@ -294,13 +295,13 @@ class AbstractDocumentExtractor implements DocumentExtractor {
 class HtmlDocumentExtractor extends AbstractDocumentExtractor {
 	function getContentFromFile($type, $file) {
 		if (isset($this->_types[$type]))
-			return strip_tags(file_get_contents($file));
+			return tpl_strip_html_tags(file_get_contents($file));
 		return null;
 	}
 	
 	function getContentFromBuffer($type, $buffer) {
 		if (isset($this->_types[$type]))
-			return strip_tags($buffer);
+			return tpl_strip_html_tags($buffer);
 		return null;
 	}
 
@@ -320,7 +321,7 @@ class HtmlDocumentExtractor extends AbstractDocumentExtractor {
 		$content = preg_replace('/alt\s*=\s*"([^"<>]{1,512})"[^>]*>/iS', '\0 \1', $buffer);
 		
 		// Strip tags, <style> and <script> content
-		$content = strip_tags(preg_replace('/<(style|script)[^>]*>.*?<\s*\/\1\s*>/isS', '', $content));
+		$content = tpl_strip_html_tags(preg_replace('/<(style|script)[^>]*>.*?<\s*\/\1\s*>/isS', '', $content));
 
 		// Extract title
 		if ((!preg_match('/<title>([^<>]{4,2048})/iS', $buffer, $matches) ||
@@ -430,7 +431,7 @@ class ExternalDocumentExtractor extends AbstractDocumentExtractor {
  */
 class PowerPointExtractor extends ExternalDocumentExtractor {
 	function run($cmd, $input = null) {
-		return strip_tags(preg_replace('/<(title|font|).*?<\/\1>/isS', '', parent::run($cmd, $input)));
+		return tpl_strip_html_tags(preg_replace('/<(title|font|).*?<\/\1>/isS', '', parent::run($cmd, $input)));
 	}
 }
 
