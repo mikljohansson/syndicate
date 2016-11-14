@@ -1,4 +1,5 @@
 <?php
+require_once 'core/i18n.inc';
 require_once 'core/index/SyndIndexExtension.class.inc';
 require_once 'core/index/IndexBuilder.class.inc';
 require_once 'core/index/SyndDocument.class.inc';
@@ -311,7 +312,7 @@ class HtmlDocumentExtractor extends AbstractDocumentExtractor {
 		if (null == $buffer)
 			$buffer = file_get_contents($file);
 		
-		$buffer = strtr(html_entity_decode($buffer, ENT_QUOTES), ' ', ' ');
+		$buffer = strtr(synd_html_entity_decode($buffer, ENT_QUOTES), ' ', ' ');
 		if (false !== strpos($buffer, "\0")) {
 			trigger_error('Binary file detected, skipping.', E_USER_WARNING);
 			return false;

@@ -21,13 +21,7 @@ class synd_plugin_text extends SyndIndexExtension {
 	}
 	
 	static function normalize($text) {
-		// Translate national chars
-		$text = strtr(html_entity_decode($text, ENT_QUOTES), 
-		   'ŠŽšžŸÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜÝàáâãçèéêëìíîïñòóôõøùúûüýÿµ',
-		   'szszyaaaaäåceeeeiiiinooooöouuuuyaaaaceeeeiiiinooooouuuuyyu');
-		return strtr($text, array(
-			'Þ' => 'th', 'þ' => 'th', 'Ð' => 'dh', 'ð' => 'dh', 'ß' => 'ss',
-   			'Œ' => 'oe', 'œ' => 'oe', 'Æ' => 'ae', 'æ' => 'ae'));
+		return synd_html_entity_decode($text, ENT_QUOTES);
 	}
 
 	function _callback_query_process_term(&$result, &$term) {

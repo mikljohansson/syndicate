@@ -30,7 +30,15 @@ function synd_strtolower($s) {
  * ISO-8859-1 compatible synd_htmlspecialchars
  * @link	http://php.net/manual/en/migration54.incompatible.php#115441
  */
-function synd_htmlspecialchars($s) {
-        return htmlspecialchars($s, ENT_COMPAT | ENT_HTML401 , 'ISO-8859-1');
+function synd_htmlspecialchars($s, $flags = null, $encoding = null, $double_encode = true) {
+        return htmlspecialchars($s, 
+		$flags !== null ? $flags : ENT_COMPAT|ENT_HTML401, 
+		$encoding !== null ? $encoding : ini_get('default_charset'), 
+		$double_encode);
 }
 
+function synd_html_entity_decode($s, $flags = null, $encoding = null) {
+	return html_entity_decode($s, 
+		$flags !== null ? $flags : ENT_COMPAT|ENT_HTML401, 
+		$encoding !== null ? $encoding : ini_get('default_charset'));
+}
