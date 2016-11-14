@@ -936,7 +936,7 @@ class MimeTextpart_2_0_0 extends MimePart {
 		$charset = $this->getHeader('Content-Type', 'charset');
 		$body = 'text/html' == strtolower($this->getHeader('Content-Type')) ? 
 			trim(tpl_text_format(synd_html_entity_decode(tpl_strip_html_tags($this->_body), ENT_COMPAT|ENT_HTML401, $charset))) : $this->_body;
-		return $normalize ? Mime::charset($body, $this->getHeader('Content-Type', 'charset')) : $body;
+		return $normalize ? Mime::charset($body, $charset) : $body;
 	}
 
 	function getMessageText($callback = null) {
@@ -969,7 +969,7 @@ class MimeTextpart_2_0_0 extends MimePart {
 
 	function acceptIndexer($indexer) {
 		parent::acceptIndexer($indexer);
-		$indexer->visitFragment($this->_body);
+		$indexer->visitFragment($this->getContent());
 	}
 }
 
