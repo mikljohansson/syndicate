@@ -9,9 +9,9 @@ class synd_parser_preg extends ForwardingIndexBuilder {
 		$word = $SYND_WORDCHARS;
 		$glue = $SYND_TOKENIZE_GLUE;
 		
-		$terms = preg_split("/(?>[^$word$glue]+)/S", synd_strtolower($fragment), 8192, PREG_SPLIT_NO_EMPTY);
-		for ($i = 0, $l = count($terms); $i < $l && $i < 8192; $i++) {
-			$term = substr(trim($terms[$i], $SYND_GLUECHARS), 0, AbstractIndex::MAX_TERM_LENGTH);
+		$terms = preg_split("/[^$word$glue]+/S", synd_strtolower(substr($fragment, 0, 65535)), 8192, PREG_SPLIT_NO_EMPTY);
+		foreach ($terms as $term) {
+			$term = substr(trim($term, $SYND_GLUECHARS), 0, AbstractIndex::MAX_TERM_LENGTH);
 			if ($term != '') {
 				$this->_next->visitTerm($term);
 			}

@@ -50,7 +50,7 @@ class synd_plugin_stem extends SyndIndexExtension {
 	}
 	
 	function _callback_query_process_term(&$result, &$term) {
-		$term = stem($term, $this->_language);
+		$term = self::process($term, $this->_language);
 	}
 	
 	function _callback_query_visit_term(&$result, $builder, $expression) {
@@ -60,7 +60,7 @@ class synd_plugin_stem extends SyndIndexExtension {
 	}
 
 	function _callback_stem($matches) {
-		return stem($matches[0], $this->_language);
+		return self::process($matches[0], $this->_language);
 	}
 
 	/**
@@ -68,15 +68,22 @@ class synd_plugin_stem extends SyndIndexExtension {
 	 */
 	function _callback_index_posting($result, $docid, &$term) {
 		profiler_enter(__METHOD__);
-		$term = stem($term, $this->_language);
+		$term = self::process($term, $this->_language);
 		profiler_leave(__METHOD__);
 	}
 
 	function _callback_builder(&$result) {
 		$result = new StemmingFilter($result, $this->_language);
-	}		
+	}
+
+	static function process($term, $language) {
+		if (strlen($term) < 16 && ctype_alpha($term))
+			return stem($term, $language);
+		return $term;
+	}
 }
-class StemmingFilter extends ForwardingIndexBuilder {
+
+class StemmingFilter extends ForwardingIndexBuilder {
 	protected $_language = null;
 	
 	function __construct(IndexBuilder $next, $language) {
@@ -85,6 +92,6 @@ class synd_plugin_stem extends SyndIndexExtension {
 	}
 
 	function visitTerm($term, $field = null) {
-		$this->_next->visitTerm(stem($term, $this->_language), $field);
+		$this->_next->visitTerm(synd_plugin_stem::process($term, $this->_language), $field);
 	}
 }
