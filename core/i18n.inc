@@ -8,7 +8,7 @@ $SYND_WORDCHARS = "\w\dְֱֲֳִֵַָֹÊֻּֽ־ֿׁׂ׃װױײ״ÙÚÛÜÝאבגדהוחטיךכלםמןסעףפץצרשתû
 /**
  * Characters that can join words
  */
-$SYND_GLUECHARS = "+-.:/\\@";
+$SYND_GLUECHARS = "+-.:/\\@'";
 $SYND_TOKENIZE_GLUE = str_replace('/', '\\/', preg_quote($SYND_GLUECHARS));
 
 /**
