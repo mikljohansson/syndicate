@@ -54,13 +54,7 @@ class synd_plugin_stem extends SyndIndexExtension {
 	}
 	
 	function _callback_query_visit_term(&$result, $builder, $expression) {
-		global $SYND_WORDCHARS;
-		$expression->setString(preg_replace_callback("/[{$SYND_WORDCHARS}]+/", 
-			array($this,'_callback_stem'), $expression->toString()));
-	}
-
-	function _callback_stem($matches) {
-		return self::process($matches[0], $this->_language);
+		$expression->setString(self::process($expression->toString(), $this->_language)); 
 	}
 
 	/**
