@@ -406,19 +406,6 @@ abstract class Mime {
 	 */
 	private static function parseHeader($value) {
 		$result = self::_parseHeaderValue($value);
-		/*
-		if (preg_match_all('/;\s*([\w\-]+)(?:\s*[\*\d]*=\s*(")?(.*?)(?:(?<!\\\\)(?(2)"|(?=;))|$))?/S', $value, $matches)) {
-			$result = array(substr($value, 0, strpos($value, ';')));
-			foreach ($matches[1] as $i => $name) {
-				if (isset($result[$name]))
-					$result[$name] .= $matches[3][$i];
-				else
-					$result[$name] = $matches[3][$i];
-			}
-		}
-		else
-			$result = array($value);
-		*/
 		
 		// Transport decode and convert to utf-8
 		foreach ($result as $name => $value) {
@@ -683,8 +670,7 @@ abstract class Mime {
 			}
 			if ('utf-8' == strtolower($from) && 'iso-8859-1' == strtolower($to))
 				return utf8_decode($buffer);
-			if ('iso-8859-1' == strtolower($from) && 'utf-8' == strtolower($to) ||
-				'windows-1252' == strtolower($from) && 'utf-8' == strtolower($to))
+			if ('iso-8859-1' == strtolower($from) && 'utf-8' == strtolower($to))
 				return utf8_encode($buffer);
 			return @mb_convert_encoding($buffer, $to, $from);
 		}
