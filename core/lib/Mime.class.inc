@@ -933,10 +933,22 @@ class MimeTextpart_2_0_0 extends MimePart {
 	}
 
 	function getContent($normalize = true) {
-		$charset = $this->getHeader('Content-Type', 'charset');
-		$body = 'text/html' == strtolower($this->getHeader('Content-Type')) ? 
-			trim(tpl_text_format(synd_html_entity_decode(tpl_strip_html_tags($this->_body), ENT_COMPAT|ENT_HTML401, $charset))) : $this->_body;
-		return $normalize ? Mime::charset($body, $charset) : $body;
+		$body = $this->_body;
+
+		if ($normalize) {
+			$charset = $this->getHeader('Content-Type', 'charset');
+			$ctype = strtolower($this->getHeader('Content-Type'));
+
+			// Normalize charset to system default
+			$body = Mime::charset($body, $charset);
+
+			// Decode HTML entities to system default encoding
+			if ('text/html' == $ctype) {
+				$body = trim(tpl_text_format(synd_html_entity_decode(tpl_strip_html_tags($body))));
+			}
+		}
+		
+		return $body;
 	}
 
 	function getMessageText($callback = null) {
