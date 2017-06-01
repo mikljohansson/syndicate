@@ -1322,10 +1322,6 @@ class synd_node_issue extends AbstractDatabaseEntity {
 		if (null !== ($task = $this->_storage->getInstance($this->_task)))
 			$data['task'] = $task->getCompositeData();
 
-		// Default to waiting if non-active
-		if ($data['INFO_STATUS'] < self::ACTIVE)
-			$data['INFO_STATUS'] = self::PENDING;
-		
 		return $data;
 	}
 
@@ -1407,7 +1403,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 			}
 		}
 
-		unset($data['INFO_STATUS']);
+		unset($data['status']);
 
 		SyndHTML::validateFile($data, $errors, 'file');
 		return array_merge(parent::validate($data), $errors,
@@ -1444,9 +1440,9 @@ class synd_node_issue extends AbstractDatabaseEntity {
 		}
 
 		// Set issue status
-		if ($this->isPermitted('status') && isset($data['INFO_STATUS'])) {
-			$this->setStatus($data['INFO_STATUS']);
-			unset($data['INFO_STATUS']);
+		if ($this->isPermitted('status') && isset($data['status'])) {
+			$this->setStatus($data['status']);
+			unset($data['status']);
 		}
 
 		// Set parent project

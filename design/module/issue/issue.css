@@ -120,11 +120,16 @@ form .Issue .PaneBody {
 	height: 1.1em;
 }
 
-.Issues .Active .Status * {
+.Issue .Properties .Status {
+	width: 0.6em !important;
+	border: 1px solid;
+}
+
+.Issues .Active .Status *, .Issue .Properties .Active .Status {
 	background-color: red;
 }
 
-.Issues .Recent .Status * {
+.Issues .Recent .Status *, .Issue .Properties .Recent .Status {
 	background-color: yellow;
 }
 
@@ -132,11 +137,11 @@ form .Issue .PaneBody {
 	font-weight: bold;
 }
 
-.Issues .Pending .Status * {
+.Issues .Pending .Status *, .Issue .Properties .Pending .Status {
 	background-color: #30cc30;
 }
 
-.Issues .Closed .Status * {
+.Issues .Closed .Status *, .Issue .Properties .Closed .Status {
 	background-color: #ccc;
 }
 
