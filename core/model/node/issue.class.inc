@@ -1855,8 +1855,8 @@ class synd_node_issue extends AbstractDatabaseEntity {
 		}
 
 		// Set issue status
-		if (isset($request['data']['INFO_STATUS']) && $request['data']['INFO_STATUS'] != $this->data['INFO_STATUS']) {
-			$this->setStatus($request['data']['INFO_STATUS']);
+		if (isset($request['data']['status']) && $request['data']['status'] != $this->data['INFO_STATUS']) {
+			$this->setStatus($request['data']['status']);
 			$this->_save();
 		}
 		
