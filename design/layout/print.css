@@ -235,7 +235,7 @@ th, td {
 	padding: 0;
 }
 
-thead th {
+thead th, thead td {
 	vertical-align: middle;
 }
 
