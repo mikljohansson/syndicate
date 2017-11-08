@@ -32,7 +32,7 @@
 				//-->
 				</script>
 			<? } else { ?>
-			<? $this->render($node->getCustomer(),'contact.tpl'); ?>
+			<? $this->render($node->getCustomer(),'contact.tpl',array('extended'=>true)); ?>
 			<? } ?>
 		</td>
 		<th><?= $this->text('Due date') ?></th>

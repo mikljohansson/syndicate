@@ -9,7 +9,7 @@ $prios = $node->getDefinedPriorities();
 		<tr class="<?= $this->cycle(array('odd','even')) ?>">
 			<td rowspan="3" class="Status"><img src="<?= tpl_design_uri('image/pixel.gif') ?>" alt="" /></td>
 			<th><?= $this->text('Customer') ?></th>
-			<td><? $this->render($node->getCustomer(),'contact.tpl') ?></td>
+			<td><? $this->render($node->getCustomer(),'contact.tpl',array('extended'=>true)) ?></td>
 			<th><?= $this->text('Created') ?></th>
 			<td><?= ucwords(tpl_strftime('%a, %d %b %Y %R', $node->data['TS_CREATE'])) ?></td>
 			<td rowspan="3" class="Status"><img src="<?= tpl_design_uri('image/pixel.gif') ?>" alt="" /></td>
