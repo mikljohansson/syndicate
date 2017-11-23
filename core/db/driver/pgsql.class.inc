@@ -30,7 +30,7 @@ class synd_database_pgsql extends DatabaseConnection {
 		if (isset($uri['host']))
 			$dsn .= "host={$uri['host']} ";
 		if (isset($uri['port']))
-			$dsn .= "port={$uri['host']} ";
+			$dsn .= "port={$uri['port']} ";
 		if (isset($uri['path']))
 			$dsn .= 'dbname='.trim($uri['path'],'/').' ';
 		if (isset($uri['user']))
