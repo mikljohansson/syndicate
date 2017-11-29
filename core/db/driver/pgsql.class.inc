@@ -258,10 +258,13 @@ class synd_database_pgsql extends DatabaseConnection {
 			switch (strtoupper($row['TYPNAME'])) {
 				case 'CHAR':
 				case 'VARCHAR':
-					$column = new DatabaseStringColumn($row['ATTNAME'], $null, $default, $row['ATTTYPMOD']-4);
-					break;
+					if ($row['ATTTYPMOD'] != -1) {
+						$column = new DatabaseStringColumn($row['ATTNAME'], $null, $default, $row['ATTTYPMOD']-4);
+						break;
+					}
+					// Fall through to TEXT column
 				case 'TEXT':
-					$column = new DatabaseLobColumn($row['ATTNAME'], $null, $default);
+					$column = new DatabaseLobColumn($row['ATTNAME'], $null, $default, null, false);
 					break;
 				case 'INT2':
 				case 'SMALLINT':
