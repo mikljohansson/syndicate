@@ -88,8 +88,8 @@ class synd_database_pgsql extends DatabaseConnection {
 			throw new DatabaseQueryException(pg_last_error($this->_db), $sql);
 		return new synd_result_pgsql($this->_result);
 	}
-	
-	function getAll($sql, $offset = 0, $limit = null, $prefetch = 50) {
+
+	function getAll($sql, $offset = 0, $limit = null, $prefetch = 50, $flags = 0) {
 		if (0 != $offset || null != $limit)
 			$sql = $this->limit($sql, $offset, $limit);
 		if (!is_resource($result = @pg_query($this->_db, $sql)))
@@ -102,7 +102,7 @@ class synd_database_pgsql extends DatabaseConnection {
 		return $rows;
 	}
 
-	function getCol($sql, $col = 0, $offset = 0, $limit = null, $prefetch = 50) {
+	function getCol($sql, $col = 0, $offset = 0, $limit = null, $prefetch = 50, $flags = 0) {
 		if (0 != $offset || null != $limit)
 			$sql = $this->limit($sql, $offset, $limit);
 		if (!is_resource($result = @pg_query($this->_db, $sql)))
@@ -200,7 +200,29 @@ class synd_database_pgsql extends DatabaseConnection {
 		
 		$sql = "
 			SELECT UPPER(a.attname) AS ATTNAME, a.ATTTYPMOD, a.ATTNOTNULL, t.TYPNAME, 
-				pg_get_expr(d.adbin, d.adrelid) AS ADSRC
+				pg_get_expr(d.adbin, d.adrelid) AS ADSRC,
+				CASE a.atttypid
+					WHEN 21 /*int2*/ THEN 16
+					WHEN 23 /*int4*/ THEN 32
+					WHEN 20 /*int8*/ THEN 64
+					WHEN 1700 /*numeric*/ THEN
+						CASE WHEN a.atttypmod = -1
+						THEN null
+						ELSE ((a.atttypmod - 4) >> 16) & 65535     -- calculate the precision
+						END
+					WHEN 700 /*float4*/ THEN 24 /*FLT_MANT_DIG*/
+					WHEN 701 /*float8*/ THEN 53 /*DBL_MANT_DIG*/
+					ELSE null
+				END AS DATA_PRECISION,
+				CASE 
+					WHEN a.atttypid IN (21, 23, 20) THEN 0
+					WHEN a.atttypid IN (1700) THEN            
+						CASE 
+							WHEN a.atttypmod = -1 THEN null       
+							ELSE (a.atttypmod - 4) & 65535            -- calculate the scale  
+						END
+					ELSE null
+				END AS DATA_SCALE
 			FROM pg_type t, pg_attribute a
 			   LEFT JOIN pg_attrdef d
 			   ON (d.adrelid = a.attrelid AND d.adnum = a.attnum)
@@ -257,6 +279,9 @@ class synd_database_pgsql extends DatabaseConnection {
 				case 'FLOAT4':
 				case 'FLOAT8':
 					$column = new DatabaseFloatColumn($row['ATTNAME'], $null, $default);
+					break;
+				case 'NUMERIC':
+					$column = new DatabaseNumberColumn($row['ATTNAME'], $null, $default, $row['DATA_PRECISION'], $row['DATA_SCALE']);
 					break;
 				case 'DATE':
 					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $null, $default, 'YYYY-MM-DD');
@@ -342,6 +367,14 @@ class synd_database_pgsql extends DatabaseConnection {
 	function concat($vals) {
 		return implode('||', $vals);
 	}
+
+        function unixtodate($expr) {
+                return "TO_TIMESTAMP($expr)";
+        }
+
+        function date($expr) {
+                return "TO_CHAR($expr, 'YYYY-MM-DD')";
+        }
 
 	function rand() {
 		return 'RANDOM()';
