@@ -1,4 +1,7 @@
 <?php
+set_include_path(get_include_path().':'.dirname(dirname(dirname(dirname(__FILE__)))).'/local:'.dirname(dirname(dirname(__FILE__))));
+require_once 'synd.inc';
+
 /**
  * Database dump script.
  *
@@ -77,7 +80,6 @@ function _parse_args($spec, $args) {
 	return array_merge($result, $args);
 }
 
-set_include_path(get_include_path().':'.dirname(dirname(dirname(__FILE__))));
 set_time_limit(0);
 
 ini_set('display_startup_errors', true);
