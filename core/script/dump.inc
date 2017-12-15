@@ -20,6 +20,7 @@ if (count($argv) < 2) {
 	print "  --lower         lowercase table names\n";
 	print "  --single-row    dump one row from each table (useful for testing)\n";
 	print "  --no-data       no row information\n";
+	print "  --relations     include tables referenced by foreign keys, in topological order\n";
 	print "  --mysql         write output formatted for MySQL\n";
 	print "  --replace-into  use MySQL REPLACE INTO statements\n";
 	print "  --sequences     dump sequences\n";
@@ -92,6 +93,7 @@ $args = _parse_args(array(
 	'--lower'			=> array(false,false),
 	'--single-row'		=> array(false,false),
 	'--no-data'			=> array(false,false),
+	'--relations'			=> array(false,false),
 	'--sequences'		=> array(false,false),
 	'--mysql'			=> array(false,false),
 	'--replace-into'	=> array(false,false),
@@ -121,8 +123,10 @@ if (empty($args['--no-data'])) {
 		if (empty($args['--match']) || fnmatch($args['--match'], $table, FNM_CASEFOLD)) {
 			$structure = $source->getTableStructure($table);
 			$relations[$table] = array();
-			foreach ($structure->getRelations() as $relation)
-				$relations[$table][] = $relation[1]->getTable();
+			if (!empty($args['--relations'])) {
+				foreach ($structure->getRelations() as $relation)
+					$relations[$table][] = $relation[1]->getTable();
+			}
 		}
 	}
 
