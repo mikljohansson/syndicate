@@ -49,7 +49,10 @@ class synd_database_pgsql extends DatabaseConnection {
 		
 		if (isset($args['charset']))
 			pg_set_client_encoding($handle, $args['charset']);
-		
+	
+		// Return bytea columns in escape mode (default is hex mode)
+		pg_query($handle, "SET bytea_output='escape';");
+	
 		profiler_leave(__METHOD__);
 		return $handle;
 	}
@@ -98,7 +101,7 @@ class synd_database_pgsql extends DatabaseConnection {
 		if (!is_array($rows = pg_fetch_all($result)))
 			return array();
 		for ($i=count($rows)-1; $i>=0; $i--)
-			$rows[$i] = array_change_key_case($rows[$i], CASE_UPPER);
+			$rows[$i] = self::_unquote(array_change_key_case($rows[$i], CASE_UPPER));
 		return $rows;
 	}
 
@@ -111,12 +114,12 @@ class synd_database_pgsql extends DatabaseConnection {
 		$rows = array();
 		if (is_numeric($col)) {
 			while (false !== ($row = pg_fetch_row($result)))
-				$rows[] = $row[$col];
+				$rows[] = self::_unquote($row[$col]);
 		}
 		else {
 			$col = strtolower($col);
 			while (false !== ($row = pg_fetch_assoc($result)))
-				$rows[] = $row[$col];
+				$rows[] = self::_unquote($row[$col]);
 		}
 		return $rows;
 	}
@@ -129,7 +132,7 @@ class synd_database_pgsql extends DatabaseConnection {
 
 		$rows = array();
 		while (false !== ($row = pg_fetch_row($result)))
-			$rows[$row[0]] = $row[1];
+			$rows[$row[0]] = self::_unquote($row[1]);
 		return $rows;
 	}
 	
@@ -139,7 +142,7 @@ class synd_database_pgsql extends DatabaseConnection {
 			throw new DatabaseQueryException(pg_last_error($this->_db), $sql);
 		if (!is_array($row = pg_fetch_assoc($result)))
 			return array();
-		return array_change_key_case($row, CASE_UPPER);
+		return self::_unquote(array_change_key_case($row, CASE_UPPER));
 	}
 	
 	function getOne($sql) {
@@ -148,7 +151,7 @@ class synd_database_pgsql extends DatabaseConnection {
 			throw new DatabaseQueryException(pg_last_error($this->_db), $sql);
 		if (!is_array($row = pg_fetch_row($result)))
 			return null;
-		return $row[0];
+		return self::_unquote($row[0]);
 	}
 
 	function getTables() {
@@ -321,7 +324,7 @@ class synd_database_pgsql extends DatabaseConnection {
 			SELECT ".implode(', ', $undefined)." 
 			FROM $table
 			WHERE oid = ".pg_last_oid($this->_result);
-		return $this->getRow($sql);
+		return self::_unquote($this->getRow($sql));
 	}
 
 	function truncate($table) {
@@ -393,6 +396,20 @@ class synd_database_pgsql extends DatabaseConnection {
 			return $value ? 'TRUE' : 'FALSE';
 		return parent::quote($value);
 	}
+	
+	/**
+	 * Reverts the effect of pg_escape_bytea
+	 */
+	static function _unquote($value) {
+		if (is_string($value))
+			return pg_unescape_bytea($value);
+                if (is_array($value)) {
+                        foreach ($value as $key => $val)
+                                $value[$key] = self::_unquote($val);
+                        return $value;
+                }
+		return $value;
+	}
 }
 
 /**
@@ -405,13 +422,13 @@ class synd_result_pgsql extends AbstractResultSet {
 
 	function fetchRow() {
 		if (is_array($row = pg_fetch_assoc($this->_result)))
-			return array_change_key_case($row, CASE_UPPER);
+			return synd_database_pgsql::_unquote(array_change_key_case($row, CASE_UPPER));
 		return $row;
 	}
 
 	function fetchInto(&$row) {
 		if (is_array($row = pg_fetch_assoc($this->_result)))
-			$row = array_change_key_case($row, CASE_UPPER);
+			$row = synd_database_pgsql::_unquote(array_change_key_case($row, CASE_UPPER));
 		return $row;
 	}
 }
