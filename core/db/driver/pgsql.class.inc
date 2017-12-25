@@ -384,8 +384,11 @@ class synd_database_pgsql extends DatabaseConnection {
 	}
 
 	function quote($value) {
+		// NOTE: pg_escape_literal/pg_escape_string doesn't handle \0 bytes, rather they
+		// will just truncate the string on \0. To properly insert \0 the column also needs
+		// to use the bytea type. See https://www.postgresql.org/docs/9.0/static/datatype-binary.html
 		if (is_string($value))
-			return "'".pg_escape_string($value)."'";
+			return "E'".pg_escape_bytea($value)."'";
 		if (is_bool($value))
 			return $value ? 'TRUE' : 'FALSE';
 		return parent::quote($value);
