@@ -6,6 +6,17 @@
 require_once 'core/db/Database.class.inc';
 
 /**
+ * \134 = 92 = backslash, \000 = 00 = NULL, \047 = 39 = Single Quote
+ *
+ * str_replace() replaces the searches array in order. Therefore, we must
+ * process the 'backslash' character first. If we process it last, it'll
+ * replace all the escaped backslashes from the other searches that came
+ * before.
+ */
+$SYND_PGSQL_ESCAPE = array(chr(92), chr(0), chr(39));
+$SYND_PGSQL_REPLACE = array('\\\\', '\\\000', '\'\'');
+
+/**
  * PostgreSQL database driver
  * @access		public
  * @package		synd.core.db
@@ -267,6 +278,7 @@ class synd_database_pgsql extends DatabaseConnection {
 					}
 					// Fall through to TEXT column
 				case 'TEXT':
+				case 'BYTEA':
 					$column = new DatabaseLobColumn($row['ATTNAME'], $null, $default, null, false);
 					break;
 				case 'INT2':
@@ -390,8 +402,10 @@ class synd_database_pgsql extends DatabaseConnection {
 		// NOTE: pg_escape_literal/pg_escape_string doesn't handle \0 bytes, rather they
 		// will just truncate the string on \0. To properly insert \0 the column also needs
 		// to use the bytea type. See https://www.postgresql.org/docs/9.0/static/datatype-binary.html
+		// Note that the pg_escape_bytea will use hex encoding which fails on normal columns,
+		// hence why we're using str_replace instead.
 		if (is_string($value))
-			return "E'".pg_escape_bytea($value)."'";
+			return "E'".str_replace($SYND_PGSQL_ESCAPE, $SYND_PGSQL_REPLACE, $value)."'";
 		if (is_bool($value))
 			return $value ? 'TRUE' : 'FALSE';
 		return parent::quote($value);
