@@ -7,7 +7,7 @@ class synd_node_node extends AbstractDatabaseEntity {
 	
 	function __construct($storage, $database, $data) {
 		if (null != $data['DATA_PINGS'])
-			$data['DATA_PINGS'] = unserialize($data['DATA_PINGS']);
+			$data['DATA_PINGS'] = unserialize($database->unwrapBinary($data['DATA_PINGS']));
 		parent::__construct($storage, $database, $data);
 	}
 	

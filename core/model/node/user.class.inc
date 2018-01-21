@@ -5,7 +5,7 @@ require_once 'core/lib/auth/User.class.inc';
 class synd_node_user extends synd_node_node implements User {
 	function __construct($storage, $database, $data) {
 		if (null != $data['INFO_PHOTO'])
-			$data['INFO_PHOTO'] = unserialize($data['INFO_PHOTO']);
+			$data['INFO_PHOTO'] = unserialize($database->unwrapBinary($data['INFO_PHOTO']));
 		parent::__construct($storage, $database, $data);
 	}
 	

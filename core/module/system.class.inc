@@ -198,7 +198,7 @@ class synd_module_system extends Module {
 				'NAMESPACE'	=> $namespace,
 				'VARIABLE'	=> $variable,
 				'EXPIRES'	=> null !== $ttl ? time() + $ttl : null,
-				'VALUE'		=> serialize($value));
+				'VALUE'		=> $synd_maindb->wrapBinary(serialize($value)));
 			$result = !SyndLib::isError($synd_maindb->replace('synd_variable', $data));
 		}
 		
@@ -220,7 +220,7 @@ class synd_module_system extends Module {
 				v.variable = ".$synd_maindb->quote($variable)." AND
 				(v.expires IS NULL OR v.expires >= ".$synd_maindb->quote(time()).")";
 		if (null !== ($buffer = $synd_maindb->getOne($sql))) {
-			$result = unserialize($buffer);
+			$result = unserialize($synd_maindb->unwrapBinary($buffer));
 			return true;
 		}
 	}

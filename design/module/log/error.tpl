@@ -50,11 +50,11 @@
 		</tr>
 		<tr class="<?= tpl_cycle() ?>">
 			<th>$_REQUEST</th>
-			<td><pre><?= $module->_context(unserialize($error['REQUEST_DATA'])) ?></pre></td>
+			<td><pre><?= $module->_context($error['REQUEST_DATA']) ?></pre></td>
 		</tr>
 		<tr class="<?= tpl_cycle() ?>">
 			<th>$_SERVER</th>
-			<td><pre><?= $module->_context(unserialize($error['REQUEST_ENV'])) ?></pre></td>
+			<td><pre><?= $module->_context($error['REQUEST_ENV']) ?></pre></td>
 		</tr>
 	</tbody>
 </table>

@@ -102,6 +102,14 @@ class synd_database_null implements Database {
 		return $value;
 	}
 
+	function wrapBinary($value) {
+		return $value;
+	}
+
+	function unwrapBinary($value) {
+		return $value;
+	}
+
 	function ternary($if, $then, $else)	{return $this->quote('');}
 	function concat($vals)				{return $this->quote('');}
 	function bitand($a, $b)				{return $this->quote('');}
@@ -129,4 +137,4 @@ class synd_result_null extends AbstractResultSet {
 		return $row = null;
 	}
 }
-
+

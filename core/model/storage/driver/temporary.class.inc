@@ -79,6 +79,9 @@ class synd_storage_temporary extends ForwardingStorage {
 					v.variable IN (".implode(',',$this->_db->quote(array_slice($temporary,$i,1000))).")";
 
 			foreach ($this->_db->getCol($sql) as $value) {
+				// Need to unwrap to ensure checksum is calculated correctly
+				$value = $this->_db->unwrapBinary($value);
+
 				if (false !== ($node = unserialize($value))) {
 					unset($ids[array_search($node->nodeId, $ids)]);
 					$node->__tempchecksum = md5($value);
@@ -189,7 +192,7 @@ class synd_storage_temporary extends ForwardingStorage {
 						'NAMESPACE'	=> $this->_namespace,
 						'VARIABLE'	=> $id,
 						'EXPIRES'	=> time() + $this->_ttl,
-						'VALUE'		=> $value);
+						'VALUE'		=> $this->_db->wrapBinary($value));
 					$this->_db->replace('synd_variable', $data);
 					$this->_strategy->set($this->_namespace.'.'.$id, $value, $this->_ttl);
 				}
@@ -205,7 +208,7 @@ class synd_storage_temporary extends ForwardingStorage {
 				v.namespace = ".$this->_db->quote($this->_namespace)." AND 
 				v.expires < ".time();
 		foreach ($this->_db->getAssoc($sql) as $id => $value) {
-			if ((!is_array($this->_deleted) || !in_array($id, $this->_deleted)) && false !== ($node = unserialize($value))) {
+			if ((!is_array($this->_deleted) || !in_array($id, $this->_deleted)) && false !== ($node = unserialize($this->_db->unwrapBinary($value)))) {
 				if (null === $this->_next->getInstance($node->nodeId))
 					$node->delete();
 				unset($node);

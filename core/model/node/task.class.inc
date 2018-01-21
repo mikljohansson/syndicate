@@ -4,9 +4,9 @@ require_once 'core/model/DatabaseEntity.class.inc';
 class synd_node_task extends AbstractDatabaseEntity {
 	function __construct($storage, $database, $data) {
 		if (null != $data['DATA_CONTENT'])
-			$data['DATA_CONTENT'] = unserialize($data['DATA_CONTENT']);
+			$data['DATA_CONTENT'] = unserialize($database->unwrapBinary($data['DATA_CONTENT']));
 		if (null != $data['DATA_FILES'])
-			$data['DATA_FILES'] = unserialize($data['DATA_FILES']);
+			$data['DATA_FILES'] = unserialize($database->unwrapBinary($data['DATA_FILES']));
 		parent::__construct($storage, $database, $data);
 	}
 	

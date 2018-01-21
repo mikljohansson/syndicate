@@ -289,13 +289,13 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 
 	function getAttribute($key) {
 		if (null === $this->_attributes && null != $this->data['DATA_ATTRIBUTES'])
-			$this->_attributes = unserialize($this->data['DATA_ATTRIBUTES']);
+			$this->_attributes = unserialize($this->_db->unwrapBinary($this->data['DATA_ATTRIBUTES']));
 		return isset($this->_attributes[$key]) ? $this->_attributes[$key] : parent::getAttribute($key);
 	}
 	
 	function setAttribute($key, $value) {
 		if (null === $this->_attributes && null != $this->data['DATA_ATTRIBUTES'])
-			$this->_attributes = unserialize($this->data['DATA_ATTRIBUTES']);
+			$this->_attributes = unserialize($this->_db->unwrapBinary($this->data['DATA_ATTRIBUTES']));
 		if (null != $value)
 			$this->_attributes[$key] = $value;
 		else if (isset($this->_attributes[$key]))
@@ -465,7 +465,7 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 	function getMailNotifier() {
 		if (null == $this->_mailNotifier) {
 			if (null != $this->data['DATA_NOTIFIER'])
-				$this->_mailNotifier = unserialize($this->data['DATA_NOTIFIER']);
+				$this->_mailNotifier = unserialize($this->_db->unwrapBinary($this->data['DATA_NOTIFIER']));
 			else {
 				$this->_mailNotifier = SyndType::factory('mail_notifier');
 				$this->_mailNotifier->setParent($this);
@@ -977,9 +977,9 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 		$this->data['TS_UPDATE'] = time();
 
 		if (null !== $this->_mailNotifier) 
-			$this->data['DATA_NOTIFIER'] = serialize($this->_mailNotifier);
+			$this->data['DATA_NOTIFIER'] = $this->_db->wrapBinary(serialize($this->_mailNotifier));
 		if (null !== $this->_attributes) 
-			$this->data['DATA_ATTRIBUTES'] = empty($this->_attributes) ? null : serialize($this->_attributes);
+			$this->data['DATA_ATTRIBUTES'] = empty($this->_attributes) ? null : $this->_db->wrapBinary(serialize($this->_attributes));
 	}
 	
 	/**

@@ -320,6 +320,20 @@ interface Database {
 	function quote($value);
 
 	/**
+	 * Wrap binary string for insertion.
+	 * @param	string	Binary string to wrap
+	 * @return	string
+	 */
+	function wrapBinary($value);
+	
+	/**
+	 * Unwrap binary string after reading.
+	 * @param	string	String from database to unwrap
+	 * @return	string
+	 */
+	function unwrapBinary($value);
+
+	/**
 	 * Returns an sql limited query
 	 * @param	string	Query to rewrite
 	 * @param	string	Result set offset
@@ -703,8 +717,18 @@ abstract class DatabaseConnection implements Database {
 			return $value;
 		}
 		if (is_object($value))
-			return $this->quote(serialize($value));
+			return $this->quote($this->wrapBinary(serialize($value)));
 		return "'".strtr($value, array("'"=>"''","\0"=>"\\0"))."'";
+	}
+
+        function wrapBinary($value) {
+		// Most databases handle NUL bytes in strings just fine, not PostgreSQL though
+		return $value;
+	}
+
+        function unwrapBinary($value) {
+		// Most databases handle NUL bytes in strings just fine, not PostgreSQL though
+		return $value;
 	}
 
 	function limit($sql, $offset, $limit) {

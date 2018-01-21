@@ -22,17 +22,17 @@ class synd_node_computer extends synd_node_item {
 
 	function __construct($storage, $database, $data) {
 		if (null != $data['DATA_DISK_DRIVES'])
-			$data['DATA_DISK_DRIVES'] = unserialize($data['DATA_DISK_DRIVES']);
+			$data['DATA_DISK_DRIVES'] = unserialize($database->unwrapBinary($data['DATA_DISK_DRIVES']));
 		if (null != $data['DATA_ROM_DRIVES'])
-			$data['DATA_ROM_DRIVES'] = unserialize($data['DATA_ROM_DRIVES']);
+			$data['DATA_ROM_DRIVES'] = unserialize($database->unwrapBinary($data['DATA_ROM_DRIVES']));
 		if (null != $data['DATA_NETWORK_CARDS'])
-			$data['DATA_NETWORK_CARDS'] = unserialize($data['DATA_NETWORK_CARDS']);
+			$data['DATA_NETWORK_CARDS'] = unserialize($database->unwrapBinary($data['DATA_NETWORK_CARDS']));
 		if (null != $data['DATA_GRAPHIC_CARDS'])
-			$data['DATA_GRAPHIC_CARDS'] = unserialize($data['DATA_GRAPHIC_CARDS']);
+			$data['DATA_GRAPHIC_CARDS'] = unserialize($database->unwrapBinary($data['DATA_GRAPHIC_CARDS']));
 		if (null != $data['DATA_SOUND_CARDS'])
-			$data['DATA_SOUND_CARDS'] = unserialize($data['DATA_SOUND_CARDS']);
+			$data['DATA_SOUND_CARDS'] = unserialize($database->unwrapBinary($data['DATA_SOUND_CARDS']));
 		if (null != $data['DATA_MONITORS'])
-			$data['DATA_MONITORS'] = unserialize($data['DATA_MONITORS']);
+			$data['DATA_MONITORS'] = unserialize($database->unwrapBinary($data['DATA_MONITORS']));
 
 		parent::__construct($storage, $database, $data);
 		$this->_storage->preload($this->data['PARENT_NODE_ID']);

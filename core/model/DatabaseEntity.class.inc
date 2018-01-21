@@ -162,7 +162,7 @@ abstract class AbstractDatabaseEntity extends AbstractDomainObject implements Da
 	 * Returns entity data ready for insertion into database
 	 *
 	 * Non-scalars (objects and arrays) contained in the data member 
-	 * will automatically serialized. The corresponding unserialize
+	 * will automatically serialized. The corresponding unserialize(Database::unwrapBinary())
 	 * should be implemented in the child classes __contruct method.
 	 *
 	 * @see		__construct()
@@ -172,7 +172,7 @@ abstract class AbstractDatabaseEntity extends AbstractDomainObject implements Da
 		$data = array();
 		foreach (array_keys($this->data) as $key) {
 			$data[$key] = is_object($this->data[$key]) || is_array($this->data[$key]) ? 
-				serialize($this->data[$key]) : $this->data[$key];
+				$this->_db->wrapBinary(serialize($this->data[$key])) : $this->data[$key];
 		}
 		return $data;
 	}

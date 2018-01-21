@@ -9,8 +9,7 @@ class synd_node_workflow extends AbstractDatabaseEntity implements Workflow {
 	
 	function __construct($storage, $database, $data) {
 		if (null != $data['DATA_ACTIVITY'])
-			$data['DATA_ACTIVITY'] = unserialize($data['DATA_ACTIVITY']);
-		
+			$data['DATA_ACTIVITY'] = unserialize($database->unwrapBinary($data['DATA_ACTIVITY']));
 		parent::__construct($storage, $database, $data);
 		
 		$sql = "

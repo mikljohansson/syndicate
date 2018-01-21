@@ -63,7 +63,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 	
 	function __construct($storage, $database, $data) {
 		if (null != $data['DATA_FILES'])
-			$data['DATA_FILES'] = unserialize($data['DATA_FILES']);
+			$data['DATA_FILES'] = unserialize($database->unwrapBinary($data['DATA_FILES']));
 		parent::__construct($storage, $database, $data);
 
 		$this->_storage->preload($this->data['PARENT_NODE_ID']);
@@ -126,11 +126,11 @@ class synd_node_issue extends AbstractDatabaseEntity {
 		$vars = parent::__sleep();
 
 		if (null !== $this->_eventLogger)
-			$this->data['DATA_EVENTLOG'] = serialize($this->_eventLogger);
+			$this->data['DATA_EVENTLOG'] = $this->_db->wrapBinary(serialize($this->_eventLogger));
 		unset($vars[array_search('_eventLogger', $vars)]);
 
 		if (null !== $this->_content)
-			$this->data['DATA_CONTENT'] = serialize($this->_content);
+			$this->data['DATA_CONTENT'] = $this->_db->wrapBinary(serialize($this->_content));
 		unset($vars[array_search('_content', $vars)]);
 
 		return $vars;
@@ -246,13 +246,13 @@ class synd_node_issue extends AbstractDatabaseEntity {
 	
 	function getAttribute($key) {
 		if (null === $this->_attributes && null != $this->data['DATA_ATTRIBUTES'])
-			$this->_attributes = unserialize($this->data['DATA_ATTRIBUTES']);
+			$this->_attributes = unserialize($this->_db->unwrapBinary($this->data['DATA_ATTRIBUTES']));
 		return isset($this->_attributes[$key]) ? $this->_attributes[$key] : parent::getAttribute($key);
 	}
 	
 	function setAttribute($key, $value) {
 		if (null === $this->_attributes && null != $this->data['DATA_ATTRIBUTES'])
-			$this->_attributes = unserialize($this->data['DATA_ATTRIBUTES']);
+			$this->_attributes = unserialize($this->_db->unwrapBinary($this->data['DATA_ATTRIBUTES']));
 		if (null != $value)
 			$this->_attributes[$key] = $value;
 		else if (isset($this->_attributes[$key]))
@@ -991,7 +991,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 			if (null == $this->data['DATA_CONTENT'])
 				$this->setContent(SyndType::factory('text'));
 			else
-				$this->_content = unserialize($this->data['DATA_CONTENT']);
+				$this->_content = unserialize($this->_db->unwrapBinary($this->data['DATA_CONTENT']));
 		}
 		return $this->_content;
 	}
@@ -1232,7 +1232,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 	 */
 	function getMailNotifier() {
 		if (null === $this->_mailNotifier) {
-			if (null == $this->data['DATA_NOTIFIER'] || false === ($this->_mailNotifier = unserialize($this->data['DATA_NOTIFIER']))) {
+			if (null == $this->data['DATA_NOTIFIER'] || false === ($this->_mailNotifier = unserialize($this->_db->unwrapBinary($this->data['DATA_NOTIFIER'])))) {
 				$this->_mailNotifier = SyndType::factory('mail_notifier');
 				$this->_mailNotifier->setParent($this);
 			}
@@ -1266,7 +1266,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 	 */
 	function getEventLogger() {
 		if (null === $this->_eventLogger && (null == $this->data['DATA_EVENTLOG'] ||
-			false === ($this->_eventLogger = unserialize($this->data['DATA_EVENTLOG'])))) {
+			false === ($this->_eventLogger = unserialize($this->_db->unwrapBinary($this->data['DATA_EVENTLOG']))))) {
 			$this->_eventLogger = SyndType::factory('issue_event_logger');
 			$this->_eventLogger->setParent($this);
 		}
@@ -1962,17 +1962,17 @@ class synd_node_issue extends AbstractDatabaseEntity {
 		// Store attribute objects that have been used
 		if (null !== $this->_mailNotifier) {
 			$this->_mailNotifier->send();
-			$this->data['DATA_NOTIFIER'] = serialize($this->_mailNotifier);
+			$this->data['DATA_NOTIFIER'] = $this->_db->wrapBinary(serialize($this->_mailNotifier));
 			unset($this->_mailNotifier);
 			$this->_mailNotifier = null;
 		}
 
 		if (null !== $this->_eventLogger) 
-			$this->data['DATA_EVENTLOG'] = serialize($this->_eventLogger);
+			$this->data['DATA_EVENTLOG'] = $this->_db->wrapBinary(serialize($this->_eventLogger));
 		if (null !== $this->_content) 
-			$this->data['DATA_CONTENT'] = serialize($this->_content);
+			$this->data['DATA_CONTENT'] = $this->_db->wrapBinary(serialize($this->_content));
 		if (null !== $this->_attributes) 
-			$this->data['DATA_ATTRIBUTES'] = empty($this->_attributes) ? null : serialize($this->_attributes);
+			$this->data['DATA_ATTRIBUTES'] = empty($this->_attributes) ? null : $this->_db->wrapBinary(serialize($this->_attributes));
 
 		foreach ($this->getNotes() as $note) {
 			if ($note->isNew())

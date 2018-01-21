@@ -12,7 +12,7 @@ class synd_node_open_ended_text extends synd_node_question {
 	function addAnswer($attempt, $answer) {
 		$infoAnswer = null;
 		if (null != trim($answer))
-			$infoAnswer = serialize(trim($answer));
+			$infoAnswer = $this->_db->wrapBinary(serialize(trim($answer)));
 		
 		$sql = "
 			INSERT INTO synd_answer_text
@@ -33,7 +33,7 @@ class synd_node_open_ended_text extends synd_node_question {
 				a.attempt_node_id = '$attempt->nodeId' AND
 				a.question_node_id = '$this->nodeId'";
 		if (null != ($answer = $this->_db->getOne($sql)))
-			return unserialize($answer);
+			return unserialize($this->_db->unwrapBinary($answer));
 		return null;
 	}
 
@@ -48,7 +48,7 @@ class synd_node_open_ended_text extends synd_node_question {
 				s.question_node_id = '$this->nodeId' AND
 				s.info_answer IS NOT NULL".$this->_filter($filters);
 		foreach ($this->_db->getAll($sql) as $answer) {
-			if (null != ($answer['INFO_ANSWER'] = unserialize($answer['INFO_ANSWER'])))
+			if (null != ($answer['INFO_ANSWER'] = unserialize($this->_db->unwrapBinary($answer['INFO_ANSWER']))))
 				$answers[] = $answer;
 		}
 		
@@ -130,4 +130,4 @@ class synd_node_open_ended_text extends synd_node_question {
 		return array('content' => $page->fetchnode($this,'xls.tpl'), 'page' => null);
 	}
 }
-
+

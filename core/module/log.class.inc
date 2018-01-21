@@ -66,8 +66,8 @@ class synd_module_log extends Module {
 				'STACKTRACE' 	=> $exception->getTraceAsString(),
 				'CLIENT_NODE_ID'=> isset($synd_user) ? $synd_user->id() : null,
 				'REQUEST_URI'	=> $uri,
-				'REQUEST_DATA'	=> serialize($_REQUEST),
-				'REQUEST_ENV'	=> serialize($_SERVER),
+				'REQUEST_DATA'	=> $synd_maindb->wrapBinary(serialize($_REQUEST)),
+				'REQUEST_ENV'	=> $synd_maindb->wrapBinary(serialize($_SERVER)),
 				);
 				
 			try {
@@ -154,8 +154,8 @@ class synd_module_log extends Module {
 				'STACKTRACE' 	=> $this->_trace($stacktrace),
 				'CLIENT_NODE_ID'=> isset($synd_user) ? $synd_user->id() : null,
 				'REQUEST_URI'	=> $uri,
-				'REQUEST_DATA'	=> serialize($_REQUEST),
-				'REQUEST_ENV'	=> serialize($_SERVER),
+				'REQUEST_DATA'	=> $synd_maindb->wrapBinary(serialize($_REQUEST)),
+				'REQUEST_ENV'	=> $synd_maindb->wrapBinary(serialize($_SERVER)),
 				);
 
 			try {
@@ -194,8 +194,10 @@ class synd_module_log extends Module {
 				ORDER BY e.timestamp";
 			$messages = $synd_maindb->getAssoc($sql);
 
-			foreach (array_keys($errors) as $key) 
+			foreach (array_keys($errors) as $key) {
 				$errors[$key]['MESSAGE'] = $messages[$errors[$key]['HASH']];
+				$this->_unwrapError($errors[$key]);
+			}
 		}
 		
 		return $errors;
@@ -206,7 +208,16 @@ class synd_module_log extends Module {
 		$sql = "
 			SELECT e.* FROM synd_log e
 			WHERE e.hash = ".$synd_maindb->quote($hash);
-		return $synd_maindb->getRow($sql);
+		return $this->_unwrapError($synd_maindb->getRow($sql));
+	}
+
+	function _unwrapError($error) {
+		global $synd_maindb;
+		if (!empty($error['REQUEST_DATA']))
+			$error['REQUEST_DATA'] = unserialize($synd_maindb->unwrapBinary($error['REQUEST_DATA']));
+		if (!empty($error['REQUEST_ENV']))
+			$error['REQUEST_ENV'] = unserialize($synd_maindb->unwrapBinary($error['REQUEST_ENV']));
+		return $error;
 	}
 
 	function getErrorCount() {

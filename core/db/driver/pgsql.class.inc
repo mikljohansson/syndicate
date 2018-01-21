@@ -6,15 +6,10 @@
 require_once 'core/db/Database.class.inc';
 
 /**
- * \134 = 92 = backslash, \000 = 00 = NULL, \047 = 39 = Single Quote
- *
- * str_replace() replaces the searches array in order. Therefore, we must
- * process the 'backslash' character first. If we process it last, it'll
- * replace all the escaped backslashes from the other searches that came
- * before.
+ * Binary characters to escape in BYTEA columns
  */
-$SYND_PGSQL_ESCAPE = array(chr(92), chr(0), chr(39));
-$SYND_PGSQL_REPLACE = array('\\\\', '\\\000', '\'\'');
+global $SYND_PGSQL_BYTEA_ESCAPE;
+$SYND_PGSQL_BYTEA_ESCAPE = array("\\" => "\\\\", "\0" => "\\000");
 
 /**
  * PostgreSQL database driver
@@ -112,7 +107,7 @@ class synd_database_pgsql extends DatabaseConnection {
 		if (!is_array($rows = pg_fetch_all($result)))
 			return array();
 		for ($i=count($rows)-1; $i>=0; $i--)
-			$rows[$i] = self::_unquote(array_change_key_case($rows[$i], CASE_UPPER));
+			$rows[$i] = array_change_key_case($rows[$i], CASE_UPPER);
 		return $rows;
 	}
 
@@ -125,12 +120,12 @@ class synd_database_pgsql extends DatabaseConnection {
 		$rows = array();
 		if (is_numeric($col)) {
 			while (false !== ($row = pg_fetch_row($result)))
-				$rows[] = self::_unquote($row[$col]);
+				$rows[] = $row[$col];
 		}
 		else {
 			$col = strtolower($col);
 			while (false !== ($row = pg_fetch_assoc($result)))
-				$rows[] = self::_unquote($row[$col]);
+				$rows[] = $row[$col];
 		}
 		return $rows;
 	}
@@ -143,7 +138,7 @@ class synd_database_pgsql extends DatabaseConnection {
 
 		$rows = array();
 		while (false !== ($row = pg_fetch_row($result)))
-			$rows[$row[0]] = self::_unquote($row[1]);
+			$rows[$row[0]] = $row[1];
 		return $rows;
 	}
 	
@@ -153,7 +148,7 @@ class synd_database_pgsql extends DatabaseConnection {
 			throw new DatabaseQueryException(pg_last_error($this->_db), $sql);
 		if (!is_array($row = pg_fetch_assoc($result)))
 			return array();
-		return self::_unquote(array_change_key_case($row, CASE_UPPER));
+		return array_change_key_case($row, CASE_UPPER);
 	}
 	
 	function getOne($sql) {
@@ -162,7 +157,7 @@ class synd_database_pgsql extends DatabaseConnection {
 			throw new DatabaseQueryException(pg_last_error($this->_db), $sql);
 		if (!is_array($row = pg_fetch_row($result)))
 			return null;
-		return self::_unquote($row[0]);
+		return $row[0];
 	}
 
 	function getTables() {
@@ -192,7 +187,6 @@ class synd_database_pgsql extends DatabaseConnection {
 				WHERE 
 					a.attrelid = '$table'::regclass AND
 					a.attnum > 0 AND 
-					a.attnotnull AND
 					NOT a.attisdropped";
 			$columns = $this->getAssoc($sql);
 
@@ -248,70 +242,66 @@ class synd_database_pgsql extends DatabaseConnection {
 		$rows = $this->getAll($sql);
 		
 		foreach ($rows as $row) {
-			$null = empty($row['ATTNOTNULL']);
+			$allownull = ($row['ATTNOTNULL'] == 'f');
 			if (preg_match("/^'(.+)'::[\w ]+$/", $row['ADSRC'], $matches))
 				$default = $matches[1];
 			else if ('nextval(' == strtolower(substr($row['ADSRC'],0,8)))
 				$default = null;
 			else {
-				switch (strtoupper($row['ADSRC'])) {
-					case 'NULL':
-						$default = null;
-						break;
-					case 'TRUE':
-						$default = true;
-						break;
-					case 'FALSE':
-						$default = false;
-						break;
-					default:
-						$default = $row['ADSRC'];
-				}
+				$upper = strtoupper($row['ADSRC']);
+				if ($upper == 'NULL' || substr($upper, 0, 6) == 'NULL::')
+					$default = null;
+				else if ($upper == 'TRUE' || substr($upper, 0, 6) == 'TRUE::')
+					$default = true;
+				else if ($upper == 'FALSE' || substr($upper, 0, 7) == 'FALSE::')
+					$default = true;
+				else
+					$default = $row['ADSRC'];
 			}
-			
+
 			switch (strtoupper($row['TYPNAME'])) {
 				case 'CHAR':
 				case 'VARCHAR':
 					if ($row['ATTTYPMOD'] != -1) {
-						$column = new DatabaseStringColumn($row['ATTNAME'], $null, $default, $row['ATTTYPMOD']-4);
+						$column = new DatabaseStringColumn($row['ATTNAME'], $allownull, $default, $row['ATTTYPMOD']-4);
 						break;
 					}
 					// Fall through to TEXT column
 				case 'TEXT':
 				case 'BYTEA':
-					$column = new DatabaseLobColumn($row['ATTNAME'], $null, $default, null, false);
+					$column = new DatabaseLobColumn($row['ATTNAME'], $allownull, $default, null, false);
 					break;
 				case 'INT2':
 				case 'SMALLINT':
-					$column = new DatabaseIntegerColumn($row['ATTNAME'], $null, $default, 16);
+					$column = new DatabaseIntegerColumn($row['ATTNAME'], $allownull, $default, 16);
 					break;
 				case 'INT':
 				case 'INT4':
 				case 'INTEGER':
-					$column = new DatabaseIntegerColumn($row['ATTNAME'], $null, $default, 32);
+					$column = new DatabaseIntegerColumn($row['ATTNAME'], $allownull, $default, 32);
 					break;
 				case 'INT8':
 				case 'BIGINT':
-					$column = new DatabaseIntegerColumn($row['ATTNAME'], $null, $default, 64);
+					$column = new DatabaseIntegerColumn($row['ATTNAME'], $allownull, $default, 64);
 					break;
 				case 'FLOAT4':
 				case 'FLOAT8':
-					$column = new DatabaseFloatColumn($row['ATTNAME'], $null, $default);
+					$column = new DatabaseFloatColumn($row['ATTNAME'], $allownull, $default);
 					break;
 				case 'NUMERIC':
-					$column = new DatabaseNumberColumn($row['ATTNAME'], $null, $default, $row['DATA_PRECISION'], $row['DATA_SCALE']);
+					$column = new DatabaseNumberColumn($row['ATTNAME'], $allownull, $default, $row['DATA_PRECISION'], $row['DATA_SCALE']);
 					break;
 				case 'DATE':
-					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $null, $default, 'YYYY-MM-DD');
+					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $allownull, $default, 'YYYY-MM-DD');
 					break;
 				case 'TIME':
-					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $null, $default, 'HH:MM:SS');
+					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $allownull, $default, 'HH:MM:SS');
 					break;
 				case 'TIMESTAMP':
-					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $null, $default);
+					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $allownull, $default);
 					break;
 				case 'BOOL':
-					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $null, $default);
+					$column = new DatabaseDatetimeColumn($row['ATTNAME'], $allownull, $default);
 					break;
 				default:
 					continue;
@@ -336,7 +326,7 @@ class synd_database_pgsql extends DatabaseConnection {
 			SELECT ".implode(', ', $undefined)." 
 			FROM $table
 			WHERE oid = ".pg_last_oid($this->_result);
-		return self::_unquote($this->getRow($sql));
+		return $this->getRow($sql);
 	}
 
 	function truncate($table) {
@@ -399,30 +389,25 @@ class synd_database_pgsql extends DatabaseConnection {
 	}
 
 	function quote($value) {
-		// NOTE: pg_escape_literal/pg_escape_string doesn't handle \0 bytes, rather they
-		// will just truncate the string on \0. To properly insert \0 the column also needs
-		// to use the bytea type. See https://www.postgresql.org/docs/9.0/static/datatype-binary.html
-		// Note that the pg_escape_bytea will use hex encoding which fails on normal columns,
-		// hence why we're using str_replace instead.
-		if (is_string($value))
-			return "E'".str_replace($SYND_PGSQL_ESCAPE, $SYND_PGSQL_REPLACE, $value)."'";
+		/* NOTE: pg_escape_literal/pg_escape_string doesn't handle \0 bytes, rather they
+		   will just truncate the string on \0. To properly insert \0 the column also needs
+		   to use the bytea type. See https://www.postgresql.org/docs/9.0/static/datatype-binary.html
+		   They also do an extra backslash escaping, so instead we just do a regular escape
+		   for ' the parent function.
+		*/
+		
 		if (is_bool($value))
 			return $value ? 'TRUE' : 'FALSE';
 		return parent::quote($value);
 	}
-	
-	/**
-	 * Reverts the effect of pg_escape_bytea
-	 */
-	static function _unquote($value) {
-		if (is_string($value))
-			return pg_unescape_bytea($value);
-                if (is_array($value)) {
-                        foreach ($value as $key => $val)
-                                $value[$key] = self::_unquote($val);
-                        return $value;
-                }
-		return $value;
+
+	function wrapBinary($value) {
+		global $SYND_PGSQL_BYTEA_ESCAPE;
+		return strtr($value, $SYND_PGSQL_BYTEA_ESCAPE);
+	}
+
+	function unwrapBinary($value) {
+		return pg_unescape_bytea($value);
 	}
 }
 
@@ -436,13 +421,13 @@ class synd_result_pgsql extends AbstractResultSet {
 
 	function fetchRow() {
 		if (is_array($row = pg_fetch_assoc($this->_result)))
-			return synd_database_pgsql::_unquote(array_change_key_case($row, CASE_UPPER));
+			return array_change_key_case($row, CASE_UPPER);
 		return $row;
 	}
 
 	function fetchInto(&$row) {
 		if (is_array($row = pg_fetch_assoc($this->_result)))
-			$row = synd_database_pgsql::_unquote(array_change_key_case($row, CASE_UPPER));
+			$row = array_change_key_case($row, CASE_UPPER);
 		return $row;
 	}
 }

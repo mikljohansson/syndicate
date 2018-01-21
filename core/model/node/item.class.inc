@@ -15,7 +15,7 @@ class synd_node_item extends synd_node_instance {
 
 	function __construct($storage, $database, $data) {
 		if (null != $data['DATA_FILES'])
-			$data['DATA_FILES'] = unserialize($data['DATA_FILES']);
+			$data['DATA_FILES'] = unserialize($database->unwrapBinary($data['DATA_FILES']));
 		parent::__construct($storage, $database, $data);
 
 		global $_synd_item_deferred;

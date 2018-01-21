@@ -6,9 +6,9 @@ require_once 'core/model/type/image.class.inc';
 class synd_node_file extends synd_node_node {
 	function __construct($storage, $database, $data) {
 		if (null != $data['DATA_FILE'])
-			$data['DATA_FILE'] = unserialize($data['DATA_FILE']);
+			$data['DATA_FILE'] = unserialize($database->unwrapBinary($data['DATA_FILE']));
 		if (null != $data['DATA_IMAGE'])
-			$data['DATA_IMAGE'] = unserialize($data['DATA_IMAGE']);
+			$data['DATA_IMAGE'] = unserialize($database->unwrapBinary($data['DATA_IMAGE']));
 		parent::__construct($storage, $database, $data);
 	}
 	
@@ -159,4 +159,4 @@ class synd_node_file extends synd_node_node {
 		$this->_save();
 	}
 }
-
+

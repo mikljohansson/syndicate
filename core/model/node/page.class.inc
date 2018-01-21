@@ -33,7 +33,7 @@ class synd_node_page extends synd_node_node {
 
 	function __construct($storage, $database, $data) {
 		if (null != $data['INFO_BODY'])
-			$data['INFO_BODY'] = unserialize($data['INFO_BODY']);
+			$data['INFO_BODY'] = unserialize($database->unwrapBinary($data['INFO_BODY']));
 		parent::__construct($storage, $database, $data);
 	}
 	
