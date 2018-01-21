@@ -263,13 +263,15 @@ class synd_database_pgsql extends DatabaseConnection {
 				case 'CHAR':
 				case 'VARCHAR':
 					if ($row['ATTTYPMOD'] != -1) {
-						$column = new DatabaseStringColumn($row['ATTNAME'], $allownull, $default, $row['ATTTYPMOD']-4);
+						$column = new DatabaseStringColumn($this, $row['ATTNAME'], $allownull, $default, $row['ATTTYPMOD']-4);
 						break;
 					}
 					// Fall through to TEXT column
 				case 'TEXT':
+					$column = new DatabaseLobColumn($this, $row['ATTNAME'], $allownull, $default, null, false);
+					break;
 				case 'BYTEA':
-					$column = new DatabaseLobColumn($row['ATTNAME'], $allownull, $default, null, false);
+					$column = new DatabaseLobColumn($this, $row['ATTNAME'], $allownull, $default, null, true);
 					break;
 				case 'INT2':
 				case 'SMALLINT':

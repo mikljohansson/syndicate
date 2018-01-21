@@ -383,25 +383,25 @@ class synd_database_mysql extends DatabaseConnection {
 			switch (strtoupper($matches[1])) {
 				case 'CHAR':
 				case 'VARCHAR':
-					$column = new DatabaseStringColumn($row['Field'], $null, $default, $matches[2], true);
+					$column = new DatabaseStringColumn($this, $row['Field'], $null, $default, $matches[2], true);
 					break;
 				case 'TINYTEXT':
-					$column = new DatabaseStringColumn($row['Field'], $null, $default, 255, true);
+					$column = new DatabaseStringColumn($this, $row['Field'], $null, $default, 255, true);
 					break;
 				case 'TINYBLOB':
-					$column = new DatabaseLobColumn($row['Field'], $null, $default, 255, true);
+					$column = new DatabaseLobColumn($this, $row['Field'], $null, $default, 255, true);
 					break;
 				case 'TEXT':
 				case 'BLOB':
-					$column = new DatabaseLobColumn($row['Field'], $null, $default, 65535, true);
+					$column = new DatabaseLobColumn($this, $row['Field'], $null, $default, 65535, true);
 					break;
 				case 'MEDIUMTEXT':
 				case 'MEDIUMBLOB':
-					$column = new DatabaseLobColumn($row['Field'], $null, $default, 16777215, true);
+					$column = new DatabaseLobColumn($this, $row['Field'], $null, $default, 16777215, true);
 					break;
 				case 'LONGTEXT':
 				case 'LONGBLOB':
-					$column = new DatabaseLobColumn($row['Field'], $null, $default, null, true);
+					$column = new DatabaseLobColumn($this, $row['Field'], $null, $default, null, true);
 					break;
 				case 'TINYINT':
 					$column = new DatabaseIntegerColumn($row['Field'], $null, $default, 8, $unsigned);

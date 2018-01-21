@@ -412,7 +412,7 @@ class synd_database_oci8 extends DatabaseConnection {
 				case 'VARCHAR':
 				case 'VARCHAR2':
 				case 'NVARCHAR2':
-					$column = new DatabaseStringColumn($row['COLUMN_NAME'], $null, $default, $row['DATA_LENGTH'], true);
+					$column = new DatabaseStringColumn($this, $row['COLUMN_NAME'], $null, $default, $row['DATA_LENGTH'], true);
 					break;
 				case 'BLOB':
 				case 'CLOB':
@@ -420,7 +420,7 @@ class synd_database_oci8 extends DatabaseConnection {
 				case 'BFILE':
 				case 'LONG':
 				case 'LONG RAW':
-					$column = new DatabaseLobColumn($row['COLUMN_NAME'], $null, $default, null, true);
+					$column = new DatabaseLobColumn($this, $row['COLUMN_NAME'], $null, $default, null, true);
 					break;
 				case 'FLOAT':
 				case 'NUMBER':

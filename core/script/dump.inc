@@ -143,7 +143,14 @@ if (empty($args['--no-data'])) {
 		if (!empty($args['--lower']))
 			$table = strtolower($table);
 
+		$sourcecols = $source->getTableStructure($table);
+		$targetcols = $target->getTableStructure($table);
+
 		while (null != ($row = $query->fetchRow())) {
+			// Unwrap/wrap any binary values
+			foreach (array_keys($row) as $colname)
+				$row[$colname] = $targetcols[$colname]->wrap($sourcecols[$colname]->unwrap($row[$colname]));
+
 			print empty($args['--replace-into']) ? 'INSERT' : 'REPLACE';
 			print " INTO $table (".implode(',',array_keys($row)).") VALUES (";
 			print implode(',', $target->quote($row));

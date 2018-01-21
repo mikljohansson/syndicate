@@ -128,16 +128,32 @@ abstract class DatabaseColumn {
 	function isRequired() {
 		return !$this->_null && null == $this->_default;
 	}
+
+	/**
+         * Allows binary values to be double encoded if needed (PostgreSQL BYTEA columns)
+         */
+	function wrap($value) {
+		return $value;
+	}
+
+	/**
+         * Allows binary values to be double encoded if needed (PostgreSQL BYTEA columns)
+         */
+	function unwrap($value) {
+		return $value;
+	}
 	
 	abstract function validate($value);
 }
 
 class DatabaseStringColumn extends DatabaseColumn {
+	var $_db = null;
 	var $_width = null;
 	var $_binary = false;
 	
-	function __construct($name, $null = true, $default = null, $width = 255, $binary = false) {
+	function __construct($db, $name, $null = true, $default = null, $width = 255, $binary = false) {
 		parent::__construct($name, $null, $default);
+		$this->_db = $db;
 		$this->_width = (int)$width;
 		$this->_binary = $binary;
 	}
@@ -155,6 +171,14 @@ class DatabaseStringColumn extends DatabaseColumn {
 	function getWidth() {
 		return $this->_width;
 	}
+
+        function wrap($value) {
+                return $this>_binary ? $this->_db->wrapBinary($value) : parent::unwrap($value);
+        }
+
+        function unwrap($value) {
+                return $this>_binary ? $this->_db->unwrapBinary($value) : parent::unwrap($value);
+        }
 }
 
 class DatabaseLobColumn extends DatabaseStringColumn {}
