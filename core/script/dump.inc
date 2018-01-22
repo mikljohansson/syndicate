@@ -143,8 +143,8 @@ if (empty($args['--no-data'])) {
 		if (!empty($args['--lower']))
 			$table = strtolower($table);
 
-		$sourcecols = $source->getTableStructure($table);
-		$targetcols = $target->getTableStructure($table);
+		$sourcecols = $source->getTableStructure($table)->getColumns();
+		$targetcols = $target->getTableStructure($table)->getColumns();
 
 		while (null != ($row = $query->fetchRow())) {
 			// Unwrap/wrap any binary values
