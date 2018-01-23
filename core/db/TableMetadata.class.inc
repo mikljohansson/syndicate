@@ -173,11 +173,11 @@ class DatabaseStringColumn extends DatabaseColumn {
 	}
 
         function wrap($value) {
-                return $this>_binary ? $this->_db->wrapBinary($value) : parent::unwrap($value);
+                return $this->_binary ? $this->_db->wrapBinary($value) : parent::unwrap($value);
         }
 
         function unwrap($value) {
-                return $this>_binary ? $this->_db->unwrapBinary($value) : parent::unwrap($value);
+                return $this->_binary ? $this->_db->unwrapBinary($value) : parent::unwrap($value);
         }
 }
 
