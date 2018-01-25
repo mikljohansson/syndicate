@@ -6,7 +6,11 @@ class synd_node_user_case extends synd_node_case implements User {
 	var $_email = null;
 
 	function __toString() {
-		return $this->toString().' ('.$this->getContact().')';
+		$result = $this->toString();
+		$contact = $this->getContact();
+		if ($contact)
+			$result .= ' ('.$this->getContact().')';
+		return $result;
 	}
 
 	function getLogin() {

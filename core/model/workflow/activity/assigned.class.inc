@@ -18,8 +18,8 @@ class synd_workflow_assigned extends synd_workflow_instance {
 	
 	function getOptions() {
 		return array_merge(
-			array('user_null.null' => SyndLib::translate('Unassigned')), 
-			array('user_case.current' => SyndLib::translate('Logged in user')), 
+			array('user_null.null' => SyndLib::getInstance('node.user_case.'.SyndLib::translate('Unassigned'))), 
+			array('user_case.current' => SyndLib::getInstance('node.user_case.'.SyndLib::translate('Logged in user'))), 
 			SyndLib::sort(Module::getInstance('issue')->getAssignedOptions()));
 	}
 	
