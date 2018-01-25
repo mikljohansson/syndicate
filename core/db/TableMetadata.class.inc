@@ -90,7 +90,7 @@ class TableMetadata {
 		
 		foreach (array_keys($this->_columns) as $key) {
 			$name = $this->_columns[$key]->getName();
-			if (isset($data[$name]) && null !== $data[$name] && false !== $data[$name] && '' !== $data[$name]) {
+			if (isset($data[$name])) {
 				if (null !== ($error = $this->_columns[$key]->validate($data[$name])))
 					$errors[$name] = $error;
 			}
@@ -143,7 +143,11 @@ abstract class DatabaseColumn {
 		return $value;
 	}
 	
-	abstract function validate($value);
+	function validate($value) {
+		if ($value === null && !$this->_null)
+			return SyndLib::translate("Field '%s' may not be null");
+		return null;
+	}	
 }
 
 class DatabaseStringColumn extends DatabaseColumn {
@@ -165,7 +169,7 @@ class DatabaseStringColumn extends DatabaseColumn {
 			return SyndLib::translate("Value in field '%s' exceeds the maximum length of %s characters", $this->toString(), $this->_width);
 		if (!$this->_binary && false !== strpos($value, "\0"))
 			return SyndLib::translate("Field '%s' may not contain binary data", $this->toString());
-		return null;
+		return parent::validate($value);
 	}
 	
 	function getWidth() {
@@ -213,6 +217,8 @@ class DatabaseIntegerColumn extends DatabaseColumn {
 			if ($value < $min || $value > $max)
 				return SyndLib::translate("Value in field '%s' out of bounds (%d..%d)", $this->toString(), $min, $max);
 		}
+
+		return parent::validate($value);
 	}
 }
 
@@ -240,6 +246,8 @@ class DatabaseNumberColumn extends DatabaseColumn {
 			return SyndLib::translate("Value '%s' out of bounds (max %d digits)", $this->toString(), $this->_precision);
 		if (null !== $this->_scale && false !== ($i = strpos($value,'.')) && strlen($value)-$i > $this->_scale)
 			return SyndLib::translate("Value '%s' out of bounds (max %d decimals)", $this->toString(), $this->_scale);
+	
+		return parent::validate($value);
 	}
 }
 
@@ -258,6 +266,8 @@ class DatabaseFloatColumn extends DatabaseColumn {
 		$negative = '-' == substr($value, 0, 1);
 		if ($this->_unsigned && $negative)
 			return SyndLib::translate("Value in field '%s' must be positive", $this->toString());
+		
+		return parent::validate($value);
 	}
 }
 
@@ -273,6 +283,8 @@ class DatabaseDatetimeColumn extends DatabaseColumn {
 		$format = '/'.preg_replace('/(yy|mm|dd|hh|ss)/i', '\\d{2}', $this->_format).'/';
 		if (!preg_match($format, $value, $matches)) 
 			return SyndLib::translate("Invalid date format (%s) in field '%s'", $this->_format, $this->toString());
+	
+		return parent::validate($value);
 	}
 }
 

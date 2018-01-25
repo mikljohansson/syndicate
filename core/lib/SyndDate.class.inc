@@ -148,7 +148,7 @@ class SyndDate {
 	static function evalDuration($duration) {
 		if (preg_match('/^(\d+[*+\-])+\d+$/', $duration))
 			return eval("return $duration;");
-		return $duration;
+		return strlen($duration) ? $duration : null;
 	}
 	
 	static function durationExpr($duration) {
@@ -163,4 +163,4 @@ class SyndDate {
 		return $result;
 	}
 }
-
+
