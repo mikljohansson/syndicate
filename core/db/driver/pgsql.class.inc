@@ -324,11 +324,26 @@ class synd_database_pgsql extends DatabaseConnection {
 			!count($undefined = array_diff($this->getTableStructure($table)->getColumnNames(), array_keys($data))))
 			return $result;
 
-		$sql = "
-			SELECT ".implode(', ', $undefined)." 
-			FROM $table
-			WHERE oid = ".pg_last_oid($this->_result);
-		return $this->getRow($sql);
+		// Read back using primary key
+		$pk = $this->getTableStructure($table)->getPrimaryKeyNames();
+		$pkvals = SyndLib::array_kintersect($data, array_flip($pk));
+
+		if (!empty($pk) && count($pk) == count($pkvals)) {
+			$sql = "
+				SELECT ".implode(', ', $undefined)."
+				FROM $table
+				WHERE ".$this->_where($pkvals);
+			return $this->getRow($sql);
+		}
+
+		// Try and read back using OID
+		if (($oid = pg_last_oid($this->_result))) {
+			$sql = "
+				SELECT ".implode(', ', $undefined)." 
+				FROM $table
+				WHERE oid = ".$this->quote($oid);
+			return $this->getRow($sql);
+		}
 	}
 
 	function truncate($table) {

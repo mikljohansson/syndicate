@@ -53,6 +53,19 @@ class TableMetadata {
 	}
 
 	/**
+	 * Returns the names of the primary key columns
+	 * @return	array
+	 */
+	function getPrimaryKeyNames() {
+		$result = array();
+		foreach (array_keys($this->_columns) as $key) {
+			if ($this->_columns[$key]->isRequired())
+				$result[] = $key;
+		}
+		return $result;
+	}
+
+	/**
 	 * Returns column default values
 	 * @return	array
 	 */
