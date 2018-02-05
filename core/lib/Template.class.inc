@@ -45,9 +45,9 @@ class Template {
 	 * @param	array	Local variables, used only for this template
 	 */
 	function display($_tpl, $_data = null) {
-    		if (null != $_data)
-    			extract($_data, EXTR_SKIP);
-	    	if (null != $this->_data)
+			if (null != $_data)
+				extract($_data, EXTR_SKIP);
+			if (null != $this->_data)
 			extract($this->_data, EXTR_SKIP);
 
 		if (file_exists($_tpl))
@@ -58,42 +58,42 @@ class Template {
 		}
 	
 		throw new InvalidArgumentException("Template '$_tpl' not found");
-	    }
+		}
 
-    /**
-     * Renders a template and returns the output
-     * @throws	InvalidArgumentException
-     * @param	string	Relative or absolute path to template
-     * @param	array	Local variables, used only for this call
-     * @return	string
-     */
-    function fetch($_tpl, $_data = null) {
+	/**
+	 * Renders a template and returns the output
+	 * @throws	InvalidArgumentException
+	 * @param	string	Relative or absolute path to template
+	 * @param	array	Local variables, used only for this call
+	 * @return	string
+	 */
+	function fetch($_tpl, $_data = null) {
 		ob_start();
 		$this->display($_tpl, $_data);
 		return ob_get_clean();
-    }
-    
+	}
+	
 	/**
-     * Renders a template once
-     * @throws	InvalidArgumentException
-     * @param	string	Relative or absolute path to template
-     * @param	array	Local variables, used only for this template
+	 * Renders a template once
+	 * @throws	InvalidArgumentException
+	 * @param	string	Relative or absolute path to template
+	 * @param	array	Local variables, used only for this template
 	 */
-    function displayonce($_tpl, $_data = null) {
+	function displayonce($_tpl, $_data = null) {
 		if (!in_array($_tpl, (array)$this->_included)) {
 			$this->_included[] = $_tpl;
 			$this->display($_tpl, $_data);
 		}
-	}    
+	}	
 
-    /**
-     * Resolve an object template
-     * @throws	InvalidArgumentException
-     * @param	object	The object to resolve template for
-     * @param	string	Relative path to template
-     * @param	bool	Throw exception on invalid template
-     * @return	bool
-     */
+	/**
+	 * Resolve an object template
+	 * @throws	InvalidArgumentException
+	 * @param	object	The object to resolve template for
+	 * @param	string	Relative path to template
+	 * @param	bool	Throw exception on invalid template
+	 * @return	bool
+	 */
 	function path($class, $template, $throw = true) {
 		do {
 			if (isset($this->_cache[$class][$template]))
@@ -108,99 +108,99 @@ class Template {
 		if ($throw)
 			throw new InvalidArgumentException("Template '$template' not found for class '".func_get_arg(0)."'. Check the template include path (".implode(':', (array)$this->_layouts).") in synd.inc");
 		return false;
-    }
-    
-    /**
-     * Renders an object
-     *
-     * <code>
-     *  class synd_node_generic {}
-     *  class synd_node_specific extends synd_node_generic {}
-     *  
-     *  $page = new Template(array('/var/www/templates/blueskin/', '/var/www/templates/default/'));
-     *  $page->render(new synd_node_specific(), 'title.tpl');
-     * </code>
-     *
-     * The example would attempt to find the template as
-     *
-     *  1) /var/www/templates/blueskin/model/node/specific/title.tpl
-     *  2) /var/www/templates/default/model/node/specific/title.tpl
-     *  3) /var/www/templates/blueskin/model/node/generic/title.tpl
-     *  4) /var/www/templates/default/model/node/generic/title.tpl
-     *
-     * @throws	InvalidArgumentException
-     * @param	object	The object to render, available as $node in the template
-     * @param	string	Relative path to template
-     * @param	array	Local variables, used only for this call
-     * @param	bool	Throw exception on invalid template
-     */
-    function render($node, $_tpl, $_data = null, $_throw = true) {
-        if (null !== $node && false != ($_file = $this->path(get_class($node), $_tpl, $_throw))) {
+	}
+	
+	/**
+	 * Renders an object
+	 *
+	 * <code>
+	 *  class synd_node_generic {}
+	 *  class synd_node_specific extends synd_node_generic {}
+	 *  
+	 *  $page = new Template(array('/var/www/templates/blueskin/', '/var/www/templates/default/'));
+	 *  $page->render(new synd_node_specific(), 'title.tpl');
+	 * </code>
+	 *
+	 * The example would attempt to find the template as
+	 *
+	 *  1) /var/www/templates/blueskin/model/node/specific/title.tpl
+	 *  2) /var/www/templates/default/model/node/specific/title.tpl
+	 *  3) /var/www/templates/blueskin/model/node/generic/title.tpl
+	 *  4) /var/www/templates/default/model/node/generic/title.tpl
+	 *
+	 * @throws	InvalidArgumentException
+	 * @param	object	The object to render, available as $node in the template
+	 * @param	string	Relative path to template
+	 * @param	array	Local variables, used only for this call
+	 * @param	bool	Throw exception on invalid template
+	 */
+	function render($node, $_tpl, $_data = null, $_throw = true) {
+		if (null !== $node && false != ($_file = $this->path(get_class($node), $_tpl, $_throw))) {
 		if (null != $this->_data)
 			extract($this->_data, EXTR_SKIP);
 		if (null != $_data)
 			extract($_data, EXTR_SKIP);
-        	include $_file;
-        }
-    }
+			include $_file;
+		}
+	}
 
-    /**
-     * Renders an object and returns the output
-     * @throws	InvalidArgumentException
-     * @param	object	The object to render, available as $node in the template
-     * @param	string	Relative path to template
-     * @param	array	Local variables, used only for this call
-     * @param	bool	Throw exception on invalid template
-     */
-    function fetchnode($node, $_tpl, $_data = null, $_throw = true) {
+	/**
+	 * Renders an object and returns the output
+	 * @throws	InvalidArgumentException
+	 * @param	object	The object to render, available as $node in the template
+	 * @param	string	Relative path to template
+	 * @param	array	Local variables, used only for this call
+	 * @param	bool	Throw exception on invalid template
+	 */
+	function fetchnode($node, $_tpl, $_data = null, $_throw = true) {
 		ob_start();
 		$this->render($node, $_tpl, $_data, $_throw);
 		return ob_get_clean();
-    }
+	}
 
-    /**
-     * Iterate over and render a list of objects
-     * @throws	InvalidArgumentException
-     * @param	Traversable		The objects to render, available as $node in the template
-     * @param	string			Relative path to template
-     * @param	array			Local variables, used only for this call
-     */
-    function iterate($_list, $_tpl, $_data = null) {
+	/**
+	 * Iterate over and render a list of objects
+	 * @throws	InvalidArgumentException
+	 * @param	Traversable		The objects to render, available as $node in the template
+	 * @param	string			Relative path to template
+	 * @param	array			Local variables, used only for this call
+	 */
+	function iterate($_list, $_tpl, $_data = null) {
 	if (null != $this->_data)
 		extract($this->_data, EXTR_SKIP);
 	if (null != $_data)
 		extract($_data, EXTR_SKIP);
-        foreach ($_list as $node)
+		foreach ($_list as $node)
 			include $this->path(get_class($node), $_tpl, true);
-    }
+	}
 
-    /**
-     * Render a list of objects and returns the output
-     * @throws	InvalidArgumentException
-     * @param	Traversable		The objects to render, available as $node in the template
-     * @param	string			Relative path to template
-     * @param	array			Local variables, used only for this call
-     */
-    function fetchiterator($_list, $_tpl, $_data = null) {
+	/**
+	 * Render a list of objects and returns the output
+	 * @throws	InvalidArgumentException
+	 * @param	Traversable		The objects to render, available as $node in the template
+	 * @param	string			Relative path to template
+	 * @param	array			Local variables, used only for this call
+	 */
+	function fetchiterator($_list, $_tpl, $_data = null) {
 		ob_start();
 		$this->iterate($_list, $_tpl, $_data);
 		return ob_get_clean();
-    }
+	}
 
-    /**
-     * Assign a value to the specified varible
-     * @param	string	Name of varible in template
-     * @param	mixed	Value to assign
-     */
-    function assign($key, $value) {
+	/**
+	 * Assign a value to the specified varible
+	 * @param	string	Name of varible in template
+	 * @param	mixed	Value to assign
+	 */
+	function assign($key, $value) {
    		$this->_data[$key] = $value;
-    }
+	}
 
 	/**
 	 * Appends the value to the end of an existing array or string.
 	 * @see		Template::assign()
 	 */
-    function append($key, $value) {
+	function append($key, $value) {
 		if (is_array($value)) {
 			if (!isset($this->_data[$key]))
 				$this->_data[$key] = array();
@@ -211,7 +211,7 @@ class Template {
 				$this->_data[$key] = null;
    			$this->_data[$key] .= $value;
    		}
-    }
+	}
 
 	/**
 	 * HTML escapes a value
@@ -255,7 +255,7 @@ class Template {
 	 *   <tr class="<?= $this->cycle() ?>">
 
 	 *  will produce
-     *
+	 *
 	 *   <tr class="even">
 	 *   <tr class="odd">
 	 *   <tr class="even">
