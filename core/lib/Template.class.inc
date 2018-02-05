@@ -35,19 +35,19 @@ class Template {
 	}
 
 	/**
-     * Renders and prints the output from a template
-     *
-     * Extracts the assigned data and any supplied temporary data
-     * into the current symbolspace and includes the specified file. 
+	 * Renders and prints the output from a template
 	 *
-     * @throws	InvalidArgumentException
-     * @param	string	Relative or absolute path to template
-     * @param	array	Local variables, used only for this template
+	 * Extracts the assigned data and any supplied temporary data
+	 * into the current symbolspace and includes the specified file. 
+	 *
+	 * @throws	InvalidArgumentException
+	 * @param	string	Relative or absolute path to template
+	 * @param	array	Local variables, used only for this template
 	 */
-    function display($_tpl, $_data = null) {
-    	if (null != $_data)
-    		extract($_data, EXTR_SKIP);
-    	if (null != $this->_data)
+	function display($_tpl, $_data = null) {
+    		if (null != $_data)
+    			extract($_data, EXTR_SKIP);
+	    	if (null != $this->_data)
 			extract($this->_data, EXTR_SKIP);
 
 		if (file_exists($_tpl))
@@ -56,9 +56,9 @@ class Template {
 			if (file_exists($_layout.$_tpl))
 				return include($_layout.$_tpl);
 		}
-		
+	
 		throw new InvalidArgumentException("Template '$_tpl' not found");
-    }
+	    }
 
     /**
      * Renders a template and returns the output
@@ -136,10 +136,10 @@ class Template {
      */
     function render($node, $_tpl, $_data = null, $_throw = true) {
         if (null !== $node && false != ($_file = $this->path(get_class($node), $_tpl, $_throw))) {
-			if (null != $this->_data)
-				extract($this->_data);
-			if (null != $_data)
-				extract($_data);
+		if (null != $this->_data)
+			extract($this->_data, EXTR_SKIP);
+		if (null != $_data)
+			extract($_data, EXTR_SKIP);
         	include $_file;
         }
     }
@@ -166,10 +166,10 @@ class Template {
      * @param	array			Local variables, used only for this call
      */
     function iterate($_list, $_tpl, $_data = null) {
-		if (null != $this->_data)
-			extract($this->_data);
-		if (null != $_data)
-			extract($_data);
+	if (null != $this->_data)
+		extract($this->_data, EXTR_SKIP);
+	if (null != $_data)
+		extract($_data, EXTR_SKIP);
         foreach ($_list as $node)
 			include $this->path(get_class($node), $_tpl, true);
     }
