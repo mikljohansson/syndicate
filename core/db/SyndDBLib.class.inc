@@ -116,7 +116,7 @@ class SyndDBLib {
 				$j=0;
 				foreach ($cols as $col) {
 					$orSql .= ($j?($not?' AND ':' OR '):'');
-					$orSql .= $lowerCase ? "LOWER($col)" : $col;
+					$orSql .= $lowerCase ? "LOWER(CAST($col AS VARCHAR))" : $col;
 					$orSql .= " $not LIKE ".SyndDBLib::quote("%$term%");
 					$j++;
 				}
@@ -137,7 +137,7 @@ class SyndDBLib {
 				$j=0;
 				foreach ($cols as $col) {
 					$andSql .= ($j?($not?' AND ':' OR '):'');
-					$andSql .= $lowerCase ? "LOWER($col)" : $col;
+					$andSql .= $lowerCase ? "LOWER(CAST($col AS VARCHAR))" : $col;
 					$andSql .= " $not LIKE ".SyndDBLib::quote("%$term%");
 					$j++;
 				}
@@ -243,4 +243,4 @@ class SyndDBLib {
 		return implode(',', SyndLib::quote($vals));
 	}
 }
-
+
