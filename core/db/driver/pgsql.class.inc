@@ -393,13 +393,17 @@ class synd_database_pgsql extends DatabaseConnection {
 		return implode('||', $vals);
 	}
 
-        function unixtodate($expr) {
-                return "TO_TIMESTAMP($expr)";
-        }
+	function unixtodate($expr) {
+		return "TO_TIMESTAMP($expr)";
+	}
 
-        function date($expr) {
-                return "TO_CHAR($expr, 'YYYY-MM-DD')";
-        }
+	function date($expr) {
+		return "TO_CHAR($expr, 'YYYY-MM-DD')";
+	}
+
+	function bitand($a, $b) {
+		return "${a}::int & ${b}::int";
+	}
 
 	function rand() {
 		return 'RANDOM()';
