@@ -52,7 +52,8 @@ class synd_type_indexer_task extends synd_type_task {
 		// Increase time limit to have time to index everything
 		set_time_limit(60*5);
 
-		// Reset the success count in case of a previous failure on this same batch
+		// Retrieves the number of times this exact task instance has already failed, and
+		// reset the success count in case of a previous failure on this batch.
 		$failures = $handler->getFailureCount();
 		if ($failures > 0)
 			$this->_prevSuccess = 0;
@@ -62,7 +63,7 @@ class synd_type_indexer_task extends synd_type_task {
 		print "Indexer: $failures previous failures on this batch, previous failure count is {$this->_prevFailures}, batch size is $limit\n";
 		
 		// Check if this single node causes crashes
-		if ($this->_limit > 1 && $limit == 1 && $this->_getLimit($failures + $this->_prevFailures - 1) == 1) {
+		if ($this->_limit > 1 && $limit == 1 && $failures > 0 && $this->_getLimit($failures + $this->_prevFailures - 1) == 1) {
 			print "Indexer: Skipping one item due to crashes on that single object\n";
 			$this->skip(1);
 			$this->_prevFailures = $failures + $this->_prevFailures - 1;
