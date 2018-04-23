@@ -181,7 +181,7 @@ class synd_module_log extends Module {
 			$order = array('TIMESTAMP', false);
 		
 		$sql = "
-			SELECT e.HASH, e.FILENAME, e.LINE, e.REQUEST_URI, e.CODE, e.STATUS, MAX(e.timestamp) TIMESTAMP
+			SELECT e.HASH, e.FILENAME, e.LINE, e.REQUEST_URI, e.CODE, e.STATUS, MAX(e.timestamp) AS TIMESTAMP
 			FROM synd_log e
 			GROUP BY e.hash, e.filename, e.line, e.request_uri, e.code, e.status
 			ORDER BY ".tpl_sort_sql($order);
