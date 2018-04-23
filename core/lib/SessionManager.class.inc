@@ -140,7 +140,7 @@ class DatabaseSessionManager extends SessionManager {
 				return '';
 			if ($row['REFRESHED'] < ($ts - (integer)($lt*0.2)))
 				$this->_refresh[] = $id;
-			return $row['CONTENT'];
+			return $this->_db->unwrapBinary($row['CONTENT']);
 		}
 		catch (DatabaseException $e) {
 			trigger_error($e->getMessage(), E_USER_WARNING);
@@ -155,7 +155,7 @@ class DatabaseSessionManager extends SessionManager {
 			$this->_db->replace('synd_session', array(
 				'SID' => $id,
 				'REFRESHED' => time(),
-				'CONTENT' => $content));
+				'CONTENT' => $this->_db->wrapBinary($content)));
 			return true;
 		}
 		catch (DatabaseException $e) {
