@@ -119,7 +119,7 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 			
 		if ('merge' == $perm && in_array($arg, array(
 			'PARENT_NODE_ID','INFO_PROJECT_ID','INFO_HEAD','INFO_DESC','INFO_EMAIL',
-			'INFO_DEFAULT_CLIENT','INFO_DEFAULT_RESOLVE','INFO_DEFAULT_REOPEN',
+			'INFO_DEFAULT_CLIENT','INFO_DEFAULT_RESOLVE','INFO_DEFAULT_REOPEN','INFO_CLEANUP_CUTOFF',
 			'INFO_COST_CENTER','INFO_PROJECT_NUMBER',
 			'FLAG_INHERIT_MEMBERS','FLAG_HIDE_ISSUES','FLAG_DISCARD_SPAM',
 			'FLAG_DISPLAY_SENDER','FLAG_ISSUE_SENDER','FLAG_RECEIPT',
@@ -493,7 +493,7 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 	function getMinimumReopenBy($ts) {
 		return strtotime($this->data['INFO_DEFAULT_REOPEN'], $ts);
 	}
-
+	
 	function getIndexDocument($index) {
 		return $index->createFragment($this->getProjectId().' '.$this->data['INFO_HEAD'].' '.$this->data['INFO_DESC']);
 	}
@@ -683,6 +683,15 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 			$errors['INFO_DEFAULT_RESOLVE'] = SyndLib::translate('Invalid resolve by offset');
 		if (isset($data['INFO_DEFAULT_REOPEN']) && !strtotime($data['INFO_DEFAULT_REOPEN']))
 			$errors['INFO_DEFAULT_REOPEN'] = SyndLib::translate('Invalid reopen offset');
+		if (isset($data['INFO_CLEANUP_CUTOFF'])) {
+			$cutoff = strtotime($data['INFO_CLEANUP_CUTOFF']);
+			$mincutoff = '-1 years';
+
+			if (!$cutoff)
+				$errors['INFO_CLEANUP_CUTOFF'] = SyndLib::translate('Invalid GDPR cleanup cutoff');
+			else if ($cutoff > strtotime($mincutoff))
+				$errors['INFO_CLEANUP_CUTOFF'] = SyndLib::translate("GDPR cleanup cutoff must be at least '$mincutoff'");
+		}
 
 		return $errors;
 	}
@@ -700,6 +709,7 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 			$data['FLAG_DISCARD_SPAM'] = (int)!empty($data['FLAG_DISCARD_SPAM']);
 			$data['FLAG_RECEIPT'] = (int)!empty($data['FLAG_RECEIPT']);
 			$data['FLAG_ARCHIVE'] = (int)!empty($data['FLAG_ARCHIVE']);
+			$data['INFO_CLEANUP_CUTOFF_SECONDS'] = time() - strtotime($data['INFO_CLEANUP_CUTOFF']);
 		}
 		
 		if (!empty($data['attributes'])) {

@@ -65,6 +65,12 @@
 	<div class="Info"><?= tpl_text('Issues closed for more than this time period are not reopened when email arrive, instead a new issue is created. Should be an expression such as "+14 days", "+4 hours" or "Friday +1 week". For more info see <a href="http://www.php.net/strtotime">http://www.php.net/strtotime</a>') ?></div>
 </div>
 
+<div class="OptionalField<? if(isset($errors['INFO_CLEANUP_CUTOFF'])) print ' InvalidField'; ?>">
+	<h3><?= tpl_text('GDPR cleanup timeframe') ?></h3>
+	<input type="text" name="data[INFO_CLEANUP_CUTOFF]" value="<?= tpl_value($data['INFO_CLEANUP_CUTOFF']) ?>" size="64" maxlength="255" />
+	<div class="Info"><?= tpl_text('Issues older than this cutoff will automatically have their personally identifable information removed. Should be an expression such as "-5 years" or "-18 months". For more info see <a href="http://www.php.net/strtotime">http://www.php.net/strtotime</a>') ?></div>
+</div>
+
 <?= SyndLib::runHook('project_edit', $node) ?>
 
 <div class="OptionalField">

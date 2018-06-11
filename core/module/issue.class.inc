@@ -378,6 +378,36 @@ class synd_module_issue extends synd_module_node {
 	function getProjectContextLimit() {
 		return isset($this->_config['project_context_limit']) ? $this->_config['project_context_limit'] : 25;
 	}
+
+	/**
+	 * GDPR cleanup
+	 */
+	function cleanup($issue) {
+	        $issue->data['CREATE_NODE_ID'] = null;
+        	$issue->data['UPDATE_NODE_ID'] = null;
+	        $issue->data['CLIENT_NODE_ID'] = null;
+        	$issue->data['ASSIGNED_NODE_ID'] = null;
+	        $issue->data['INFO_CUSTOMER_HINT'] = null;
+        	$issue->data['INFO_HEAD'] = 'This issue has been removed due to GDPR';
+	        $issue->data['DATA_CONTENT'] = null;
+        	$issue->data['DATA_EVENTLOG'] = null;
+
+	        foreach (array_keys($issue->getFiles()) as $fid)
+        	        $issue->unlink($fid);
+
+	        $issue->save();
+
+        	foreach ($issue->getNotes() as $note) {
+                	$note->data['CREATE_NODE_ID'] = null;
+	                $note->data['UPDATE_NODE_ID'] = null;
+        	        $note->data['DATA_CONTENT'] = null;
+
+                	foreach (array_keys($note->getFiles()) as $fid)
+                        	$note->unlink($fid);
+
+	                $note->save();
+        	}
+	}
 	
 	function _hook_defined_events(&$result, $node) {
 		if (($node[0] instanceof synd_node_project)) {
