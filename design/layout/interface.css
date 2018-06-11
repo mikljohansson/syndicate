@@ -67,6 +67,7 @@ form {
 	.PaneTab, .SelectedPaneTab {
 		position: relative;
 		top: 2px;
+		padding-top: 2px;
 	}
 }
 
