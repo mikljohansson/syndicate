@@ -98,7 +98,9 @@ class synd_type_node_indexer_task extends synd_type_indexer_task {
 	}
 	
 	function skip($i) {
-		$this->completed($this->_fetch($i));
+		$ids = $this->_fetch($i);
+		$this->completed($ids);
+		trigger_error("Indexer: Nodes ".implode(",", $ids)." are causing persistent indexer errors, skipping them", E_USER_WARNING);
 	}
 	
 	function _fetch($limit) {

@@ -14,7 +14,7 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 	 */
 	var $_prevSuccess = 0;
 	
-	function getBatchIds($limit) {
+	function _fetch($limit) {
 		global $synd_maindb;
 
 		// List of issues keyword names to clean up
@@ -42,7 +42,7 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 	}
 
 	function getBatch($limit) {
-		$ids = $this->getBatchIds($limit);
+		$ids = $this->_fetch($limit);
 		$nodes = SyndNodeLib::getInstances($ids);
 		return array($nodes, $ids);
 	}
@@ -50,12 +50,14 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 	function skip($i) {
 		global $synd_maindb;
 
-		$ids = $this->getBatchIds($i);
+		$ids = $this->_fetch($i);
 		$sql = "
 			UPDATE synd_issue i
 			SET i.ts_update = ".time()."
 			WHERE i.node_id IN (".implode(',',$synd_maindb->quote($ids)).")";
 		$synd_maindb->query($sql);
+
+		trigger_error("GDPR cleanup: Nodes ".implode(",", $ids)." are causing persistent errors, skipping them", E_USER_WARNING);
 	}
 	
 	function run($handler) {
