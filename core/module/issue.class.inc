@@ -407,6 +407,16 @@ class synd_module_issue extends synd_module_node {
 
 	                $note->save();
         	}
+
+		// Prevent sending any E-mails from this change
+		$issue->getMailNotifier()->clearActiveEvents();
+	}
+
+	function runCleanup() {
+		require_once 'core/lib/SyndTaskHandler.class.inc';
+		$handler = SyndTaskHandler::factory('gdpr_cleanup');
+		if (!$handler->isScheduled('gdpr_cleanup_task'))
+			$handler->appendTask(SyndType::factory("gdpr_cleanup_task"), "gdpr_cleanup_task");
 	}
 	
 	function _hook_defined_events(&$result, $node) {

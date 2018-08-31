@@ -183,6 +183,13 @@ class synd_type_mail_notifier extends SyndType {
 	}
 
 	/**
+	 * Clear the active events that have triggered in this session.
+	 */
+	function clearActiveEvents() {
+		$this->_active = null;
+	}
+
+	/**
 	 * Returns list of active events and listener ids
 	 * @return	array	array(event instance id => array(user instance id, ...))
 	 */
