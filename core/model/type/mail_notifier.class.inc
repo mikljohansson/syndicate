@@ -1,4 +1,6 @@
 <?php
+global $_synd_mail_notifier_disable;
+$_synd_mail_notifier_disable = false;
 
 /**
  * Issue mailnotification helper.
@@ -49,6 +51,14 @@ class synd_type_mail_notifier extends SyndType {
                         unset($vars[$key]);
                 return $vars;
         }
+
+	/**
+	 * Disable all sending of E-mails for this session
+	 */
+	static function disable() {
+		global $_synd_mail_notifier_disable;
+		$_synd_mail_notifier_disable = true;
+	}
 
 	/**
 	 * Add an email to an event.
@@ -183,13 +193,6 @@ class synd_type_mail_notifier extends SyndType {
 	}
 
 	/**
-	 * Clear the active events that have triggered in this session.
-	 */
-	function clearActiveEvents() {
-		$this->_active = null;
-	}
-
-	/**
 	 * Returns list of active events and listener ids
 	 * @return	array	array(event instance id => array(user instance id, ...))
 	 */
@@ -219,12 +222,14 @@ class synd_type_mail_notifier extends SyndType {
 	 * Sends any queued emails
 	 */
 	function send() {
-		global $synd_user;
+		global $synd_user, $_synd_mail_notifier_disable;
 		require_once 'core/lib/TemplateLib.inc';
 		require_once 'core/lib/Mime.class.inc';
 		
 		$seen = array();
-		foreach ($this->getActiveEvents() as $event) {
+		$active = !$_synd_mail_notifier_disable ? $this->getActiveEvents() : array();
+
+		foreach ($active as $event) {
 			$users = $this->getListeners($event->classId());
 			$receivers = array_diff(array_merge(SyndLib::invoke($users, 'getEmail'), (array)$this->_tempAddresses), $seen);
 			

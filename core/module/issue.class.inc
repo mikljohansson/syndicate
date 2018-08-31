@@ -407,9 +407,6 @@ class synd_module_issue extends synd_module_node {
 
 	                $note->save();
         	}
-
-		// Prevent sending any E-mails from this change
-		$issue->getMailNotifier()->clearActiveEvents();
 	}
 
 	function runCleanup() {

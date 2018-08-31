@@ -1,5 +1,6 @@
 <?php
 require_once 'core/model/type/task.class.inc';
+require_once 'core/model/type/mail_notifier.class.inc';
 
 class synd_type_gdpr_cleanup_task extends synd_type_task {
 	var $_limit = 750;
@@ -52,9 +53,9 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 
 		$ids = $this->_fetch($i);
 		$sql = "
-			UPDATE synd_issue i
-			SET i.ts_update = ".time()."
-			WHERE i.node_id IN (".implode(',',$synd_maindb->quote($ids)).")";
+			UPDATE synd_issue
+			SET ts_update = ".time()."
+			WHERE node_id IN (".implode(',',$synd_maindb->quote($ids)).")";
 		$synd_maindb->query($sql);
 
 		trigger_error("GDPR cleanup: Nodes ".implode(",", $ids)." are causing persistent errors, skipping them", E_USER_WARNING);
@@ -69,6 +70,9 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 		
 		// Increase time limit to have time to index everything
 		set_time_limit(60*5);
+
+		// Disable all E-mail sending
+		synd_type_mail_notifier::disable();
 
 		// Retrieves the number of times this exact task instance has already failed, and
 		// reset the success count in case of a previous failure on this batch.
