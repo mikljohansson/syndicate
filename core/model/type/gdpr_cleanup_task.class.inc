@@ -35,6 +35,7 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 		        WHERE
 		                i.node_id = ik.issue_node_id AND
 		                k.node_id = ik.keyword_node_id AND
+				i.ts_update < ik.ts_create + 300 AND
 		                ik.ts_create < ".strtotime('midnight')." AND
 		                k.info_head IN (".implode(',', $synd_maindb->quote($keywords)).")";
 
