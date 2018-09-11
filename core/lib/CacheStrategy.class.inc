@@ -1,5 +1,9 @@
 <?php
 
+function _synd_cache_jitter($ttl) {
+	return $ttl !== null ? rand((int)($ttl * 0.75), $ttl) : null;
+}
+
 /**
  * Caching strategy manager
  * @access		public
@@ -329,7 +333,7 @@ class ApcCacheStrategy extends AbstractCacheStrategy {
 	}
 
 	function set($key, $value, $ttl = null) {
-		return apc_store($key, $value, $ttl);
+		return apc_store($key, $value, _synd_cache_jitter($ttl));
 	}
 	
 	function delete($key) {
@@ -357,7 +361,7 @@ class XCacheStrategy extends AbstractCacheStrategy {
 	}
 
 	function set($key, $value, $ttl = null) {
-		return xcache_set($key, $value, $ttl);
+		return xcache_set($key, $value, _synd_cache_jitter($ttl));
 	}
 	
 	function delete($key) {
@@ -367,12 +371,12 @@ class XCacheStrategy extends AbstractCacheStrategy {
 	function add($key, $value, $ttl = null) {
 		if (xcache_isset($key))
 			return false;
-		return xcache_set($key, $value, $ttl);
+		return xcache_set($key, $value, _synd_cache_jitter($ttl));
 	}
 	
 	function replace($key, $value, $ttl = null) {
 		if (xcache_isset($key))
-			return xcache_set($key, $value, $ttl);
+			return xcache_set($key, $value, _synd_cache_jitter($ttl));
 		return false;
 	}
 
@@ -417,7 +421,7 @@ class FilesystemCacheStrategy extends AbstractCacheStrategy {
 	function set($key, $value, $ttl = null) {
 		if (SyndLib::createDirectory($this->_path) && 
 			false !== ($fp = fopen($this->_path.md5($key), 'w')) &&
-			false !== (fwrite($fp, null != $ttl ? dechex(time() + $ttl) : '00000000')) &&
+			false !== (fwrite($fp, null != $ttl ? dechex(time() + _synd_cache_jitter($ttl)) : '00000000')) &&
 			false !== fwrite($fp, serialize($value)))
 			return true;
 		return false;
