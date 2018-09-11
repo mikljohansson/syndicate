@@ -23,7 +23,7 @@ class synd_type_class_indexer_task extends synd_type_indexer_task {
 		$this->_order = $order;
 	}
 	
-	function getBatch($limit) {
+	function _fetch($limit) {
 		$storage = SyndNodeLib::getDefaultStorage($this->_clsid);
 		$storage->flush();
 
@@ -43,12 +43,19 @@ class synd_type_class_indexer_task extends synd_type_indexer_task {
 				$ids[] = $id;
 			$this->_offset++;
 		}
+
+		return $ids;
+	}
 		
+	function getBatch($limit) {
+		$ids = $this->_fetch($limit);
 		$nodes = $persistent->getInstances($ids);
 		return array($nodes, $ids);
 	}
 	
 	function skip($i) {
+		$ids = $this->_fetch($i);
+		trigger_error("Indexer: Nodes ".implode(",", $ids)." are causing persistent indexer errors, skipping them", E_USER_WARNING);
 		$this->_offset += $i;
 	}
 }

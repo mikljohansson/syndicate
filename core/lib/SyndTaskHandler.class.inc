@@ -323,7 +323,7 @@ class SyndTaskHandler extends SyndTask {
 	 * @access	private
 	 */
 	function lockHandler($id = 'handler', $mode = LOCK_EX) {
-		if (empty($this->_lockStack[$id]) && !flock($this->getLockHandle($id), $mode))
+		if (empty($this->_lockStack[$id]) && (($lockHandle = $this->getLockHandle($id)) === false || !flock($lockHandle, $mode)))
 			return false;
 		if (!isset($this->_lockStack[$id]))
 			$this->_lockStack[$id] = 0;

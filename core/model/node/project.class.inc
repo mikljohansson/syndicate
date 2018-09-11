@@ -119,7 +119,7 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 			
 		if ('merge' == $perm && in_array($arg, array(
 			'PARENT_NODE_ID','INFO_PROJECT_ID','INFO_HEAD','INFO_DESC','INFO_EMAIL',
-			'INFO_DEFAULT_CLIENT','INFO_DEFAULT_RESOLVE','INFO_DEFAULT_REOPEN',
+			'INFO_DEFAULT_CLIENT','INFO_DEFAULT_RESOLVE','INFO_DEFAULT_REOPEN','INFO_CLEANUP_CUTOFF',
 			'INFO_COST_CENTER','INFO_PROJECT_NUMBER',
 			'FLAG_INHERIT_MEMBERS','FLAG_HIDE_ISSUES','FLAG_DISCARD_SPAM',
 			'FLAG_DISPLAY_SENDER','FLAG_ISSUE_SENDER','FLAG_RECEIPT',
@@ -232,6 +232,10 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 			$this->data['FLAG_ISSUE_SENDER'] = (int)!empty($parent->data['FLAG_ISSUE_SENDER']);
 			$this->data['FLAG_DISCARD_SPAM'] = (int)!empty($parent->data['FLAG_DISCARD_SPAM']);
 		}
+
+		// Inherit GDPR cleanup timeframe unless overriden on this project
+		if (empty($this->data['INFO_CLEANUP_CUTOFF']))
+			$this->data['INFO_CLEANUP_CUTOFF_SECONDS'] = $parent->data['INFO_CLEANUP_CUTOFF_SECONDS'];
 		
 		$this->_save();
 	}
@@ -395,6 +399,37 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 		return substr(null != $this->data['INFO_PROJECT_ID'] ? 
 			$this->data['INFO_PROJECT_ID'] : $this->toString(),0,6);
 	}
+
+	/**
+	 * Returns the GDPR cleanup timeframe in effect for this project
+	 * @return	int
+	 */
+	function getCleanupTimeframe() {
+		if (!empty($this->data['INFO_CLEANUP_CUTOFF']))
+			return $this->data['INFO_CLEANUP_CUTOFF'];
+		if (!$this->getParent()->isNull())
+			return $this->getParent()->getCleanupTimeframe();
+		return '-5 years';
+	}
+
+	/**
+	 * Sets the GDPR cleanup timeframe for this project and its children
+	 */
+	function setCleanupTimeframe($timeframe, $ischild=false) {
+		if (!$ischild)
+			$this->data['INFO_CLEANUP_CUTOFF'] = $timeframe;
+		$this->data['INFO_CLEANUP_CUTOFF_SECONDS'] = time() - strtotime($this->getCleanupTimeframe());
+
+		// Recursively set for child projects that haven't got a timeframe specified
+		if (!empty($timeframe)) {
+			foreach ($this->getProjects() as $project) {
+				if (empty($project->data['INFO_CLEANUP_CUTOFF']))
+					$project->setCleanupTimeframe($timeframe, true);
+			}
+		}
+
+		$this->_save();
+	}
 	
 	/**
 	 * Returns the node ids for this entire project branch
@@ -493,7 +528,7 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 	function getMinimumReopenBy($ts) {
 		return strtotime($this->data['INFO_DEFAULT_REOPEN'], $ts);
 	}
-
+	
 	function getIndexDocument($index) {
 		return $index->createFragment($this->getProjectId().' '.$this->data['INFO_HEAD'].' '.$this->data['INFO_DESC']);
 	}
@@ -683,6 +718,15 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 			$errors['INFO_DEFAULT_RESOLVE'] = SyndLib::translate('Invalid resolve by offset');
 		if (isset($data['INFO_DEFAULT_REOPEN']) && !strtotime($data['INFO_DEFAULT_REOPEN']))
 			$errors['INFO_DEFAULT_REOPEN'] = SyndLib::translate('Invalid reopen offset');
+		if (!empty($data['INFO_CLEANUP_CUTOFF'])) {
+			$cutoff = strtotime($data['INFO_CLEANUP_CUTOFF']);
+			$mincutoff = '-1 years';
+
+			if (!$cutoff)
+				$errors['INFO_CLEANUP_CUTOFF'] = SyndLib::translate('Invalid GDPR cleanup cutoff');
+			else if ($cutoff > strtotime($mincutoff))
+				$errors['INFO_CLEANUP_CUTOFF'] = SyndLib::translate("GDPR cleanup cutoff must be at least '$mincutoff'");
+		}
 
 		return $errors;
 	}
@@ -700,6 +744,8 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 			$data['FLAG_DISCARD_SPAM'] = (int)!empty($data['FLAG_DISCARD_SPAM']);
 			$data['FLAG_RECEIPT'] = (int)!empty($data['FLAG_RECEIPT']);
 			$data['FLAG_ARCHIVE'] = (int)!empty($data['FLAG_ARCHIVE']);
+
+			$this->setCleanupTimeframe($data['INFO_CLEANUP_CUTOFF']);
 		}
 		
 		if (!empty($data['attributes'])) {
