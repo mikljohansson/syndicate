@@ -16,28 +16,32 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 	var $_prevSuccess = 0;
 	
 	function _fetch($limit) {
-		global $synd_maindb;
+		global $synd_maindb, $synd_config;
 
 		// List of issues keyword names to clean up
-		$keywords = array('GDPR-gallring');
+		$keywords = (array)$synd_config['issue']['gdpr_cleanup_keywords'];
 
 		$sql = "
 		        SELECT i.node_id
 		        FROM synd_issue i, synd_project p
 		        WHERE
 		                i.parent_node_id = p.node_id AND
-		                i.ts_update < (".strtotime('midnight')." - p.info_cleanup_cutoff_seconds)
+				i.update_node_id IS NOT NULL AND
+		                i.ts_update < (".strtotime('midnight')." - p.info_cleanup_cutoff_seconds)";
 
+		if (!empty($keywords)) {
+			$sql .= "
 		        UNION ALL
 
 		        SELECT i.node_id
 		        FROM synd_issue i, synd_issue_keyword ik, synd_keyword k
 		        WHERE
 		                i.node_id = ik.issue_node_id AND
+				i.update_node_id IS NOT NULL AND
 		                k.node_id = ik.keyword_node_id AND
-				i.ts_update < ik.ts_create + 300 AND
 		                ik.ts_create < ".strtotime('midnight')." AND
 		                k.info_head IN (".implode(',', $synd_maindb->quote($keywords)).")";
+		}
 
 		$ids = $synd_maindb->getCol($sql, 0, 0, $limit);
 		return $ids;
@@ -50,7 +54,10 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 	}
 	
 	function skip($i) {
-		global $synd_maindb;
+		global $synd_maindb, $synd_config;
+
+		// List of issues keyword names to clean up
+		$keywords = (array)$synd_config['issue']['gdpr_cleanup_keywords'];
 
 		$ids = $this->_fetch($i);
 		$sql = "
@@ -58,6 +65,17 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 			SET ts_update = ".time()."
 			WHERE node_id IN (".implode(',',$synd_maindb->quote($ids)).")";
 		$synd_maindb->query($sql);
+
+		if (!empty($keywords)) {
+			$sql = "
+				DELETE FROM synd_issue_keyword
+				WHERE
+                        	        issue_node_id IN (".implode(',',$synd_maindb->quote($ids)).") AND
+					keyword_node_id IN (
+						SELECT k.node_id from synd_keyword k
+						WHERE k.info_head IN (".implode(',', $synd_maindb->quote($keywords))."))";
+			$synd_maindb->query($sql);
+		}
 
 		trigger_error("GDPR cleanup: Nodes ".implode(",", $ids)." are causing persistent errors, skipping them", E_USER_WARNING);
 	}

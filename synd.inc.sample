@@ -209,6 +209,7 @@ $synd_config = array(
 			),
 		'project_context_levels'		=> 3,				// Number of project levels per contextmenu, sublevels are opened in submenues
 		'project_context_limit'			=> 25,				// Max number of items per contextmenu before number of levels is decreased
+		'gdpr_cleanup_keywords'			=> array('GDPR-cleanup'),
 		),
 	'inventory' => array(
 		'plugins' => array(
