@@ -20,7 +20,7 @@ class synd_storage_cache extends ForwardingStorage {
 	/**
 	 * @access	protected
 	 */
-	var $_ttl = 93600;
+	var $_ttl = 28800;
 
 	/**
 	 * @access	private
