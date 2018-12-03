@@ -62,12 +62,12 @@ form {
 	font-weight: bold;
 }
 
-/* Applies to Chrome only which has off-by-2px box model in this case */
+/* Applies to Chrome only which has off-by-1px box model in this case */
 @media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) { 
 	.PaneTab, .SelectedPaneTab {
 		position: relative;
-		top: 2px;
-		padding-top: 2px;
+		top: 1px;
+		padding-top: 1px;
 	}
 }
 
