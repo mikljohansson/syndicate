@@ -3,12 +3,6 @@ require_once 'core/model/node/case.class.inc';
 
 class synd_node_null extends synd_node_case {
 	function isNull()		{return true;}
-
-	function __construct($id, $defer)	{
-		parent::__construct($id, $defer);
-		$this->nodeId = null;
-	}
-	
 	function __sleep() 		{return array();}
 
 	function objectId()		{return null;}
