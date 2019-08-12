@@ -106,7 +106,7 @@ class synd_plugin_crypto extends Plugin implements CryptoProtocolFactory {
 		}
 
 		$pane->append('tabs', array(
-			'uri' => tpl_view('issue','project',$node->getProjectId(),'admin','crypto'),
+			'uri' => tpl_view('issue','project',$node->nodeId,'admin','crypto'),
 			'text' => SyndLib::translate('Crypto'),
 			'template' => $tab,
 			'selected' => $selected));
@@ -114,7 +114,7 @@ class synd_plugin_crypto extends Plugin implements CryptoProtocolFactory {
 	
 	function _callback_breadcrumbs(&$result, Template $page) {
 		$result[] = array(
-			'uri' => tpl_link('issue','project',$this->_project->getProjectId(),'admin','crypto'),
+			'uri' => tpl_link('issue','project',$this->_project->nodeId,'admin','crypto'),
 			'text' => SyndLib::translate('Crypto'));
 	}
 

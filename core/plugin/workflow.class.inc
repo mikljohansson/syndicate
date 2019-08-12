@@ -66,7 +66,7 @@ class synd_plugin_workflow extends Plugin {
 		}
 		
 		$pane->append('tabs', array(
-			'uri' => tpl_view('issue','project',$node->getProjectId(),'admin','workflows'),
+			'uri' => tpl_view('issue','project',$node->nodeId,'admin','workflows'),
 			'text' => SyndLib::translate('Workflows'),
 			'template' => $tab,
 			'selected' => $selected));

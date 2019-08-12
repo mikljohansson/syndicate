@@ -37,7 +37,7 @@ if ($node->isPermitted('write')) {
 
 if ($node->isPermitted('admin')) {
 	$pane->append('tabs', array(
-		'uri' => tpl_view('issue','project',$node->getProjectId(),'admin'),
+		'uri' => tpl_view('issue','project',$node->nodeId,'admin'),
 		'text' => tpl_text('Administer'),
 		'template' => array($node,'pane_view_admin.tpl'),
 		'selected' => 'admin' == $request[0]));
