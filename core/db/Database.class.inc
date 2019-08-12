@@ -531,7 +531,9 @@ abstract class DatabaseConnection implements Database {
 			if (array_key_exists($column, $data)) {
 				if ($i++) $sql .= ', ';
 				$sql .= $column.' = ';
-				$sql .= $this->quote($data[$column]);
+
+				// MySQL and Oracle treats empty string as null, PostgreSQL doesn't
+				$sql .= $this->quote($data[$column] !== '' ? $data[$column] : null);
 			}
 		}
 		
@@ -556,7 +558,9 @@ abstract class DatabaseConnection implements Database {
 		$i = 0;
 		foreach ($columns as $column) {
 			if ($i++) $sql .= ', ';
-			$sql .= $this->quote($data[$column]);
+
+			// MySQL and Oracle treats empty string as null, PostgreSQL doesn't
+			$sql .= $this->quote($data[$column] !== '' ? $data[$column] : null);
 		}
 
 		$sql .= ')';
@@ -576,7 +580,13 @@ abstract class DatabaseConnection implements Database {
 
 		$this->begin();
 		foreach ($rows as $row) {
-			$sql2 = $sql.'('.implode(', ',$row).')';
+			$sql2 = $sql.'(';
+			$i = 0;
+			foreach ($row as $value) {
+				if ($i++) $sql2 .= ',';
+				$sql2 .= $this->quote($value !== '' ? $value : null);
+			}
+			$sql2 .= ')';
 			
 			if (SyndLib::isError($result = $this->query($sql2))) {
 				$this->rollback();
