@@ -192,7 +192,8 @@ class synd_database_pgsql extends DatabaseConnection {
 
 			$sql = "
 				SELECT i.indkey FROM pg_index i
-				WHERE i.indrelid = '$table'::regclass AND i.indisunique";
+				WHERE i.indrelid = '$table'::regclass AND i.indisunique
+				ORDER BY i.indkey";
 			foreach ($this->getCol($sql) as $indexes) {
 				$numbers = array_flip(explode(' ', $indexes));
 				if (count($numbers) == count($key = SyndLib::array_kintersect($columns, $numbers)))
