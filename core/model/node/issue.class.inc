@@ -814,8 +814,8 @@ class synd_node_issue extends AbstractDatabaseEntity {
 	 */
 	function getPublishedNotes() {
 		$notes = clone $this->getNotes();
-		if ($this->_task != null)
-			$notes->removeTemporary($this->_storage->getInstance($this->_task));
+		if (($task = $this->_storage->getInstance($this->_task)) !== null)
+			$notes->removeTemporary($task);
 		if (!$this->isPermitted('admin')) {
 			$notes->flush();
 			$notes->getDatabaseQuery()->where('flag_protected', 0);
