@@ -380,7 +380,7 @@ class DatabaseEntityQuery implements EntityQuery {
 		$this->_query->column($expression, $alias, $operator);
 	}
 
-	function where($column, $value = null) {
+	function where($column, $value = SYND_SQL_MISSING_PARAM) {
 		$this->_query->where($column, $value);
 	}
 
@@ -472,7 +472,7 @@ class FixedEntityQuery implements EntityQuery {
 		$this->_query->column($expression, $alias, $operator);
 	}
 
-	function where($column, $value = null) {
+	function where($column, $value = SYND_SQL_MISSING_PARAM) {
 		$this->_query->where($column, $value);
 	}
 

@@ -16,6 +16,11 @@ define('SYND_SQL_CALC_FOUND_ROWS', 1);
 define('SYND_SQL_HIGH_PRIORITY', 2);
 
 /**
+ * Marker for missing value
+ */
+define('SYND_SQL_MISSING_PARAM', 'VRnjKeFUK/vkmVtZqgzz7spJXDVuAbDsU15C15AjKw5z');
+
+/**
  * Database connection registry
  */
 abstract class DatabaseManager {
@@ -834,7 +839,7 @@ interface DatabaseQuery extends IteratorAggregate, Countable {
 	 * @param	string	Column to restrict
 	 * @param	mixed	Value to restrict to
 	 */
-	function where($column, $value = null);
+	function where($column, $value = SYND_SQL_MISSING_PARAM);
 	
 	/**
 	 * Sort the query

@@ -78,9 +78,12 @@ class synd_node_role extends AbstractDatabaseEntity implements Role {
 		
 		$members = array();
 		$relations = $this->getRelations();
-		foreach (array_keys($relations) as $key) 
-			$members[] = $relations[$key]->getChild();
-			
+		foreach (array_keys($relations) as $key) {
+			$member = $relations[$key]->getChild();
+			if (!$member->isNull())
+				$members[] = $member;
+		}
+
 		$this->_members = SyndLib::collect($members, 'nodeId');
 		$this->_node_onchange_internal();
 		
@@ -140,4 +143,4 @@ class synd_node_role extends AbstractDatabaseEntity implements Role {
 		$this->removeChild(SyndNodeLib::getInstance($request[2]));
 	}
 }
-
+

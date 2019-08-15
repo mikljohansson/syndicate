@@ -249,9 +249,16 @@ class synd_query_sql implements DatabaseQuery {
 		return $this->_tables;
 	}
 	
-	function where($column, $value = null) {
-		if (null != $column)
-			$this->_where[] = null !== $value ? "$column = ".$this->_db->quote($value) : $column;
+	function where($column, $value = SYND_SQL_MISSING_PARAM) {
+		if (null != $column) {
+			// column is a complete predicate
+			if ($value == SYND_SQL_MISSING_PARAM)
+				$this->_where[] = $column;		
+			else if ($value !== null)
+				$this->_where[] = "$column = ".$this->_db->quote($value);
+			else
+				$this->_where[] = "$column IS NULL";
+		}
 	}
 	
 	/**
