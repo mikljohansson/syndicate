@@ -252,7 +252,7 @@ class synd_query_sql implements DatabaseQuery {
 	function where($column, $value = SYND_SQL_MISSING_PARAM) {
 		if (null != $column) {
 			// column is a complete predicate
-			if ($value == SYND_SQL_MISSING_PARAM)
+			if ($value === SYND_SQL_MISSING_PARAM)
 				$this->_where[] = $column;		
 			else if ($value !== null)
 				$this->_where[] = "$column = ".$this->_db->quote($value);
