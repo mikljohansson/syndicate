@@ -123,8 +123,8 @@ class synd_module_search extends Module implements SearchBackend {
 
 				$database = $this->getIndexDatabase();
 				$this->_queue[] = array(
-					'NAMESPACE'	=> $database->quote($this->_config['namespace']),
-					'NODE_ID'	=> $database->quote($subject->nodeId));
+					'NAMESPACE'	=> $this->_config['namespace'],
+					'NODE_ID'	=> $subject->nodeId);
 			}
 		}
 	}
