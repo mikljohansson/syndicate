@@ -132,8 +132,8 @@ abstract class DatabaseIndex extends AbstractIndex {
 		// Add document to buffer
 		$this->_documents[$docid] = array(
 			'docid'   => $docid,
-			'pageid'  => $this->_db->quote($pageid),
-			'section' => $this->_db->quote($this->_context['section'].'.'),
+			'pageid'  => $pageid,
+			'section' => $this->_context['section'].'.',
 			'modified'=> $document->getModified() ? $document->getModified() : time(),
 			'length'  => 0,
 			'rank'    => 1,
@@ -144,7 +144,7 @@ abstract class DatabaseIndex extends AbstractIndex {
 			foreach ($attributes as $attribute) {
 				$this->_attributes[$docid.'.'.$attribute] = array(
 					'docid'		=> $docid,
-					'attribute'	=> $this->_db->quote($attribute.'.'));
+					'attribute'	=> $attribute.'.');
 			}
 		}
 

@@ -39,7 +39,7 @@ class synd_index_text extends DatabaseIndex {
 		if (null != ($text = $document->toString())) {
 			$this->_dataBuffer[] = array(
 				'docid' => $this->documentId($pageId),
-				'text' 	=> $this->_db->quote($text));
+				'text' 	=> $text);
 		}
 		parent::addDocument($pageId, $document, $section, $attributes);
 	}

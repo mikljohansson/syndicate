@@ -213,7 +213,7 @@ class SyndWebIndex {
 
 		// Check for hash collisions
 		if (!isset($this->_hashes[$hash]) ||
-			strlen($this->_db->quote($uri)) < 
+			strlen($uri) < 
 			strlen($this->_documents[$this->_hashes[$hash]]['URI'])) {
 
 			profiler_enter(__METHOD__);
@@ -239,15 +239,14 @@ class SyndWebIndex {
 				'TTL'		=> $ttl,
 				'SIZE'		=> $size,
 				'FLAGS'		=> 0,
-				'URI'		=> $this->_db->quote($uri),
-				'TITLE'		=> $this->_db->quote($title),
+				'URI'		=> $uri,
+				'TITLE'		=> $title,
 				'CONTENT'	=> substr($content, 0, $this->_maxContentLength));
 			
 			$this->_index->runHook('document_prepare_store', 
 				array($this->_documents[$docid]));
 
-			$this->_documents[$docid]['CONTENT'] = 
-				$this->_db->quote($this->_documents[$docid]['CONTENT']);
+			$this->_documents[$docid]['CONTENT'] = $this->_documents[$docid]['CONTENT'];
 			
 			profiler_leave(__METHOD__);
 
@@ -472,7 +471,7 @@ class SyndWebSpiderQueue extends ISyndSpiderQueue {
 			if (!$this->_index->isBuffered($docid)) {
 				$rows[] = array(
 					'DOCID' => $docid,
-					'URI' => $this->_db->quote($uris[$keys[$docid]]));
+					'URI' => $uris[$keys[$docid]]);
 			}
 		}
 		

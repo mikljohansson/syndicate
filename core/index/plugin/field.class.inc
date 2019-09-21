@@ -270,15 +270,13 @@ class synd_plugin_field extends SyndIndexExtension {
 			if (isset($this->_buffer[$id])) {
 				$content = trim($this->_buffer[$id]['content'],"'");
 				$content .= ' '.$document->toString();
-				$this->_buffer[$id]['content'] = $this->_index->_db->quote(
-					substr(trim($content),0,$this->_sortLength),"'");
+				$this->_buffer[$id]['content'] = substr(trim($content),0,$this->_sortLength);
 			}
 			else {
 				$this->_buffer[$id] = array(
 					'field' => $this->_hash($field),
 					'docid' => $this->_index->_context['docid'],
-					'content' => $this->_index->_db->quote(
-						substr(trim($document->toString()),0,$this->_sortLength),"'"));
+					'content' => substr(trim($document->toString()),0,$this->_sortLength));
 			}
 		}
 	}
@@ -394,4 +392,4 @@ class SyndFieldQuery extends SyndBooleanAND {
 		$visitor->visitUnaryOperator($this, $this->_rhs);
 	}
 }
-
+

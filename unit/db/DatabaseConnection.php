@@ -169,7 +169,7 @@ class _db_DatabaseConnection extends PHPUnit2_Framework_TestCase {
 			array('NODE_ID' => 'unit_test.1'),
 			array('NODE_ID' => 'unit_test.2'),
 			array('NODE_ID' => 'unit_test.3'));
-		$db->load('synd_unit_test', $db->quote($expected));
+		$db->load('synd_unit_test', $expected);
 			
 		$actual = $db->getAll($sql);
 		$this->assertEquals($expected, $actual);

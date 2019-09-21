@@ -144,10 +144,10 @@ class synd_node_os extends AbstractDatabaseEntity {
 				if (empty($product[0]) || empty($product[1]))
 					continue;
 				$rows[SyndLib::hash($this->nodeId, $product[0], $product[1])] = array(
-					'OS_NODE_ID'	=> $this->_db->quote($this->nodeId),
-					'INFO_PRODUCT' 	=> $this->_db->quote($product[0]),
-					'INFO_VERSION'	=> $this->_db->quote($product[1]),
-					'INFO_STATE'	=> $this->_db->quote($product[2]));
+					'OS_NODE_ID'	=> $this->nodeId,
+					'INFO_PRODUCT' 	=> $product[0],
+					'INFO_VERSION'	=> $product[1],
+					'INFO_STATE'	=> $product[2]);
 			}
 
 			$this->_db->load('synd_inv_software', $rows);

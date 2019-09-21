@@ -292,7 +292,7 @@ class synd_index_term extends DatabaseIndex {
 				$this->_terms[$id] = array(
 					'TERMID' => $id, 
 					'TERM' => $term, 
-					'ORIGINAL' => $this->_db->quote(null != $original ? $original : $term),
+					'ORIGINAL' => null != $original ? $original : $term,
 					'FUZZY' => 'NULL',
 					'N' => 1);
 

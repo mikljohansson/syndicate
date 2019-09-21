@@ -356,15 +356,15 @@ class synd_module_language extends Module {
 				foreach ($translations as $translation) {
 					if (!empty($request['inclusive']) && !array_key_exists($translation['LID'], $lids)) {
 						$newStrings[] = array(
-							'lid' => $this->_db->quote($translation['LID']),
-							'string' => $this->_db->quote($translation['STRING']));
+							'lid' => $translation['LID'],
+							'string' => $translation['STRING']);
 					}
 					if (!empty($request['overwrite']) || !isset($lids[$translation['LID']]) && 
 						(!empty($request['inclusive']) || array_key_exists($translation['LID'], $lids))) {
 						$newTranslations[] = array(
-							'lid' => $this->_db->quote($translation['LID']),
-							'locale' => $this->_db->quote($locale),
-							'translation' => $this->_db->quote($translation['TRANSLATION']));
+							'lid' => $translation['LID'],
+							'locale' => $locale,
+							'translation' => $translation['TRANSLATION']);
 						$delete[] = $translation['LID'];
 					}
 
