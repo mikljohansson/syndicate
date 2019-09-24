@@ -1439,12 +1439,6 @@ class synd_node_issue extends AbstractDatabaseEntity {
 			}
 		}
 
-		// Set issue status
-		if ($this->isPermitted('status') && isset($data['status'])) {
-			$this->setStatus($data['status']);
-			unset($data['status']);
-		}
-
 		// Set parent project
 		if (isset($data['PARENT_NODE_ID'])) {
 			$this->setParent($this->_storage->getInstance($data['PARENT_NODE_ID']));
@@ -1524,6 +1518,12 @@ class synd_node_issue extends AbstractDatabaseEntity {
 
 		if (isset($data['TS_RESOLVE_BY']))
 			$data['TS_RESOLVE_BY'] = strtotime($data['TS_RESOLVE_BY']);
+		
+		// Set issue status
+		if ($this->isPermitted('status') && isset($data['status'])) {
+			$this->setStatus($data['status']);
+			unset($data['status']);
+		}
 
 		// Merge data info $this->data
 		parent::merge($data);
