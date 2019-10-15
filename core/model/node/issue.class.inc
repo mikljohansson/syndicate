@@ -1439,13 +1439,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 			}
 		}
 
-		// Set parent project
-		if (isset($data['PARENT_NODE_ID'])) {
-			$this->setParent($this->_storage->getInstance($data['PARENT_NODE_ID']));
-			unset($data['PARENT_NODE_ID']);
-		}
-		
-		// Set assigned user
+		// Set assigned user (before setting status, so that status is unchanged from what was in the form submit)
 		if (isset($data['ASSIGNED_NODE_ID'])) {
 			if (null !== ($assigned = SyndNodeLib::getInstance($data['ASSIGNED_NODE_ID'])))
 				$this->setAssigned($assigned);
@@ -1525,6 +1519,12 @@ class synd_node_issue extends AbstractDatabaseEntity {
 			unset($data['status']);
 		}
 
+		// Set parent project (after setting status, so that status turns to "Needs attention")
+		if (isset($data['PARENT_NODE_ID'])) {
+			$this->setParent($this->_storage->getInstance($data['PARENT_NODE_ID']));
+			unset($data['PARENT_NODE_ID']);
+		}
+		
 		// Merge data info $this->data
 		parent::merge($data);
 		SyndLib::runHook('issue_data_merge', $this, $data);
