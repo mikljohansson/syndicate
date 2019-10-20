@@ -77,6 +77,16 @@ class synd_type_class_exporter_task extends synd_type_task {
 				$fname = $dname.$node->objectId().'.json';
 				$content = $node->data;
 				$content['project'] = $node->getParent()->data;
+				$content['title'] = $node->getTitle();
+				$content['description'] = $node->getDescription();
+				
+				$email = $node->getContent();
+				if ($email instanceof synd_type_email) {
+					$content['mail'] = array(
+						'sender' => $email->getSender(),
+						'from' => $email->getMessage()->getHeader('From')
+					);
+				}
 
 				$content['events'] = array();
 				foreach (SyndLib::sort($node->getEventLogger()->getEvents(), 'getTimestamp') as $event) {
@@ -146,7 +156,7 @@ class synd_type_class_exporter_task extends synd_type_task {
 		$database = $persistent->getDatabase();
 		$query = call_user_func(array(SyndNodeLib::loadClass($this->_clsid), 'getEntityQuery'), $storage);
 		$query->column($query->getPrimaryKey());
-		$query->where('ts_create >= '.strtotime('-7 days'));
+		$query->where('ts_create >= '.strtotime('-90 days'));
 
 		$project = SyndNodeLib::getInstance('project.48112');
 		$pids = $project->getProjectBranchIds();
