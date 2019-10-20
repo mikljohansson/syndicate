@@ -90,13 +90,13 @@ class synd_type_class_exporter_task extends synd_type_task {
 
 				$content['events'] = array();
 				foreach (SyndLib::sort($node->getEventLogger()->getEvents(), 'getTimestamp') as $event) {
-					if ($event instanceof synd_type_onsetparent) {
+					if ($event instanceof synd_type_onsetparent && $event->getProject() !== null) {
 						$content['events'][] = array(
 							'event' => 'moved-to', 'timestamp' => $event->getTimestamp(), 
 							'project' => $event->getProject()->data);
 					}
 
-					if ($event instanceof synd_type_onassign) {
+					if ($event instanceof synd_type_onassign && $event->getAssigned() !== null) {
 						$content['events'][] = array(
 							'event' => 'assigned-to', 'timestamp' => $event->getTimestamp(), 
 							'assignee' => $event->getAssigned()->data);
