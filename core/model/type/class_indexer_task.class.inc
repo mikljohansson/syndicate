@@ -49,6 +49,9 @@ class synd_type_class_indexer_task extends synd_type_indexer_task {
 		
 	function getBatch($limit) {
 		$ids = $this->_fetch($limit);
+
+                $storage = SyndNodeLib::getDefaultStorage($this->_clsid);
+                $persistent = $storage->getPersistentStorage();
 		$nodes = $persistent->getInstances($ids);
 		return array($nodes, $ids);
 	}
