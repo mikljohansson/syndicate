@@ -668,6 +668,8 @@ abstract class Mime {
 					$result[$key] = self::charset($value, $from, $to);
 				return $result;
 			}
+			if (is_object($buffer))
+				return $buffer;
 			if ('utf-8' == strtolower($from) && 'iso-8859-1' == strtolower($to))
 				return utf8_decode($buffer);
 			if ('iso-8859-1' == strtolower($from) && 'utf-8' == strtolower($to))

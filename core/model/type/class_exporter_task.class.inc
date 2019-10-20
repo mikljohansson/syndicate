@@ -43,7 +43,7 @@ class synd_type_class_exporter_task extends synd_type_task {
 		// Increase memory limit if very low to avoid too much out-of-memory problems
 		if ($this->_toBytes(ini_get('memory_limit')) < $this->_toBytes('512M'))
 			ini_set('memory_limit', '512M');
-		
+
 		// Increase time limit to have time to export everything
 		set_time_limit(60*5);
 		// Retrieves the number of times this exact task instance has already failed, and
@@ -103,8 +103,8 @@ class synd_type_class_exporter_task extends synd_type_task {
 					}
 				}
 
-				file_put_contents($fname, json_encode($content, JSON_PRETTY_PRINT));
-
+				$encoded = Mime::charset($content, null, 'UTF-8');
+				file_put_contents($fname, json_encode($encoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 			}
 		}
 		
@@ -156,7 +156,7 @@ class synd_type_class_exporter_task extends synd_type_task {
 		$database = $persistent->getDatabase();
 		$query = call_user_func(array(SyndNodeLib::loadClass($this->_clsid), 'getEntityQuery'), $storage);
 		$query->column($query->getPrimaryKey());
-		$query->where('ts_create >= '.strtotime('-90 days'));
+		$query->where('ts_create >= '.strtotime('-5 years'));
 
 		$project = SyndNodeLib::getInstance('project.48112');
 		$pids = $project->getProjectBranchIds();
