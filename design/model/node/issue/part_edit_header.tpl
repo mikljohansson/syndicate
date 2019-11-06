@@ -29,6 +29,17 @@
 							new AutoComplete(document.getElementById('client'), '<?= tpl_view('rpc','json',$node->id()) ?>', 'findSuggestedUsers');
 						};
 					}
+
+					// Toggles the issue status to RECENT, if it's currently PENDING
+					function setAttentionStatus() {
+						if (document.getElementById) {
+							var pending = document.getElementById('data[status][<?= synd_node_issue::PENDING ?>]');
+							var recent = document.getElementById('data[status][<?= synd_node_issue::RECENT ?>]');
+							if (pending && recent && pending.checked) {
+								recent.checked = true;
+							}
+						}
+					}
 				//-->
 				</script>
 			<? } else { ?>
@@ -46,8 +57,8 @@
 	<tr class="<?= $this->cycle(array('odd','even')) ?>">	
 		<th><?= $this->text('Project') ?></th>
 		<td<? if(isset($errors['PARENT_NODE_ID'])) print ' class="InvalidField"'; ?>>
-			<select tabindex="<?= $this->sequence() ?>" name="data[PARENT_NODE_ID]" onchange="Issue.loadProject('<?= 
-				tpl_view('rpc','json') ?>', this, document.getElementById('data[ASSIGNED_NODE_ID]'));" onkeyup="Issue.loadProject('<?= 
+			<select tabindex="<?= $this->sequence() ?>" name="data[PARENT_NODE_ID]" onchange="setAttentionStatus(); Issue.loadProject('<?= 
+				tpl_view('rpc','json') ?>', this, document.getElementById('data[ASSIGNED_NODE_ID]'));" onkeyup="setAttentionStatus(); Issue.loadProject('<?= 
 				tpl_view('rpc','json') ?>', this, document.getElementById('data[ASSIGNED_NODE_ID]'));" onkeypress="Issue.findOption(this, event);" onmousewheel="return false;">
 				<? $this->iterate(SyndLib::sort($node->getParentOptions()),
 					'option_expand_children.tpl',array('selected'=>$node->_storage->getInstance($data['PARENT_NODE_ID']))) ?>
@@ -73,7 +84,7 @@
 			uasort($options, 'strcasecmp');
 
 			if ($node->isPermitted('admin')) { ?>
-				<select tabindex="<?= $this->sequence() ?>" name="data[ASSIGNED_NODE_ID]" id="data[ASSIGNED_NODE_ID]" onmousewheel="return false;">
+				<select tabindex="<?= $this->sequence() ?>" name="data[ASSIGNED_NODE_ID]" id="data[ASSIGNED_NODE_ID]" onchange="setAttentionStatus();" onkeyup="setAttentionStatus();" onmousewheel="return false;">
 					<option value="user_null.null" class="Predefined"><?= $this->text('Unassigned') ?></option>
 					<?= tpl_form_options($options,$assigned->nodeId) ?>
 				</select>
