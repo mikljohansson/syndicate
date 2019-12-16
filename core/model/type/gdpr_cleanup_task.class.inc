@@ -27,7 +27,8 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 		        WHERE
 		                i.parent_node_id = p.node_id AND
 				i.update_node_id IS NOT NULL AND
-		                i.ts_update < (".strtotime('midnight')." - p.info_cleanup_cutoff_seconds)";
+		                i.ts_update < (".strtotime('midnight')." - p.info_cleanup_cutoff_seconds) AND 
+				i.info_status = ".synd_node_issue::CLOSED;
 
 		if (!empty($keywords)) {
 			$sql .= "
