@@ -41,6 +41,7 @@ class synd_type_gdpr_cleanup_task extends synd_type_task {
 				i.update_node_id IS NOT NULL AND
 		                k.node_id = ik.keyword_node_id AND
 		                ik.ts_create < ".strtotime('midnight')." AND
+				i.info_status = ".synd_node_issue::CLOSED." AND
 		                k.info_head IN (".implode(',', $synd_maindb->quote($keywords)).")";
 		}
 
