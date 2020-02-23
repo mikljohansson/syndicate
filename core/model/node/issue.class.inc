@@ -1574,19 +1574,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 			
 			unset($this->data['mail']);
 		}
-	}
-	
-	/**
-	 * Returns the direct email address to this issue
-	 * @return	string	Returns null
-	 */
-	function getDirectAddress() {
-		$parent = $this->getParent();
-		$project = $parent->getAbsoluteEmail();
-		if (!$project->isNull())
-			return str_replace('@', '+'.$this->objectId().'@', $project->getEmail());
-		return null;
-	}
+	}	
 	
 	/**
 	 * Returns current user or project email depending on settings
@@ -1626,13 +1614,29 @@ class synd_node_issue extends AbstractDatabaseEntity {
 		
 		return $senders;
 	}
+
+	/**
+	 * Returns the direct email address to this issue
+	 * @return	string	Returns null
+	 */
+	function getDirectAddress() {
+		$parent = $this->getParent();
+		$project = $parent->getAbsoluteEmail();
+		if (!$project->isNull())
+			return str_replace('@', '+'.$this->objectId().'@', $project->getEmail());
+		return null;
+	}
 	
 	/**
 	 * Returns the direct email address to this issue
 	 * @return	string	Returns null
 	 */
 	function getEnvelopeAddress() {
-		return $this->getDirectAddress();
+                $parent = $this->getParent();
+                $project = $parent->getAbsoluteEmail();
+                if (!$project->isNull())
+                        return $project->isIssueSender() ? $this->getDirectAddress() : $project->getEmail();
+                return null;
 	}
 	
 	/**
@@ -1819,7 +1823,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 			foreach ($mime->getMessageHeaders() as $name => $value)
 				$headers[] = $name.': '.MimeHeader::encodeHeader($name, $value);
 
-			$flags = null != ($direct = $this->getDirectAddress()) ? "-f $direct" : null;
+			$flags = null != ($envelope = $this->getEnvelopeAddress()) ? "-f $envelope" : null;
 			mail($to, $request['subject'], $mime->getMessageBody(), implode("\r\n", $headers), $flags);
 
 			// Append email to issue
@@ -1849,7 +1853,7 @@ class synd_node_issue extends AbstractDatabaseEntity {
 					$headers[] = $name.': '.MimeHeader::encodeHeader($name, $value);
 			}
 				
-			$flags = null != ($direct = $this->getDirectAddress()) ? "-f $direct" : null;
+			$flags = null != ($envelope = $this->getEnvelopeAddress()) ? "-f $envelope" : null;
 			mail($mime->getHeader('To'), $mime->getHeader('Subject'), $mime->getMessageBody(), implode("\r\n", $headers), $flags);
 		}
 
