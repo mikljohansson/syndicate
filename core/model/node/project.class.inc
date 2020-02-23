@@ -197,7 +197,8 @@ class synd_node_project extends AbstractDatabaseEntity implements Collection {
 	 * @return	bool
 	 */
 	function isIssueSender() {
-		return !empty($this->data['FLAG_ISSUE_SENDER']);
+		return false;
+//		return !empty($this->data['FLAG_ISSUE_SENDER']);
 	}
 
 	function toString() {
