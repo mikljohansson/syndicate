@@ -31,11 +31,18 @@ class synd_type_class_exporter_task extends synd_type_task {
 	 * Tracks how many batches in a row has been processed successfully
 	 */
 	var $_prevSuccess = 0;
+
+	/**
+	 * Directory to export into
+	 */
+	var $_exportDir = null;
 	
 	function __construct($clsid, $order = array()) {
 		parent::__construct();
 		$this->_clsid = $clsid;
 		$this->_order = $order;
+		$this->_exportDir = '/usr/local/ahs/export/ahs-export-'.date('YmdHis');
+		SyndLib::createDirectory($this->_exportDir);
 	}
 	
 	function run($handler) {
@@ -71,7 +78,7 @@ class synd_type_class_exporter_task extends synd_type_task {
 				print 'Exporter: Attempting to export single node '.$ids[0]."\n";
 			}
 			foreach ($nodes as $node) {
-				$dname = '/usr/local/ahs/export/'.date('Y-m', $node->data['TS_CREATE']).'/';
+				$dname = $this->_exportDir.'/'.date('Y-m', $node->data['TS_CREATE']).'/';
 				SyndLib::createDirectory($dname);
 
 				$fname = $dname.$node->objectId().'.json';
@@ -84,7 +91,8 @@ class synd_type_class_exporter_task extends synd_type_task {
 				if ($email instanceof synd_type_email) {
 					$content['mail'] = array(
 						'sender' => $email->getSender(),
-						'from' => $email->getMessage()->getHeader('From')
+						'from' => $email->getMessage()->getHeader('From'),
+						'to' => $email->getMessage()->getHeader('To')
 					);
 				}
 
@@ -101,6 +109,23 @@ class synd_type_class_exporter_task extends synd_type_task {
 							'event' => 'assigned-to', 'timestamp' => $event->getTimestamp(), 
 							'assignee' => $event->getAssigned()->data);
 					}
+				}
+			
+				$content['notes'] = array();
+				foreach ($node->getNotes() as $note) {
+					$comment = array(
+						'text' => $note->getDescription(),
+						'creator' => $note->getCreator()->data);
+					$email = $note->getContent();
+					if ($email instanceof synd_type_email) {
+						$comment['mail'] = array(
+							'sender' => $email->getSender(),
+							'from' => $email->getMessage()->getHeader('From'),
+							'to' => $email->getMessage()->getHeader('To')
+						);
+					}
+
+					$content['notes'][] = $comment;
 				}
 
 				$encoded = Mime::charset($content, null, 'UTF-8');
@@ -119,6 +144,7 @@ class synd_type_class_exporter_task extends synd_type_task {
 			$this->_prevFailures = max($this->_prevFailures - 1, 0);
 			$this->_prevSuccess = 0;
 		}
+
 		// Reschedule task if limit number of nodes was returned
 		if (count($ids) >= $limit) {
 			print "Exporter: Rescheduling task after processing ".count($ids)." nodes.\n";
