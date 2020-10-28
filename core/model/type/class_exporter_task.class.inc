@@ -112,10 +112,10 @@ class synd_type_class_exporter_task extends synd_type_task {
 				}
 			
 				$content['notes'] = array();
-				foreach ($node->getNotes() as $note) {
-					$comment = array(
-						'text' => $note->getDescription(),
-						'creator' => $note->getCreator()->data);
+				foreach ($node->getPublishedNotes() as $note) {
+					$comment = $note->data;
+					$comment['text'] = $note->getDescription();
+					$comment['creator'] = $note->getCreator()->data;
 					$email = $note->getContent();
 					if ($email instanceof synd_type_email) {
 						$comment['mail'] = array(
